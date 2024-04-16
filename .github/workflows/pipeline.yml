@@ -24,7 +24,7 @@ jobs:
       - name: Install Dependencies
         run: npm install
       - name: Linter Check
-        run: ng lint
+        run: npx ng lint
       - name: Format with Prettier
         run: npm run formatstyle
       - name: Check with Prettier
