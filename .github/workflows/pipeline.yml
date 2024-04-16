@@ -48,7 +48,7 @@ jobs:
       - name: Install Dependencies
         run: npm install
       - name: Test with Jasmine
-        run: ng test --no-watch
+        run: npx ng test --no-watch
 
   build:
     needs:
