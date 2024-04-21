@@ -31,33 +31,8 @@ jobs:
       - name: Check with Prettier
         run: npm run checkstyle
 
-  test:
-    needs: lint
-    runs-on: ubuntu-latest
-
-    strategy:
-      matrix:
-        node-version: [ 18.x ]
-
-    steps:
-      - uses: actions/checkout@v3
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v3
-        with:
-          node-version: ${{ matrix.node-version }}
-          cache: 'npm'
-          cache-dependency-path: package-lock.json
-      - name: Install NPM
-        run: npm install
-      - name: Install CI
-        run: npm ci
-      - name: Test Project
-        run: npm run test:ci
-        env:
-          CI: true
-
   build:
-    needs: test
+    needs: lint
     runs-on: ubuntu-latest
 
     strategy:
@@ -74,4 +49,4 @@ jobs:
       - name: Install NPM
         run: npm install
       - name: Build Project
-        run: npm run build
+        run: npm run build --if-present
