@@ -21,6 +21,9 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
+          cache-dependency-path: package-lock.json
+      - name: Install NPM
+        run: npm install
       - name: Linter Check
         run: npx ng lint
       - name: Format with Prettier
@@ -44,6 +47,8 @@ jobs:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
           cache-dependency-path: package-lock.json
+      - name: Install NPM
+        run: npm install
       - name: Install CI
         run: npm ci
       - name: Test Project
@@ -64,5 +69,7 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
+      - name: Install NPM
+        run: npm install
       - name: Build Project
         run: npm run build
