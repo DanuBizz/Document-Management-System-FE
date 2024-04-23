@@ -11,8 +11,3 @@
   display: none;
 }
 
-@import '../../../../styles';
-
-.inner-table {
-  background-color: map-get($mat-primary, 100) !important;
-}
