@@ -1,6 +1,6 @@
 import { Routes } from '@angular/router';
 import { CategoryManagementComponent } from './categories/category-management/category-management.component';
-import {DocumentManagementComponent} from "./documents/document-management/document-management.component";
+import { DocumentManagementComponent } from './documents/document-management/document-management.component';
 
 export const ADMIN_ROUTES: Routes = [
   {
