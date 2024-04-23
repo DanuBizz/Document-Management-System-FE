@@ -13,10 +13,12 @@ import { MatTooltip } from '@angular/material/tooltip';
 import { MatCheckbox } from '@angular/material/checkbox';
 import { MatPaginator } from '@angular/material/paginator';
 import { CategoryService } from '../../../shared/service/category.service';
-import { combineLatest } from 'rxjs';
+import { combineLatest, filter } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { selectCategoryData, selectError, selectIsLoading } from '../store/category.reducers';
 import { MatProgressBar } from '@angular/material/progress-bar';
+import { openCreateCategoryDialog } from '../create-category-dialog/category-dialog.config';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-category-management',
@@ -52,9 +54,16 @@ export class CategoryManagementComponent {
 
   displayedColumns: string[] = ['id', 'name', 'users'];
 
-  constructor(private store: Store) {}
+  constructor(
+    private store: Store,
+    private dialog: MatDialog
+  ) {}
 
   createNewCategory() {
-    console.log('Create new category');
+    openCreateCategoryDialog(this.dialog)
+      .pipe(filter(val => !!val))
+      .subscribe(val => {
+        console.log('new course value: ', val);
+      });
   }
 }
