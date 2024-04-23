@@ -8,3 +8,18 @@ body {
   margin: 0;
   font-family: Roboto, 'Helvetica Neue', sans-serif;
 }
+
+.toolbar-button {
+  height: auto !important;
+  width: 100px !important;
+  padding: 0.5rem 1rem !important;
+}
+
+.mat-toolbar-single-row {
+  height: auto !important;
+  padding: 0.2rem !important;
+}
+
+.menu-item-active {
+  text-decoration: underline;
+}
