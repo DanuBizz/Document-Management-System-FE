@@ -1,17 +1,12 @@
 <!-- Hauptcontainer, der als Flexbox dient -->
 <div class="d-flex flex-column vh-100">
-  <mat-toolbar color="accent" class="desktop-nav ">
-
+  <mat-toolbar color="accent" class="desktop-nav">
     <div class="toolbar-tools">
-
-      <a class="menu-item toolbar-button" mat-button routerLink="admin/category"
-         routerLinkActive="menu-item-active">
+      <a class="menu-item toolbar-button" mat-button routerLink="admin/category" routerLinkActive="menu-item-active">
         <span class="icon-with-text"><mat-icon>category</mat-icon></span>
         <span class="button-description">Kategorie</span>
       </a>
-
     </div>
-
   </mat-toolbar>
 
   <div class="flex-grow-1">
@@ -19,27 +14,16 @@
   </div>
 
   <mat-card class="footer desktop-footer">
-
-    <mat-card-footer >
+    <mat-card-footer>
       © 2024 Kulturbetriebe Burgenland | Nutzungsbedingungen | Impressum | Datenschutz
     </mat-card-footer>
-
   </mat-card>
 
   <mat-toolbar color="accent" class="mobile-nav">
-
     <div class="mobile-toolbar-tools">
-
-      <a
-        class="menu-item"
-        mat-button
-        routerLink="/admin/category"
-        routerLinkActive="menu-item-active">
+      <a class="menu-item" mat-button routerLink="/admin/category" routerLinkActive="menu-item-active">
         <mat-icon>category</mat-icon>
       </a>
-
     </div>
-
   </mat-toolbar>
-
 </div>

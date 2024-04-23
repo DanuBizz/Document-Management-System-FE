@@ -1,6 +1,5 @@
-import {Routes} from "@angular/router";
-import {CategoryManagementComponent} from "./categories/category-management/category-management.component";
-
+import { Routes } from '@angular/router';
+import { CategoryManagementComponent } from './categories/category-management/category-management.component';
 
 export const ADMIN_ROUTES: Routes = [
   {
