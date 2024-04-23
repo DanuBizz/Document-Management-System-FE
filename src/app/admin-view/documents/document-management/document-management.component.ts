@@ -6,7 +6,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
 import { MatButtonModule } from '@angular/material/button';
-import { combineLatest } from 'rxjs';
+import { combineLatest, filter } from 'rxjs';
 import { DocumentService } from '../../../shared/service/document.service';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatPaginator } from '@angular/material/paginator';
@@ -19,6 +19,8 @@ import { Store } from '@ngrx/store';
 import { selectDocumentData, selectError, selectIsLoading } from '../store/document.reducers';
 import { documentActions } from '../store/document.actions';
 import { MatProgressBar } from '@angular/material/progress-bar';
+import { MatDialog } from '@angular/material/dialog';
+import { openCreateDocumentDialog } from '../create-document-dialog/document-dialog.config';
 
 @Component({
   selector: 'app-document-management',
@@ -57,7 +59,10 @@ export class DocumentManagementComponent implements OnInit {
 
   selection = new SelectionModel<DocumentResponseInterface>(false, []);
 
-  constructor(private store: Store) {}
+  constructor(
+    private store: Store,
+    private dialog: MatDialog
+  ) {}
 
   ngOnInit(): void {
     this.store.dispatch(documentActions.getDocuments());
@@ -75,7 +80,25 @@ export class DocumentManagementComponent implements OnInit {
     }
   }
 
-  createNewDocument() {}
+  createNewDocument() {
+    openCreateDocumentDialog(this.dialog, null)
+      .pipe(filter(val => !!val))
+      .subscribe(val => {
+        console.log('new course value: ', val);
+      });
+  }
 
-  createNewVersion() {}
+  createNewVersion() {
+    this.data$.pipe(filter(data => !data.isLoading && !data.error)).subscribe(data => {
+      const selectedDocument = data.document.find(document => this.selection.selected.at(0)!.id === document.id);
+
+      if (selectedDocument) {
+        openCreateDocumentDialog(this.dialog, selectedDocument)
+          .pipe(filter(val => !!val))
+          .subscribe(val => console.log('new course value: ', val));
+      } else {
+        console.error('Document not found.');
+      }
+    });
+  }
 }
