@@ -1,0 +1,57 @@
+@mixin table-design {
+  .default-table-design {
+    tr.mat-mdc-row:hover {
+      background-color: map-get($mat-accent, 50) !important;
+      cursor: pointer;
+    }
+
+    .mat-mdc-header-row {
+      background-color: map-get($mat-primary, 500) !important;
+    }
+
+    .mat-mdc-header-cell,
+    .mat-mdc-cell {
+      text-align: center;
+    }
+  }
+}
+
+@mixin scrolling-container {
+  overflow-y: scroll;
+  max-height: 50vh;
+
+  @media (max-width: 576px) {
+    overflow-x: scroll;
+  }
+}
+
+@mixin mobile-responsive-title {
+  .mobile-title {
+    margin-top: 2rem !important;
+  }
+
+  .mobile-without-title {
+    margin-top: 2rem;
+  }
+
+  @media (max-width: 576px) {
+    .mobile-without-title {
+      margin-top: 0.8rem;
+    }
+
+    .mobile-title {
+      margin-top: 0.8rem !important;
+      font-size: 1.2rem;
+    }
+  }
+
+  @media (max-height: 576px) {
+    .mobile-without-title {
+      margin-top: 0.8rem;
+    }
+
+    .mobile-title {
+      display: none;
+    }
+  }
+}
