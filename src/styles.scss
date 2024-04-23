@@ -148,3 +148,7 @@ body {
   white-space: pre-line;
   text-align: center;
 }
+
+.inner-table {
+  background-color: map-get($mat-primary, 100) !important;
+}

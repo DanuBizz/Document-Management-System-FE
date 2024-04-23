@@ -1,0 +1,31 @@
+<div class="edit-course-form">
+  <h2 mat-dialog-title>{{ dialogTitle }}</h2>
+
+  <mat-dialog-content [formGroup]="form">
+    <mat-form-field>
+      <input matInput placeholder="Dokument Name" formControlName="name" />
+    </mat-form-field>
+
+    <mat-form-field>
+      <input matInput placeholder="Dokument Version" formControlName="version" />
+    </mat-form-field>
+
+    <mat-form-field>
+      <input matInput placeholder="Dokument Pfad" formControlName="filePath" />
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Kategorien</mat-label>
+      <mat-select formControlName="categories" multiple>
+        @for (category of categories$ | async; track category) {
+          <mat-option [value]="category.id">{{ category.name }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+  </mat-dialog-content>
+
+  <mat-dialog-actions class="justify-content-center">
+    <button mat-raised-button color="accent" (click)="close()">Schließen</button>
+    <button mat-raised-button color="primary" (click)="save()">Speichern</button>
+  </mat-dialog-actions>
+</div>
