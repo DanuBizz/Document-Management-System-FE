@@ -2,19 +2,17 @@
   <h2 mat-dialog-title>Neue Kategorie erstellen</h2>
 
   <mat-dialog-content [formGroup]="form">
-    <mat-form-field>
+    <mat-form-field appearance="outline">
       <input matInput placeholder="Kategorie Name" formControlName="name" />
     </mat-form-field>
 
-    <mat-form-field>
-      <mat-form-field>
-        <mat-label>Benutzer hinzufügen</mat-label>
-        <mat-select formControlName="user" multiple>
-          @for (user of userList; track user) {
-            <mat-option [value]="user">{{ user }}</mat-option>
-          }
-        </mat-select>
-      </mat-form-field>
+    <mat-form-field appearance="outline" class="select-field">
+      <mat-label>Benutzer hinzufügen</mat-label>
+      <mat-select formControlName="user" multiple>
+        @for (user of userList; track user) {
+          <mat-option [value]="user">{{ user }}</mat-option>
+        }
+      </mat-select>
     </mat-form-field>
   </mat-dialog-content>
 

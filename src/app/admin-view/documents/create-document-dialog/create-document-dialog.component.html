@@ -2,19 +2,19 @@
   <h2 mat-dialog-title>{{ dialogTitle }}</h2>
 
   <mat-dialog-content [formGroup]="form">
-    <mat-form-field>
+    <mat-form-field appearance="outline">
       <input matInput placeholder="Dokument Name" formControlName="name" />
     </mat-form-field>
 
-    <mat-form-field>
+    <mat-form-field appearance="outline">
       <input matInput placeholder="Dokument Version" formControlName="version" />
     </mat-form-field>
 
-    <mat-form-field>
+    <mat-form-field appearance="outline">
       <input matInput placeholder="Dokument Pfad" formControlName="filePath" />
     </mat-form-field>
 
-    <mat-form-field appearance="fill">
+    <mat-form-field appearance="outline" class="select-field">
       <mat-label>Kategorien</mat-label>
       <mat-select formControlName="categories" multiple>
         @for (category of categories$ | async; track category) {

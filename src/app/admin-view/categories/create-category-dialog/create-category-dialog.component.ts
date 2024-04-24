@@ -28,7 +28,7 @@ import { MatOption, MatSelect } from '@angular/material/select';
 export class CreateCategoryDialogComponent {
   form: FormGroup;
 
-  userList: string[] = ['User1', 'User2', 'User3', 'User4'];
+  userList: string[] = [];
 
   constructor(
     private fb: FormBuilder,
@@ -38,6 +38,10 @@ export class CreateCategoryDialogComponent {
       name: ['', Validators.required],
       user: ['', Validators.required],
     });
+
+    for (let i = 1; i <= 50; i++) {
+      this.userList.push(`User${i}`);
+    }
   }
 
   close() {
