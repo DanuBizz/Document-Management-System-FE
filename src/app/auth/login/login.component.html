@@ -1,0 +1,35 @@
+<div class="container-fluid">
+  <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="form-control form-sign-in">
+    <h1>{{ title }}</h1>
+
+    <div class="form-group">
+      <mat-form-field appearance="outline" hideRequiredMarker="true">
+        <mat-label>Email</mat-label>
+        <input matInput type="email" formControlName="email" />
+        <mat-icon matSuffix class="large-icon">email</mat-icon>
+        @if (loginForm.controls['email'].hasError('required')) {
+          <mat-error>Email ist <strong>erforderlich</strong></mat-error>
+        }
+      </mat-form-field>
+    </div>
+
+    <div class="form-group">
+      <mat-form-field appearance="outline" hideRequiredMarker="true">
+        <mat-label>Passwort</mat-label>
+        <input matInput type="password" formControlName="password" />
+        <mat-icon matSuffix class="large-icon">key</mat-icon>
+        @if (loginForm.controls['password'].hasError('required')) {
+          <mat-error>Passwort ist <strong>erforderlich</strong></mat-error>
+        }
+      </mat-form-field>
+    </div>
+
+    <div class="form-group">
+      <mat-checkbox color="primary">Angemeldet bleiben</mat-checkbox>
+    </div>
+
+    <button mat-raised-button color="primary" class="sign-in-button" type="submit" [disabled]="!loginForm.valid">
+      Login
+    </button>
+  </form>
+</div>

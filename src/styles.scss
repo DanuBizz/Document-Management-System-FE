@@ -109,6 +109,7 @@ html,
 body {
   height: 100%;
 }
+
 body {
   margin: 0;
   font-family: Roboto, 'Helvetica Neue', sans-serif;
@@ -151,4 +152,24 @@ body {
 
 .inner-table {
   background-color: map-get($mat-primary, 100) !important;
+}
+
+.mdc-text-field {
+  --mdc-outlined-text-field-container-shape: 1.8rem !important;
+}
+
+mat-form-field {
+  width: 100%;
+}
+
+.mdc-button {
+  &.mat-mdc-button,
+  &.mat-mdc-raised-button {
+    border-radius: 2rem !important;
+  }
+}
+
+.select-field {
+  height: 150px;
+  max-height: 150px;
 }
