@@ -7,6 +7,14 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatCard, MatCardHeader } from '@angular/material/card';
+import {LoginRequestInterface} from "../../type/login-request.interface";
+import {authActions} from "../../store/auth.actions";
+import {Store} from "@ngrx/store";
+import {combineLatest} from "rxjs";
+import {selectIsSubmitting, selectValidationErrors} from "../../store/auth.reducers";
+import {
+  BackendErrorMessagesComponent
+} from "../../../shared/component/backend-error-messages/backend-error-messages.component";
 
 @Component({
   selector: 'app-login',
@@ -22,6 +30,7 @@ import { MatCard, MatCardHeader } from '@angular/material/card';
     MatCheckboxModule,
     MatCard,
     MatCardHeader,
+    BackendErrorMessagesComponent,
   ],
   providers: [],
   templateUrl: './login.component.html',
@@ -31,12 +40,23 @@ export class LoginComponent {
   title = 'Anmelden';
   loginForm: FormGroup;
 
-  constructor(private fb: FormBuilder) {
+  data$ = combineLatest({
+    isSubmitting: this.store.select(selectIsSubmitting),
+    backendErrors: this.store.select(selectValidationErrors)
+  })
+
+  constructor(private fb: FormBuilder, private store: Store,) {
     this.loginForm = this.fb.group({
-      email: ['su@kbb.at', Validators.required],
-      password: ['asdnmlm123_3', Validators.required],
+      email: ['karl.franz.bertl.sayajin@kamehameha.at', [Validators.required]],
+      password: ['karl.franz.bertl.sayajin123456789', [Validators.required]],
     });
   }
 
-  onSubmit() {}
+  onSubmit() {
+    const request: LoginRequestInterface = {
+      user: this.loginForm.getRawValue(),
+    }
+
+    this.store.dispatch(authActions.login({request}))
+  }
 }
