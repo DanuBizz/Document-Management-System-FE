@@ -3,11 +3,14 @@ import { Routes } from '@angular/router';
 export const routes: Routes = [
   {
     path: '',
-    loadChildren: () => import('./admin-view/admin.routes').then(m => m.ADMIN_ROUTES),
+    loadChildren: () => import('./auth/auth.routes').then(m => m.LOGIN_ROUTES),
   },
-
   {
     path: 'admin',
     loadChildren: () => import('./admin-view/admin.routes').then(r => r.ADMIN_ROUTES),
+  },
+  {
+    path: 'login',
+    loadChildren: () => import('./auth/auth.routes').then(m => m.LOGIN_ROUTES),
   },
 ];
