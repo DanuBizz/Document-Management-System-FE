@@ -10,10 +10,3 @@ export const categoryActions = createActionGroup({
     'get all categories failure': props<{ error: BackendErrorsInterface }>(),
   },
 });
-
-/*
-
-export const getCategories = createAction('[Category Management] Get categories from backend');
-export const setCategories = createAction('[Category Management] Set categories', props<{ categories: CategoryInterface[] }>());
-
-*/

@@ -2,6 +2,7 @@ import { CategoryStateInterface } from '../../type/category-state.interface';
 import { createFeature, createReducer, on } from '@ngrx/store';
 import { categoryActions } from './category.actions';
 
+// Initial state for the categories feature
 export const initialState: CategoryStateInterface = {
   isLoading: false,
   error: null,
@@ -10,6 +11,7 @@ export const initialState: CategoryStateInterface = {
 
 export const categoriesFeature = createFeature({
   name: 'categories',
+  // Reducer functions for the feature
   reducer: createReducer(
     initialState,
     on(categoryActions.getAllCategories, state => ({
@@ -26,12 +28,14 @@ export const categoriesFeature = createFeature({
       isLoading: false,
       error: action.error,
     }))
-
-    /*            on(routerNavigatedAction, () => (initialState)
-                        )*/
+    // Handling router navigated action
+    /*
+    on(routerNavigatedAction, () => (initialState))
+    */
   ),
 });
 
+// Extracting necessary values from the categories feature
 export const {
   name: categoryFeatureKey,
   reducer: categoryReducer,

@@ -1,13 +1,17 @@
 <div class="edit-course-form">
-  <h2 mat-dialog-title>Neue Kategorie erstellen</h2>
+  <!-- Dialog title -->
+  <h2 mat-dialog-title>Create New Category</h2>
 
+  <!-- Dialog content with form -->
   <mat-dialog-content [formGroup]="form">
+    <!-- Text input for category name -->
     <mat-form-field appearance="outline">
-      <input matInput placeholder="Kategorie Name" formControlName="name" />
+      <input matInput placeholder="Category Name" formControlName="name" />
     </mat-form-field>
 
+    <!-- Select field for adding users -->
     <mat-form-field appearance="outline" class="select-field">
-      <mat-label>Benutzer hinzufügen</mat-label>
+      <mat-label>Add Users</mat-label>
       <mat-select formControlName="user" multiple>
         @for (user of userList; track user) {
           <mat-option [value]="user">{{ user }}</mat-option>
@@ -16,8 +20,11 @@
     </mat-form-field>
   </mat-dialog-content>
 
+  <!-- Dialog actions -->
   <mat-dialog-actions class="justify-content-center">
-    <button mat-raised-button color="accent" (click)="close()">Schließen</button>
-    <button mat-raised-button color="primary" (click)="save()">Speichern</button>
+    <!-- Button to close the dialog -->
+    <button mat-raised-button color="accent" (click)="close()">Close</button>
+    <!-- Button to save changes -->
+    <button mat-raised-button color="primary" (click)="save()">Save</button>
   </mat-dialog-actions>
 </div>

@@ -12,10 +12,14 @@ export class DocumentService {
 
   constructor(private http: HttpClient) {}
 
+  /**
+   * Retrieves all documents from the backend.
+   * @returns An observable of an array of document response objects.
+   */
   getDocuments(): Observable<DocumentResponseInterface[]> {
     const fullUrl = this.documentsBaseUrl + this.queryParam;
     return this.http.get<{ content: DocumentResponseInterface[] }>(fullUrl).pipe(
-      delay(3000),
+      delay(3000), // Simulate delay for demonstration purposes
       map(response => response.content)
     );
   }

@@ -25,9 +25,13 @@ import { categoryActions } from './admin-view/categories/store/category.actions'
   styleUrl: './app.component.scss',
 })
 export class AppComponent implements OnInit {
+  /**
+   * @param store - The Redux store instance injected via dependency injection.
+   */
   constructor(private store: Store) {}
 
   ngOnInit(): void {
+    // Load all categories on app initialization
     this.store.dispatch(categoryActions.getAllCategories());
   }
 }

@@ -1,15 +1,19 @@
+<!-- Container to utilize data once data$ has been fetched -->
 <ng-container *ngIf="data$ | async as data">
   <div class="container">
+    <!-- Title -->
     <h1 class="text-center mobile-title">{{ title }}</h1>
 
-    <div class="container mobile-without-title">
-      <div class="d-flex justify-content-center mb-4">
-        <app-fab-button icon="add" tooltip="Neue Kategorie erstellen" (click)="createNewCategory()"></app-fab-button>
-      </div>
+    <!-- Button area for category-->
+    <div class="d-flex justify-content-center mobile-without-title mb-4">
+      <!-- Button for creating a new category -->
+      <app-fab-button icon="add" tooltip="Create New Category" (click)="createNewCategory()"></app-fab-button>
     </div>
 
+    <!-- Progress bar: displayed while data is being fetched -->
     <mat-progress-bar mode="indeterminate" *ngIf="data.isLoading" color="accent"></mat-progress-bar>
 
+    <!-- Table for category data -->
     <div class="mat-elevation-z10 mb-2">
       <div class="scrolling-container">
         <table
@@ -19,27 +23,37 @@
           matSort
           matSortActive="id"
           matSortDirection="asc">
+          <!-- Column header for ID -->
           <ng-container matColumnDef="id" sticky>
             <th mat-header-cell *matHeaderCellDef>ID</th>
-            <td mat-cell *matCellDef="let category">{{ category.id }}</td>
+            <td mat-cell *matCellDef="let category">
+              {{ category.id }}
+            </td>
           </ng-container>
 
+          <!-- Column header for Name -->
           <ng-container matColumnDef="name">
             <th mat-header-cell *matHeaderCellDef>Name</th>
-            <td mat-cell *matCellDef="let category">{{ category.name }}</td>
+            <td mat-cell *matCellDef="let category">
+              {{ category.name }}
+            </td>
           </ng-container>
 
+          <!-- Column header for Users -->
           <ng-container matColumnDef="users">
-            <th mat-header-cell *matHeaderCellDef>Benutzer</th>
-            <td mat-cell *matCellDef="let category">{{ category.userIDs }}</td>
+            <th mat-header-cell *matHeaderCellDef>Users</th>
+            <td mat-cell *matCellDef="let category">
+              {{ category.userIDs }}
+            </td>
           </ng-container>
 
+          <!-- Row and column definitions -->
           <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
           <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
         </table>
       </div>
 
-      <!--  Not implemented yet    -->
+      <!-- Paginator (not implemented yet) -->
       <mat-paginator class="border-top" [length]="1000" [pageSize]="5" [pageSizeOptions]="[5, 10, 15]"></mat-paginator>
     </div>
   </div>

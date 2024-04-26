@@ -46,24 +46,34 @@ import { MatDialog } from '@angular/material/dialog';
 export class CategoryManagementComponent {
   title = 'Kategorie Management';
 
+  // Observable combining necessary data from the store for the component
   data$ = combineLatest({
     category: this.store.select(selectCategoryData),
     isLoading: this.store.select(selectIsLoading),
     error: this.store.select(selectError),
   });
 
+  // Columns to display in the table
   displayedColumns: string[] = ['id', 'name', 'users'];
 
+  /**
+   * @param store - The Redux store instance injected via dependency injection.
+   * @param dialog - The MatDialog service for opening dialogs.
+   */
   constructor(
     private store: Store,
     private dialog: MatDialog
   ) {}
 
+  /**
+   * Opens a dialog to create a new category.
+   * This method is prepared but not fully implemented.
+   */
   createNewCategory() {
     openCreateCategoryDialog(this.dialog)
       .pipe(filter(val => !!val))
       .subscribe(val => {
-        console.log('new course value: ', val);
+        console.log('New category value:', val);
       });
   }
 }

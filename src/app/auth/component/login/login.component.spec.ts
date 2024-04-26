@@ -1,15 +1,13 @@
-import {ComponentFixture, TestBed} from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import {LoginComponent} from './login.component';
-import {MockStore, provideMockStore} from "@ngrx/store/testing";
-import {provideAnimationsAsync} from "@angular/platform-browser/animations/async";
-import {By} from "@angular/platform-browser";
-import {BackendErrorsInterface} from "../../../shared/type/backend-erros.interface";
-import {
-  BackendErrorMessagesComponent
-} from "../../../shared/component/backend-error-messages/backend-error-messages.component";
-import {authActions} from "../../store/auth.actions";
-import {LoginRequestInterface} from "../../type/login-request.interface";
+import { LoginComponent } from './login.component';
+import { MockStore, provideMockStore } from '@ngrx/store/testing';
+import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
+import { By } from '@angular/platform-browser';
+import { BackendErrorsInterface } from '../../../shared/type/backend-erros.interface';
+import { BackendErrorMessagesComponent } from '../../../shared/component/backend-error-messages/backend-error-messages.component';
+import { authActions } from '../../store/auth.actions';
+import { LoginRequestInterface } from '../../type/login-request.interface';
 
 describe('LoginComponent', () => {
   let component: LoginComponent;
@@ -21,13 +19,13 @@ describe('LoginComponent', () => {
       isLoading: false,
       currentUser: undefined,
       validationErrors: null,
-    }
-  }
+    },
+  };
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [LoginComponent],
-      providers: [provideMockStore({initialState}), provideAnimationsAsync()]
+      providers: [provideMockStore({ initialState }), provideAnimationsAsync()],
     }).compileComponents();
 
     fixture = TestBed.createComponent(LoginComponent);
@@ -48,11 +46,12 @@ describe('LoginComponent', () => {
 
   it('should display backend error messages if present', () => {
     const testErrors: BackendErrorsInterface = {
-      'error': ['server error', 'test error']
-    }
+      error: ['server error', 'test error'],
+    };
     store.setState({
-      ...initialState, auth: {...initialState.auth, validationErrors: testErrors}
-    })
+      ...initialState,
+      auth: { ...initialState.auth, validationErrors: testErrors },
+    });
     fixture.detectChanges();
 
     const backendErrorMessages = fixture.debugElement.query(By.directive(BackendErrorMessagesComponent));
@@ -72,7 +71,6 @@ describe('LoginComponent', () => {
 
     const emailError = fixture.debugElement.query(By.css('mat-error'));
     expect(emailError.nativeElement.textContent).toContain('Email ist erforderlich');
-
   });
 
   it('should display required field error for password if password is empty', () => {
@@ -107,9 +105,9 @@ describe('LoginComponent', () => {
   });
 
   it('should dispatch login action with correct data on form submit', () => {
-    const formData= {
+    const formData = {
       email: 'test@example.com',
-      password: 'password'
+      password: 'password',
     };
     component.loginForm.setValue(formData);
     component.onSubmit();
@@ -117,7 +115,4 @@ describe('LoginComponent', () => {
     const expectedAction = authActions.login({ request: { user: formData } as LoginRequestInterface });
     expect(store.dispatch).toHaveBeenCalledWith(expectedAction);
   });
-
-
-
 });

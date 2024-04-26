@@ -7,13 +7,19 @@ import { MatSnackBar, MatSnackBarConfig } from '@angular/material/snack-bar';
 export class SnackbarService {
   constructor(private snackBar: MatSnackBar) {}
 
-  openSnackBar(message: string) {
+  /**
+   * Opens a snackbar with the provided message.
+   * @param message The message to display in the snackbar.
+   */
+  openSnackBar(message: string): void {
     const config = new MatSnackBarConfig();
+    // Customize snackbar configuration
     config.duration = 7000;
     config.horizontalPosition = 'left';
     config.verticalPosition = 'top';
-    config.panelClass = ['custom-snackbar'];
+    config.panelClass = ['custom-snackbar']; // Apply custom styling to snackbar
 
+    // Open snackbar with provided message and configuration
     this.snackBar.open(message, 'close', config);
   }
 }
