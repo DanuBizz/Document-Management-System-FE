@@ -7,7 +7,7 @@
     <!-- Button area for category-->
     <div class="d-flex justify-content-center mobile-without-title mb-4">
       <!-- Button for creating a new category -->
-      <app-fab-button icon="add" tooltip="Create New Category" (click)="createNewCategory()"></app-fab-button>
+      <app-fab-button icon="add" tooltip="Neue Kategorie erstellen" (click)="createNewCategory()"></app-fab-button>
     </div>
 
     <!-- Progress bar: displayed while data is being fetched -->
@@ -41,7 +41,7 @@
 
           <!-- Column header for Users -->
           <ng-container matColumnDef="users">
-            <th mat-header-cell *matHeaderCellDef>Users</th>
+            <th mat-header-cell *matHeaderCellDef>Benutzer</th>
             <td mat-cell *matCellDef="let category">
               {{ category.userIDs }}
             </td>

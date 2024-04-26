@@ -91,13 +91,11 @@ export class DocumentManagementComponent implements OnInit {
    * Not tested: only provisional
    */
   onToggleDocument(document: DocumentResponseInterface) {
-    //
-    // if (document == this.expandedDocument) {
-    //   this.expandedDocument = null;
-    // } else {
-    //   this.expandedDocument = document;
-    // }
-    //
+    if (document == this.expandedDocument) {
+      this.expandedDocument = null;
+    } else {
+      this.expandedDocument = document;
+    }
   }
 
   /**

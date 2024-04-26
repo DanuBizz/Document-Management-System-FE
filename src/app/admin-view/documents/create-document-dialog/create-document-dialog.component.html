@@ -6,22 +6,22 @@
   <mat-dialog-content [formGroup]="form">
     <!-- Text input for document name -->
     <mat-form-field appearance="outline">
-      <input matInput placeholder="Document Name" formControlName="name" />
+      <input matInput placeholder="Dokument Name" formControlName="name" />
     </mat-form-field>
 
     <!-- Text input for document version -->
     <mat-form-field appearance="outline">
-      <input matInput placeholder="Document Version" formControlName="version" />
+      <input matInput placeholder="Dokument Version" formControlName="version" />
     </mat-form-field>
 
     <!-- Text input for document path -->
     <mat-form-field appearance="outline">
-      <input matInput placeholder="Document Path" formControlName="filePath" />
+      <input matInput placeholder="Dokument Pfad" formControlName="filePath" />
     </mat-form-field>
 
     <!-- Select field for categories -->
     <mat-form-field appearance="outline" class="select-field">
-      <mat-label>Categories</mat-label>
+      <mat-label>Kategorien</mat-label>
       <mat-select formControlName="categories" multiple>
         @for (category of categories$ | async; track category) {
           <mat-option [value]="category.id">{{ category.name }}</mat-option>
@@ -33,8 +33,8 @@
   <!-- Dialog actions -->
   <mat-dialog-actions class="justify-content-center">
     <!-- Button to close the dialog -->
-    <button mat-raised-button color="accent" (click)="close()">Close</button>
+    <button mat-raised-button color="accent" (click)="close()">Schließen</button>
     <!-- Button to save changes -->
-    <button mat-raised-button color="primary" (click)="save()">Save</button>
+    <button mat-raised-button color="primary" (click)="save()">Speichern</button>
   </mat-dialog-actions>
 </div>

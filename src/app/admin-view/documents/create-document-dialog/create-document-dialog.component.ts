@@ -38,7 +38,7 @@ import { CategoryResponseInterface } from '../../type/category-response.interfac
   styleUrl: './create-document-dialog.component.scss',
 })
 export class CreateDocumentDialogComponent implements OnInit {
-  dialogTitle = 'Create New Document';
+  dialogTitle = 'Neues Dokument erstellen';
   formName: string = '';
 
   // Flag to disable form field name as true if document is passed and not null
@@ -68,7 +68,7 @@ export class CreateDocumentDialogComponent implements OnInit {
     if (this.document !== null) {
       this.isDisabled = true;
       this.formName = this.document.name;
-      this.dialogTitle = 'Create New Version';
+      this.dialogTitle = 'Neue Version erstellen';
     }
     // Initialize the form
     this.initializeForm();

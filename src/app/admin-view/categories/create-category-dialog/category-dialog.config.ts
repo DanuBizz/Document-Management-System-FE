@@ -12,7 +12,7 @@ export function openCreateCategoryDialog(dialog: MatDialog) {
   config.disableClose = true; // Prevent closing the dialog by clicking outside or pressing Escape key
   config.autoFocus = true; // Focus on the first focusable element in the dialog
   config.panelClass = 'modal-panel'; // Custom CSS class for styling the dialog panel
-  config.width = '500px'; // Width of the dialog panel
+  config.width = '500px';
 
   // Open the dialog with the specified component and configuration
   const dialogRef = dialog.open(CreateCategoryDialogComponent, config);
