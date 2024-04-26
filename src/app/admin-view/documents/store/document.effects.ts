@@ -10,16 +10,22 @@ import { SnackbarService } from '../../../shared/service/snackbar.service';
 import { Store } from '@ngrx/store';
 import { selectError } from '../../categories/store/category.reducers';
 
+// Effect to fetch documents
 export const getDocumentsEffect = createEffect(
+  // Injecting dependencies
   (actions$ = inject(Actions), documentService = inject(DocumentService)) => {
     return actions$.pipe(
+      // Listening for actions of type 'getDocuments'
       ofType(documentActions.getDocuments),
       switchMap(() => {
+        // Calling the service method to fetch documents
         return documentService.getDocuments().pipe(
           map((document: DocumentResponseInterface[]) => {
+            // Dispatching action when documents are successfully fetched
             return documentActions.getDocumentsSuccess({ document });
           }),
           catchError((errorResponse: HttpErrorResponse) => {
+            // Handling errors and dispatching action when fetching fails
             return of(documentActions.getDocumentsFailure(errorResponse.error));
           })
         );
@@ -29,16 +35,21 @@ export const getDocumentsEffect = createEffect(
   { functional: true }
 );
 
+// Effect to open a snackbar with error message when fetching documents fails
 export const openSnackbarEffect = createEffect(
+  // Injecting dependencies
   (actions$ = inject(Actions), snackbarService = inject(SnackbarService), store = inject(Store)) => {
     return actions$.pipe(
+      // Listening for actions of type 'getDocumentsFailure'
       ofType(documentActions.getDocumentsFailure),
       tap(() => {
+        // Subscribing to selectError selector to get the error from the store
         store.select(selectError).subscribe(error => {
-          snackbarService.openSnackBar('Fehler beim laden der Dokumente. \nError:' + JSON.stringify(error));
+          // Opening a snackbar to display the error message
+          snackbarService.openSnackBar('Fehler beim Laden der Dokumente.\nError: ' + JSON.stringify(error));
         });
       })
     );
   },
-  { functional: true, dispatch: false }
+  { functional: true, dispatch: false } // Marks the effect as functional and indicates not to dispatch any actions
 );

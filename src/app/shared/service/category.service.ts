@@ -12,10 +12,14 @@ export class CategoryService {
 
   constructor(private http: HttpClient) {}
 
+  /**
+   * Retrieves all categories from the backend.
+   * @returns An observable of an array of category response objects.
+   */
   getAllCategories(): Observable<CategoryResponseInterface[]> {
     const fullUrl = this.documentsBaseUrl + this.queryParam;
     return this.http.get<{ content: CategoryResponseInterface[] }>(fullUrl).pipe(
-      delay(3000),
+      delay(3000), // Simulate delay for demonstration purposes
       map(response => response.content)
     );
   }

@@ -2,6 +2,7 @@ import { DocumentStateInterface } from '../../type/document-state.interface';
 import { createFeature, createReducer, on } from '@ngrx/store';
 import { documentActions } from './document.actions';
 
+// Initial state for the documents feature
 export const initialState: DocumentStateInterface = {
   isLoading: false,
   error: null,
@@ -10,6 +11,7 @@ export const initialState: DocumentStateInterface = {
 
 export const documentFeature = createFeature({
   name: 'document',
+  // Reducer functions for the feature
   reducer: createReducer(
     initialState,
     on(documentActions.getDocuments, state => ({
@@ -26,12 +28,13 @@ export const documentFeature = createFeature({
       isLoading: false,
       error: action.error,
     }))
-
-    /*            on(routerNavigatedAction, () => (initialState)
-            )*/
+    /*
+    on(routerNavigatedAction, () => (initialState))
+    */
   ),
 });
 
+// Extracting necessary values from the document feature
 export const {
   name: documentFeatureKey,
   reducer: documentReducer,

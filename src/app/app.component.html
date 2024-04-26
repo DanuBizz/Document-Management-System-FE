@@ -1,17 +1,20 @@
-<!-- Hauptcontainer, der als Flexbox dient -->
 <div class="d-flex flex-column vh-100">
+  <!-- Toolbar for desktop navigation -->
   <mat-toolbar color="accent" class="desktop-nav">
     <div class="toolbar-tools">
+      <!-- Link to the 'admin/document' route -->
       <a class="menu-item toolbar-button" mat-button routerLink="admin/document" routerLinkActive="menu-item-active">
         <span class="icon-with-text"><mat-icon>article</mat-icon></span>
         <span class="button-description">Dokumente</span>
       </a>
 
+      <!-- Link to the 'admin/category' route -->
       <a class="menu-item toolbar-button" mat-button routerLink="admin/category" routerLinkActive="menu-item-active">
         <span class="icon-with-text"><mat-icon>category</mat-icon></span>
         <span class="button-description">Kategorie</span>
       </a>
 
+      <!-- Link to the 'login' route -->
       <a class="menu-item toolbar-button" mat-button routerLink="login" routerLinkActive="menu-item-active">
         <span class="icon-with-text"><mat-icon>login</mat-icon></span>
         <span class="button-description">Login</span>
@@ -19,26 +22,32 @@
     </div>
   </mat-toolbar>
 
+  <!-- Container for dynamic content, fills remaining vertical space -->
   <div class="flex-grow-1">
     <router-outlet></router-outlet>
   </div>
 
+  <!-- Footer card for desktop -->
   <mat-card class="footer desktop-footer">
     <mat-card-footer>
       © 2024 Kulturbetriebe Burgenland | Nutzungsbedingungen | Impressum | Datenschutz
     </mat-card-footer>
   </mat-card>
 
+  <!-- Toolbar for mobile navigation -->
   <mat-toolbar color="accent" class="mobile-nav">
     <div class="mobile-toolbar-tools">
+      <!-- Link to the '/admin/document' route -->
       <a class="menu-item" mat-button routerLink="/admin/document" routerLinkActive="menu-item-active">
         <mat-icon>article</mat-icon>
       </a>
 
+      <!-- Link to the '/admin/category' route -->
       <a class="menu-item" mat-button routerLink="/admin/category" routerLinkActive="menu-item-active">
         <mat-icon>category</mat-icon>
       </a>
 
+      <!-- Link to the '/login' route -->
       <a class="menu-item" mat-button routerLink="/login" routerLinkActive="menu-item-active">
         <mat-icon>login</mat-icon>
       </a>

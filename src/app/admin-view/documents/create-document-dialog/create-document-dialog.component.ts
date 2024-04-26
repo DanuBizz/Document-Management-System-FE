@@ -38,31 +38,45 @@ import { CategoryResponseInterface } from '../../type/category-response.interfac
   styleUrl: './create-document-dialog.component.scss',
 })
 export class CreateDocumentDialogComponent implements OnInit {
-  formName: string = '';
-  isDisabled: boolean = false;
-  form!: FormGroup;
   dialogTitle = 'Neues Dokument erstellen';
+  formName: string = '';
 
-  categories$: Observable<CategoryResponseInterface[]>;
+  // Flag to disable form field name as true if document is passed and not null
+  isDisabled: boolean = false;
 
+  // Form group for the dialog
+  form!: FormGroup;
+
+  // Observable for retrieving categories from the store
+  categories$: Observable<CategoryResponseInterface[]> = this.store.select(selectCategoryData);
+
+  /**
+   * @param fb - The FormBuilder service for creating form controls and groups.
+   * @param document - The document data to pass to the dialog.
+   * @param dialogRef - The MatDialogRef service for managing dialog reference.
+   * @param store - The Redux store instance injected via dependency injection.
+   */
   constructor(
     private fb: FormBuilder,
     @Inject(MAT_DIALOG_DATA) private document: DocumentResponseInterface | null,
     private dialogRef: MatDialogRef<CreateDocumentDialogComponent>,
     private store: Store
-  ) {
-    this.categories$ = this.store.select(selectCategoryData);
-  }
+  ) {}
 
   ngOnInit(): void {
+    // If document data exists, set formName and disable form fields
     if (this.document !== null) {
       this.isDisabled = true;
       this.formName = this.document.name;
       this.dialogTitle = 'Neue Version erstellen';
     }
+    // Initialize the form
     this.initializeForm();
   }
 
+  /**
+   * Initializes the form with form controls and validators.
+   */
   initializeForm() {
     this.form = this.fb.group({
       name: [{ value: this.formName, disabled: this.isDisabled }, this.isDisabled ? [] : Validators.required],
@@ -72,15 +86,25 @@ export class CreateDocumentDialogComponent implements OnInit {
     });
   }
 
+  /**
+   * Closes the dialog.
+   */
   close() {
     this.dialogRef.close();
   }
 
+  /**
+   * Saves the form data and closes the dialog.
+   * If a document exists, closes the dialog with the form value.
+   * Otherwise, combines the form data with the document name and closes the dialog.
+   */
   save() {
+    // If a document exists, close the dialog with the form value
     if (this.document !== null) {
       this.dialogRef.close(this.form.value);
     }
 
+    // Otherwise, combine the form data with the document name and close the dialog
     const newData = {
       name: this.formName,
       ...this.form.value,

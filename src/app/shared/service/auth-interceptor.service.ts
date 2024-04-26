@@ -1,15 +1,22 @@
-import {HttpInterceptorFn} from "@angular/common/http";
-import {PersistanceService} from "../../auth/service/persistance.service";
-import {inject} from "@angular/core";
+import { HttpInterceptorFn } from '@angular/common/http';
+import { PersistenceService } from '../../auth/service/persistence.service';
+import { inject } from '@angular/core';
 
-
+/**
+ * HTTP interceptor for adding authorization token to outgoing requests.
+ * Retrieves the access token from the PersistenceService and attaches it to the request headers.
+ */
 export const authInterceptor: HttpInterceptorFn = (request, next) => {
-    const persistanceService = inject(PersistanceService)
-    const token = persistanceService.get('accessToken');
-    request = request.clone({
-        setHeaders: {
-            Authorization: token ? `Token ${token}` : '',
-        },
-    })
-    return next(request)
-}
+  // Inject PersistenceService to retrieve access token
+  const persistenceService = inject(PersistenceService);
+  // Get access token from PersistenceService
+  const token = persistenceService.get('accessToken');
+  // Clone the request and set authorization header with token if available
+  request = request.clone({
+    setHeaders: {
+      Authorization: token ? `Token ${token}` : '',
+    },
+  });
+  // Proceed to next interceptor or HTTP handler with the modified request
+  return next(request);
+};
