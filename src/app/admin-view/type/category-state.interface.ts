@@ -5,4 +5,5 @@ export interface CategoryStateInterface {
   isLoading: boolean;
   error: BackendErrorsInterface | null;
   data: CategoryResponseInterface[];
+  totalElements: string;
 }

@@ -7,6 +7,7 @@ export const initialState: CategoryStateInterface = {
   isLoading: false,
   error: null,
   data: [],
+  totalElements: '0',
 };
 
 export const categoriesFeature = createFeature({
@@ -27,7 +28,24 @@ export const categoriesFeature = createFeature({
       ...state,
       isLoading: false,
       error: action.error,
+    })),
+
+    on(categoryActions.getCategoriesWithQuery, state => ({
+      ...state,
+      isLoading: true,
+    })),
+    on(categoryActions.getCategoriesWithQuerySuccess, (state, { categories, totalElements }) => ({
+      ...state,
+      isLoading: false,
+      data: categories,
+      totalElements: totalElements,
+    })),
+    on(categoryActions.getCategoriesWithQueryFailure, (state, action) => ({
+      ...state,
+      isLoading: false,
+      error: action.error,
     }))
+
     // Handling router navigated action
     /*
     on(routerNavigatedAction, () => (initialState))
@@ -42,4 +60,5 @@ export const {
   selectIsLoading,
   selectError,
   selectData: selectCategoryData,
+  selectTotalElements,
 } = categoriesFeature;
