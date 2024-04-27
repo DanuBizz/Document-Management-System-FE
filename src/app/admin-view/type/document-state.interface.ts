@@ -5,4 +5,5 @@ export interface DocumentStateInterface {
   isLoading: boolean;
   error: BackendErrorsInterface | null;
   data: DocumentResponseInterface[];
+  totalElements: string;
 }
