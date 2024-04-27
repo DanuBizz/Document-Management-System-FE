@@ -7,6 +7,7 @@ export const initialState: DocumentStateInterface = {
   isLoading: false,
   error: null,
   data: [],
+  totalElements: '0',
 };
 
 export const documentFeature = createFeature({
@@ -14,16 +15,17 @@ export const documentFeature = createFeature({
   // Reducer functions for the feature
   reducer: createReducer(
     initialState,
-    on(documentActions.getDocuments, state => ({
+    on(documentActions.getDocumentsWithQuery, state => ({
       ...state,
       isLoading: true,
     })),
-    on(documentActions.getDocumentsSuccess, (state, action) => ({
+    on(documentActions.getDocumentsWithQuerySuccess, (state, { documents, totalElements }) => ({
       ...state,
       isLoading: false,
-      data: action.document,
+      data: documents,
+      totalElements: totalElements,
     })),
-    on(documentActions.getDocumentsFailure, (state, action) => ({
+    on(documentActions.getDocumentsWithQueryFailure, (state, action) => ({
       ...state,
       isLoading: false,
       error: action.error,
@@ -41,4 +43,5 @@ export const {
   selectIsLoading,
   selectError,
   selectData: selectDocumentData,
+  selectTotalElements,
 } = documentFeature;

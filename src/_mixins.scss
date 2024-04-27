@@ -16,6 +16,18 @@
   }
 }
 
+@mixin pagination-design {
+  .default-paginator-design {
+    .mat-mdc-paginator-container {
+      border-top: 1px solid gray !important;
+    }
+
+    .mat-mdc-text-field-wrapper {
+      width: 100px !important;
+    }
+  }
+}
+
 @mixin scrolling-container {
   overflow-y: scroll;
   max-height: 50vh;

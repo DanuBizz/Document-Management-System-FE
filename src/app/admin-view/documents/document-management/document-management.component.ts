@@ -9,18 +9,20 @@ import { MatButtonModule } from '@angular/material/button';
 import { combineLatest, filter } from 'rxjs';
 import { DocumentService } from '../../../shared/service/document.service';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { MatPaginator } from '@angular/material/paginator';
+import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { SelectionModel } from '@angular/cdk/collections';
 import { MatCheckbox } from '@angular/material/checkbox';
 import { FabButtonComponent } from '../../../shared/component/fab-button/fab-button.component';
 import { DocumentResponseInterface } from '../../type/document-response.interface';
 import { Store } from '@ngrx/store';
-import { selectDocumentData, selectError, selectIsLoading } from '../store/document.reducers';
+import { selectDocumentData, selectError, selectIsLoading, selectTotalElements } from '../store/document.reducers';
 import { documentActions } from '../store/document.actions';
 import { MatProgressBar } from '@angular/material/progress-bar';
 import { MatDialog } from '@angular/material/dialog';
 import { openCreateDocumentDialog } from '../create-document-dialog/document-dialog.config';
+import { PaginationQueryParamsInterface } from '../../../shared/type/pagination-query-params.interface';
+import { PaginationConfigService } from '../../../shared/service/pagination-config.service';
 
 @Component({
   selector: 'app-document-management',
@@ -52,6 +54,7 @@ export class DocumentManagementComponent implements OnInit {
     document: this.store.select(selectDocumentData),
     isLoading: this.store.select(selectIsLoading),
     error: this.store.select(selectError),
+    totalElements: this.store.select(selectTotalElements),
   });
 
   // Currently expanded document
@@ -66,15 +69,31 @@ export class DocumentManagementComponent implements OnInit {
   /**
    * @param store - The Redux store instance injected via dependency injection.
    * @param dialog - The MatDialog service for opening dialogs.
+   * @param paginationConfigService
    */
   constructor(
     private store: Store,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    public paginationConfigService: PaginationConfigService
   ) {}
 
   ngOnInit(): void {
-    // Dispatch action to fetch documents when the component initializes
-    this.store.dispatch(documentActions.getDocuments());
+    this.loadInitialDocumentsPage();
+  }
+
+  /**
+   * Loads the initial documents page by constructing a pagination query interface
+   * using the initial page index and page size from the pagination configuration service,
+   * and dispatches an action to retrieve documents with query parameters.
+   */
+  private loadInitialDocumentsPage() {
+    const request: PaginationQueryParamsInterface = {
+      pageNumber: this.paginationConfigService.getInitialPageIndex(),
+      pageSize: this.paginationConfigService.getPageSize(),
+    };
+
+    // Dispatch an action to retrieve documents with the updated pagination query
+    this.store.dispatch(documentActions.getDocumentsWithQuery({ queryParams: request }));
   }
 
   /**
@@ -130,5 +149,22 @@ export class DocumentManagementComponent implements OnInit {
         console.error('Document not found.');
       }
     });
+  }
+
+  /**
+   * Handles page events by updating the pagination configuration service with the new page size,
+   * constructing a pagination query interface to retrieve documents with query parameter.
+   * @param event - The PageEvent object containing information about the page event.
+   */
+  handlePageEvent(event: PageEvent) {
+    this.paginationConfigService.setPageSize(event.pageSize);
+
+    const request: PaginationQueryParamsInterface = {
+      pageNumber: event.pageIndex.toString(),
+      pageSize: event.pageSize.toString(),
+    };
+
+    // Dispatch an action to retrieve documents with the updated pagination query
+    this.store.dispatch(documentActions.getDocumentsWithQuery({ queryParams: request }));
   }
 }
