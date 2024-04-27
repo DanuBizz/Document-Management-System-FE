@@ -1,4 +1,4 @@
 export interface PaginationQueryParamsInterface {
-  pageNumber: string,
-    pageSize: string
+  pageNumber: string;
+  pageSize: string;
 }

@@ -17,9 +17,7 @@
 }
 
 @mixin pagination-design {
-
   .default-paginator-design {
-
     .mat-mdc-paginator-container {
       border-top: 1px solid gray !important;
     }
@@ -28,7 +26,6 @@
       width: 100px !important;
     }
   }
-
 }
 
 @mixin scrolling-container {

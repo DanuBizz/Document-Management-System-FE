@@ -3,7 +3,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { By } from '@angular/platform-browser';
-import {DocumentResponseInterface} from "../../type/document-response.interface";
+import { DocumentResponseInterface } from '../../type/document-response.interface';
 
 describe('CategoryManagementComponent', () => {
   let component: DocumentManagementComponent;
@@ -95,7 +95,7 @@ describe('CategoryManagementComponent', () => {
       filePath: '/path/to/document',
       categoryIds: [1],
       read: false,
-      visible: true
+      visible: true,
     };
 
     expect(component.selection.isSelected(dummyDocument)).toBeFalse();
@@ -106,5 +106,4 @@ describe('CategoryManagementComponent', () => {
     component.onDocumentToggled(dummyDocument);
     expect(component.selection.isSelected(dummyDocument)).toBeFalse();
   });
-
 });

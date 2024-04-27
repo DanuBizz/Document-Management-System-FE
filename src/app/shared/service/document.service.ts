@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { delay, map, Observable } from 'rxjs';
 import { DocumentResponseInterface } from '../../admin-view/type/document-response.interface';
 import { environment } from '../../../environments/environment';
-import {PaginationQueryParamsInterface} from "../type/pagination-query-params.interface";
+import { PaginationQueryParamsInterface } from '../type/pagination-query-params.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -19,23 +19,23 @@ export class DocumentService {
    * @param queryParams Pagination parameters including pageNumber and pageSize.
    * @returns Observable emitting documents array and total number of elements.
    */
-  getDocumentsWithQuery(queryParams: { queryParams: PaginationQueryParamsInterface}): Observable<{ documents: DocumentResponseInterface[], totalElements: string }> {
+  getDocumentsWithQuery(queryParams: {
+    queryParams: PaginationQueryParamsInterface;
+  }): Observable<{ documents: DocumentResponseInterface[]; totalElements: string }> {
     const fullUrl = `${this.baseUrl}`;
-    return this.http.get<{ content: DocumentResponseInterface[], totalElements: string }>(fullUrl, {
-      params: {
-        page: queryParams.queryParams.pageNumber,
-        size: queryParams.queryParams.pageSize
-      }
-    }).pipe(
+    return this.http
+      .get<{ content: DocumentResponseInterface[]; totalElements: string }>(fullUrl, {
+        params: {
+          page: queryParams.queryParams.pageNumber,
+          size: queryParams.queryParams.pageSize,
+        },
+      })
+      .pipe(
         delay(1000), // Simulate delay for demonstration purposes
         map(response => ({
           documents: response.content,
-          totalElements: response.totalElements.toString()
+          totalElements: response.totalElements.toString(),
         }))
-    );
+      );
   }
-
-
-
 }
-

@@ -7,7 +7,7 @@ export const initialState: DocumentStateInterface = {
   isLoading: false,
   error: null,
   data: [],
-  totalElements: '0'
+  totalElements: '0',
 };
 
 export const documentFeature = createFeature({
