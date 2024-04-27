@@ -3,6 +3,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { By } from '@angular/platform-browser';
+import {DocumentResponseInterface} from "../../type/document-response.interface";
 
 describe('CategoryManagementComponent', () => {
   let component: DocumentManagementComponent;
@@ -86,4 +87,24 @@ describe('CategoryManagementComponent', () => {
     const loadingBar = fixture.debugElement.query(By.css('mat-progress-bar'));
     expect(loadingBar).toBeTruthy();
   });
+
+  it('should toggle document selection', () => {
+    const dummyDocument: DocumentResponseInterface = {
+      id: 1,
+      name: 'Test Document',
+      filePath: '/path/to/document',
+      categoryIds: [1],
+      read: false,
+      visible: true
+    };
+
+    expect(component.selection.isSelected(dummyDocument)).toBeFalse();
+
+    component.onDocumentToggled(dummyDocument);
+    expect(component.selection.isSelected(dummyDocument)).toBeTrue();
+
+    component.onDocumentToggled(dummyDocument);
+    expect(component.selection.isSelected(dummyDocument)).toBeFalse();
+  });
+
 });

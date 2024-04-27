@@ -1,68 +1,79 @@
 import { documentReducer, initialState } from './document.reducers';
 import { documentActions } from './document.actions';
 import { DocumentResponseInterface } from '../../type/document-response.interface';
+import {PaginationQueryParamsInterface} from "../../../shared/type/pagination-query-params.interface";
+
 
 describe('DocumentReducers', () => {
-  it('returns a default state', () => {
-    const action = { type: 'UNKNOWN' };
-    const state = documentReducer(initialState, action);
-    const newState = {
-      error: null,
-      isLoading: false,
-      data: [],
+
+    const requestParams: PaginationQueryParamsInterface = {
+        pageNumber: '0',
+        pageSize: '5'
     };
 
-    expect(state).toEqual(newState);
-  });
+ it('returns a default state', () => {
+   const action = { type: 'UNKNOWN' };
+   const state = documentReducer(initialState, action);
+   const newState = {
+     error: null,
+     isLoading: false,
+     data: [],
+     totalElements: '0'
+   };
 
-  it('should get documents', () => {
-    const action = documentActions.getDocuments();
-    const state = documentReducer(initialState, action);
-    const newState = {
-      error: null,
-      isLoading: true,
-      data: [],
-    };
+   expect(state).toEqual(newState);
+ });
 
-    expect(state).toEqual(newState);
-  });
+ it('should change the state for get documents with query', () => {
+   const action = documentActions.getDocumentsWithQuery({queryParams: requestParams});
+   const state = documentReducer(initialState, action);
+   const newState = {
+     ...initialState,
+        isLoading: true,
+   };
 
-  it('should get documents success', () => {
-    const documents: DocumentResponseInterface[] = [
-      {
-        id: 10,
-        name: 'test',
-        filePath: 'asdf',
-        categoryIds: [1, 2, 3],
-        read: false,
-        visible: true,
-      },
-    ];
+   expect(state).toEqual(newState);
+ });
 
-    const action = documentActions.getDocumentsSuccess({
-      document: documents,
+ it('should get documents and totalElements when success', () => {
+   const documents: DocumentResponseInterface[] = [
+     {
+       id: 10,
+       name: 'test',
+       filePath: 'asdf',
+       categoryIds: [1, 2, 3],
+       read: false,
+       visible: true,
+     },
+   ];
+   const totalElements = '1';
+
+   const action = documentActions.getDocumentsWithQuerySuccess(
+       { documents: documents, totalElements: totalElements});
+   const state = documentReducer(initialState, action);
+   const newState = {
+       ...initialState,
+     data: documents,
+       totalElements: totalElements,
+   };
+
+   expect(state).toEqual(newState);
+ });
+
+    it('should get documents with query failure', () => {
+      const action = documentActions.getDocumentsWithQueryFailure({
+        error: { ['error500']: ['Server error'] },
+      });
+      const state = documentReducer(initialState, action);
+      const newState = {
+          ...initialState,
+          error: { ['error500']: ['Server error'] },
+      };
+
+      expect(state).toEqual(newState);
     });
-    const state = documentReducer(initialState, action);
-    const newState = {
-      error: null,
-      isLoading: false,
-      data: documents,
-    };
 
-    expect(state).toEqual(newState);
-  });
 
-  it('should get documents failure', () => {
-    const action = documentActions.getDocumentsFailure({
-      error: { ['error500']: ['Server error'] },
-    });
-    const state = documentReducer(initialState, action);
-    const newState = {
-      error: { ['error500']: ['Server error'] },
-      isLoading: false,
-      data: [],
-    };
-
-    expect(state).toEqual(newState);
-  });
 });
+
+
