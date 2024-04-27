@@ -118,6 +118,7 @@ body {
 @import './mixins';
 
 @include table-design();
+@include pagination-design();
 @include responsive-dialogs();
 @include mobile-responsive-title;
 
@@ -173,3 +174,6 @@ mat-form-field {
   height: 150px;
   max-height: 150px;
 }
+
+
+
