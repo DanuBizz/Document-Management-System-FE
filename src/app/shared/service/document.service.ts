@@ -19,12 +19,11 @@ export class DocumentService {
    * @param queryParams Pagination parameters including pageNumber and pageSize.
    * @returns Observable emitting documents array and total number of elements.
    */
-  getDocumentsWithQuery(queryParams: {
+  fetchDocumentsWithQuery(queryParams: {
     queryParams: PaginationQueryParamsInterface;
   }): Observable<{ documents: DocumentResponseInterface[]; totalElements: string }> {
-    const fullUrl = `${this.baseUrl}`;
     return this.http
-      .get<{ content: DocumentResponseInterface[]; totalElements: string }>(fullUrl, {
+      .get<{ content: DocumentResponseInterface[]; totalElements: string }>(this.baseUrl, {
         params: {
           page: queryParams.queryParams.pageNumber,
           size: queryParams.queryParams.pageSize,

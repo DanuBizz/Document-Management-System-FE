@@ -1,12 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
-import { Store } from '@ngrx/store';
-import { categoryActions } from './admin-view/categories/store/category.actions';
 
 @Component({
   selector: 'app-root',
@@ -24,14 +22,4 @@ import { categoryActions } from './admin-view/categories/store/category.actions'
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
 })
-export class AppComponent implements OnInit {
-  /**
-   * @param store - The Redux store instance injected via dependency injection.
-   */
-  constructor(private store: Store) {}
-
-  ngOnInit(): void {
-    // Load all categories on app initialization
-    this.store.dispatch(categoryActions.getAllCategories());
-  }
-}
+export class AppComponent {}

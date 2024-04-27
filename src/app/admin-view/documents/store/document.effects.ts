@@ -17,7 +17,7 @@ export const getDocumentsWithQuery = createEffect(
       ofType(documentActions.getDocumentsWithQuery),
       switchMap(({ queryParams }) => {
         // Calling the service method to fetch documents
-        return documentService.getDocumentsWithQuery({ queryParams }).pipe(
+        return documentService.fetchDocumentsWithQuery({ queryParams }).pipe(
           map(documents =>
             // Handling the response and dispatching action when successful
             documentActions.getDocumentsWithQuerySuccess({

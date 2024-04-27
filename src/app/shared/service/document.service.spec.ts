@@ -35,7 +35,7 @@ describe('DocumentService', () => {
     const dummyTotalElements = '2';
     const dummyPaginationQuery: PaginationQueryParamsInterface = { pageNumber: '0', pageSize: '20' };
 
-    service.getDocumentsWithQuery({ queryParams: dummyPaginationQuery }).subscribe(response => {
+    service.fetchDocumentsWithQuery({ queryParams: dummyPaginationQuery }).subscribe(response => {
       expect(response.documents.length).toBe(2);
       expect(response.documents).toEqual(dummyDocuments);
       expect(response.totalElements).toBe(dummyTotalElements);

@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import {Component, Inject, OnInit} from '@angular/core';
 import {
   MAT_DIALOG_DATA,
   MatDialogActions,
@@ -6,17 +6,17 @@ import {
   MatDialogRef,
   MatDialogTitle,
 } from '@angular/material/dialog';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { MatFormField, MatLabel } from '@angular/material/form-field';
-import { MatOption, MatSelect } from '@angular/material/select';
-import { MatInput } from '@angular/material/input';
-import { MatButton } from '@angular/material/button';
-import { Observable } from 'rxjs';
-import { Store } from '@ngrx/store';
-import { CommonModule } from '@angular/common';
-import { selectCategoryData } from '../../categories/store/category.reducers';
-import { DocumentResponseInterface } from '../../type/document-response.interface';
-import { CategoryResponseInterface } from '../../type/category-response.interface';
+import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
+import {MatFormField, MatLabel} from '@angular/material/form-field';
+import {MatOption, MatSelect} from '@angular/material/select';
+import {MatInput} from '@angular/material/input';
+import {MatButton} from '@angular/material/button';
+import {Observable} from 'rxjs';
+import {Store} from '@ngrx/store';
+import {CommonModule} from '@angular/common';
+import {selectCategoryData} from '../../categories/store/category.reducers';
+import {DocumentResponseInterface} from '../../type/document-response.interface';
+import {CategoryResponseInterface} from '../../type/category-response.interface';
 
 @Component({
   selector: 'app-create-document-dialog',

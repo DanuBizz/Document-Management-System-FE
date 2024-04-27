@@ -23,6 +23,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { openCreateDocumentDialog } from '../create-document-dialog/document-dialog.config';
 import { PaginationQueryParamsInterface } from '../../../shared/type/pagination-query-params.interface';
 import { PaginationConfigService } from '../../../shared/service/pagination-config.service';
+import { categoryActions } from '../../categories/store/category.actions';
 
 @Component({
   selector: 'app-document-management',
@@ -69,7 +70,7 @@ export class DocumentManagementComponent implements OnInit {
   /**
    * @param store - The Redux store instance injected via dependency injection.
    * @param dialog - The MatDialog service for opening dialogs.
-   * @param paginationConfigService
+   * @param paginationConfigService contains the configuration values for the pagination
    */
   constructor(
     private store: Store,
@@ -79,6 +80,9 @@ export class DocumentManagementComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadInitialDocumentsPage();
+
+    // Load all categories on initialization
+    this.store.dispatch(categoryActions.getAllCategories());
   }
 
   /**
