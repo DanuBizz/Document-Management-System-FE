@@ -1,14 +1,14 @@
-import {Actions, createEffect, ofType} from '@ngrx/effects';
-import {inject} from '@angular/core';
-import {map, of, switchMap} from 'rxjs';
-import {catchError, tap} from 'rxjs/operators';
-import {CategoryService} from '../../../shared/service/category.service';
-import {categoryActions} from './category.actions';
-import {CategoryResponseInterface} from '../../type/category-response.interface';
-import {HttpErrorResponse} from '@angular/common/http';
-import {SnackbarService} from '../../../shared/service/snackbar.service';
-import {Store} from '@ngrx/store';
-import {selectError} from './category.reducers';
+import { Actions, createEffect, ofType } from '@ngrx/effects';
+import { inject } from '@angular/core';
+import { map, of, switchMap } from 'rxjs';
+import { catchError, tap } from 'rxjs/operators';
+import { CategoryService } from '../../../shared/service/category.service';
+import { categoryActions } from './category.actions';
+import { CategoryResponseInterface } from '../../type/category-response.interface';
+import { HttpErrorResponse } from '@angular/common/http';
+import { SnackbarService } from '../../../shared/service/snackbar.service';
+import { Store } from '@ngrx/store';
+import { selectError } from './category.reducers';
 
 export const getAllCategoriesEffect = createEffect(
   // Injecting dependencies
