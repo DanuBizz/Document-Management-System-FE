@@ -53,8 +53,16 @@
         </table>
       </div>
 
-      <!-- Paginator (not implemented yet) -->
-      <mat-paginator class="border-top" [length]="1000" [pageSize]="5" [pageSizeOptions]="[5, 10, 15]"></mat-paginator>
+      <!-- Paginator -->
+      <mat-paginator
+        class="default-paginator-design"
+        [length]="data.totalElements"
+        [pageSize]="paginationConfigService.getPageSize()"
+        [pageSizeOptions]="paginationConfigService.getPageSizeOptions()"
+        (page)="handlePageEvent($event)"
+        [showFirstLastButtons]="true"
+        aria-label="Select page of categories">
+      </mat-paginator>
     </div>
   </div>
 </ng-container>

@@ -10,7 +10,7 @@ import { SnackbarService } from '../../../shared/service/snackbar.service';
 import { Store } from '@ngrx/store';
 import { selectError } from './category.reducers';
 
-export const getCategoriesEffect = createEffect(
+export const getAllCategoriesEffect = createEffect(
   // Injecting dependencies
   (actions$ = inject(Actions), categoriesService = inject(CategoryService)) => {
     return actions$.pipe(
@@ -34,12 +34,39 @@ export const getCategoriesEffect = createEffect(
   { functional: true }
 );
 
-export const openSnackbarEffect = createEffect(
+export const getCategoryWithQueryEffect = createEffect(
+  // Injecting dependencies
+  (actions$ = inject(Actions), categoryService = inject(CategoryService)) => {
+    return actions$.pipe(
+      // Listening for actions of type
+      ofType(categoryActions.getCategoriesWithQuery),
+      switchMap(({ queryParams }) => {
+        // Calling the service method to fetch documents
+        return categoryService.fetchCategoriesWithQuery({ queryParams }).pipe(
+          map(categories =>
+            // Handling the response and dispatching action when successful
+            categoryActions.getCategoriesWithQuerySuccess({
+              categories: categories.categories,
+              totalElements: categories.totalElements,
+            })
+          ),
+          catchError((errorResponse: HttpErrorResponse) => {
+            // Handling errors and dispatching action when fetching fails
+            return of(categoryActions.getCategoriesWithQueryFailure(errorResponse.error));
+          })
+        );
+      })
+    );
+  },
+  { functional: true }
+);
+
+export const openSnackbarErrorEffect = createEffect(
   // Injecting dependencies
   (actions$ = inject(Actions), snackbarService = inject(SnackbarService), store = inject(Store)) => {
     return actions$.pipe(
       // Listening for actions of type 'getAllCategoriesFailure'
-      ofType(categoryActions.getAllCategoriesFailure),
+      ofType(categoryActions.getAllCategoriesFailure, categoryActions.getCategoriesWithQueryFailure),
       tap(() => {
         // Subscribing to selectError selector to get the error from the store
         store.select(selectError).subscribe(error => {
