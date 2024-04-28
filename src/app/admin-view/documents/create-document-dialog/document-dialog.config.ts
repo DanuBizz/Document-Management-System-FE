@@ -14,7 +14,7 @@ export function openCreateDocumentDialog(dialog: MatDialog, document: DocumentRe
   config.disableClose = true; // Prevent closing the dialog by clicking outside or pressing Escape key
   config.autoFocus = true; // Focus on the first focusable element in the dialog
   config.panelClass = 'modal-panel'; // Custom CSS class for styling the dialog panel
-  config.width = '500px';
+  config.width = '900px';
 
   config.data = document; // Pass document data to the dialog component
 

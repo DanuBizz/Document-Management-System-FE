@@ -39,7 +39,7 @@
     <!-- Select field for categories -->
     <mat-form-field appearance="outline" hideRequiredMarker="true" class="select-field">
       <mat-label>Kategorien</mat-label>
-      <mat-select formControlName="categories" multiple>
+      <mat-select formControlName="categories" multiple class="select-panel">
         @for (category of categories$ | async; track category) {
           <mat-option [value]="category.id">{{ category.name }}</mat-option>
         }
@@ -55,6 +55,6 @@
     <!-- Button to close the dialog -->
     <button mat-raised-button color="accent" (click)="close()">Schließen</button>
     <!-- Button to save changes -->
-    <button mat-raised-button color="primary" (click)="save()">Speichern</button>
+    <button mat-raised-button color="primary" [disabled]="!form.valid" (click)="save()">Speichern</button>
   </mat-dialog-actions>
 </div>
