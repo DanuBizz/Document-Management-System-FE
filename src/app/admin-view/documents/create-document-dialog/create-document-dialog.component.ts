@@ -87,7 +87,6 @@ export class CreateDocumentDialogComponent implements OnInit {
   initializeForm() {
     this.form = this.fb.group({
       name: [{ value: this.formName, disabled: this.isDisabled }, this.isDisabled ? [] : Validators.required],
-      version: ['', Validators.required],
       fileName: ['', Validators.required],
       categories: ['', Validators.required],
     });

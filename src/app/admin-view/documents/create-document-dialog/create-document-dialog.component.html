@@ -12,14 +12,6 @@
       }
     </mat-form-field>
 
-    <!-- Text input for document version -->
-    <mat-form-field appearance="outline">
-      <input matInput placeholder="Dokumenten Version" formControlName="version" />
-      @if (form.controls['version'].hasError('required')) {
-        <mat-error>Version ist <strong>erforderlich</strong></mat-error>
-      }
-    </mat-form-field>
-
     <!-- Select file input -->
     <mat-form-field appearance="outline" hideRequiredMarker="true">
       <!-- Display file name -->
