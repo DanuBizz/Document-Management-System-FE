@@ -6,21 +6,29 @@
   <mat-dialog-content [formGroup]="form">
     <!-- Text input for document name -->
     <mat-form-field appearance="outline">
-      <input matInput placeholder="Dokument Name" formControlName="name" />
+      <input matInput placeholder="Dokumenten Name" formControlName="name" />
     </mat-form-field>
 
     <!-- Text input for document version -->
     <mat-form-field appearance="outline">
-      <input matInput placeholder="Dokument Version" formControlName="version" />
+      <input matInput placeholder="Dokumenten Version" formControlName="version" />
     </mat-form-field>
 
-    <!-- Text input for document path -->
-    <mat-form-field appearance="outline">
-      <input matInput placeholder="Dokument Pfad" formControlName="filePath" />
+    <!-- Select file input -->
+    <mat-form-field appearance="outline" hideRequiredMarker="true">
+      <mat-label>Datei auswählen</mat-label>
+      <!-- Display file name -->
+        <input matInput placeholder="Datei auswählen" formControlName="fileName" readonly>
+      <!-- Open explorer button -->
+        <button mat-mini-fab color="primary" (click)="fileInput.click()" matSuffix class="upload-btn">
+          <mat-icon >upload</mat-icon></button>
     </mat-form-field>
+
+    <!-- Open explorer function (hidden) -->
+    <input type="file" (change)="selectFile($event)" #fileInput hidden>
 
     <!-- Select field for categories -->
-    <mat-form-field appearance="outline" class="select-field">
+    <mat-form-field appearance="outline" hideRequiredMarker="true" class="select-field">
       <mat-label>Kategorien</mat-label>
       <mat-select formControlName="categories" multiple>
         @for (category of categories$ | async; track category) {
