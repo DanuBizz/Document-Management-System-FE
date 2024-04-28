@@ -29,6 +29,19 @@ export const documentFeature = createFeature({
       ...state,
       isLoading: false,
       error: action.error,
+    })),
+
+    on(documentActions.createDocumentVersion, state => ({
+      ...state,
+      isLoading: true,
+    })),
+    on(documentActions.createDocumentVersionSuccess, state => ({
+      ...state,
+      isLoading: false,
+    })),
+    on(documentActions.createDocumentVersionFailure, state => ({
+      ...state,
+      isLoading: false,
     }))
     /*
     on(routerNavigatedAction, () => (initialState))

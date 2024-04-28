@@ -8,6 +8,7 @@ import { documentActions } from './document.actions';
 import { SnackbarService } from '../../../shared/service/snackbar.service';
 import { Store } from '@ngrx/store';
 import { selectError } from '../../categories/store/category.reducers';
+import { DocVersionService } from '../../../shared/service/docVersion.service';
 
 export const getDocumentsWithQuery = createEffect(
   // Injecting dependencies
@@ -53,4 +54,28 @@ export const openSnackbarEffect = createEffect(
     );
   },
   { functional: true, dispatch: false } // Indicates not to dispatch any actions
+);
+
+export const createDocumentVersionEffect = createEffect(
+  // Injecting dependencies
+  (actions$ = inject(Actions), docVersionService = inject(DocVersionService)) => {
+    return actions$.pipe(
+      // Listening for actions of type
+      ofType(documentActions.createDocumentVersion),
+      switchMap(({ doc }) => {
+        // Calling the service method to fetch documents
+        return docVersionService.createDocVersion(doc).pipe(
+          map(() =>
+            // Handling the response and dispatching action when successful
+            documentActions.createDocumentVersionSuccess()
+          ),
+          catchError(() => {
+            // Handling errors and dispatching action when fetching fails
+            return of(documentActions.createDocumentVersionFailure());
+          })
+        );
+      })
+    );
+  },
+  { functional: true }
 );

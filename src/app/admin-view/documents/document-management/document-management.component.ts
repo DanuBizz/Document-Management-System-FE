@@ -24,8 +24,7 @@ import { openCreateDocumentDialog } from '../create-document-dialog/document-dia
 import { PaginationQueryParamsInterface } from '../../../shared/type/pagination-query-params.interface';
 import { PaginationConfigService } from '../../../shared/service/pagination-config.service';
 import { categoryActions } from '../../categories/store/category.actions';
-import {DocVersionService} from "../../../shared/service/docVersion.service";
-import {DocVersionRequest} from "../../type/doc-version-request.interface";
+import { DocVersionRequest } from '../../type/doc-version-request.interface';
 
 @Component({
   selector: 'app-document-management',
@@ -73,13 +72,11 @@ export class DocumentManagementComponent implements OnInit {
    * @param store - The Redux store instance injected via dependency injection.
    * @param dialog - The MatDialog service for opening dialogs.
    * @param paginationConfigService contains the configuration values for the pagination
-   * @param docVersionService contains the http crud methods for the document version
    */
   constructor(
     private store: Store,
     private dialog: MatDialog,
-    public paginationConfigService: PaginationConfigService,
-    private docVersionService: DocVersionService
+    public paginationConfigService: PaginationConfigService
   ) {}
 
   ngOnInit(): void {
@@ -136,11 +133,11 @@ export class DocumentManagementComponent implements OnInit {
       .subscribe(val => {
         console.log('New document value:', val);
         const date = Date.now();
-        const newDocumentVersion : DocVersionRequest = {
+        const newDocumentVersion: DocVersionRequest = {
           ...val,
-          date
-        }
-        this.docVersionService.UploadDocVersion(newDocumentVersion)
+          date,
+        };
+        this.store.dispatch(documentActions.createDocumentVersion({ doc: newDocumentVersion }));
       });
   }
 
