@@ -7,25 +7,34 @@
     <!-- Text input for document name -->
     <mat-form-field appearance="outline">
       <input matInput placeholder="Dokumenten Name" formControlName="name" />
+      @if (form.controls['name'].hasError('required')) {
+        <mat-error>Name ist <strong>erforderlich</strong></mat-error>
+      }
     </mat-form-field>
 
     <!-- Text input for document version -->
     <mat-form-field appearance="outline">
       <input matInput placeholder="Dokumenten Version" formControlName="version" />
+      @if (form.controls['version'].hasError('required')) {
+        <mat-error>Version ist <strong>erforderlich</strong></mat-error>
+      }
     </mat-form-field>
 
     <!-- Select file input -->
     <mat-form-field appearance="outline" hideRequiredMarker="true">
-      <mat-label>Datei auswählen</mat-label>
       <!-- Display file name -->
-        <input matInput placeholder="Datei auswählen" formControlName="fileName" readonly>
+      <input matInput placeholder="Datei auswählen" formControlName="fileName" readonly />
+      @if (form.controls['fileName'].hasError('required')) {
+        <mat-error>Datei ist <strong>erforderlich</strong></mat-error>
+      }
       <!-- Open explorer button -->
-        <button mat-mini-fab color="primary" (click)="fileInput.click()" matSuffix class="upload-btn">
-          <mat-icon >upload</mat-icon></button>
+      <button mat-mini-fab color="primary" (click)="fileInput.click()" matSuffix class="upload-btn">
+        <mat-icon>upload</mat-icon>
+      </button>
     </mat-form-field>
 
     <!-- Open explorer function (hidden) -->
-    <input type="file" (change)="selectFile($event)" #fileInput hidden>
+    <input type="file" (change)="selectFile($event)" #fileInput hidden />
 
     <!-- Select field for categories -->
     <mat-form-field appearance="outline" hideRequiredMarker="true" class="select-field">
@@ -35,6 +44,9 @@
           <mat-option [value]="category.id">{{ category.name }}</mat-option>
         }
       </mat-select>
+      @if (form.controls['categories'].hasError('required')) {
+        <mat-error>Kategorie ist <strong>erforderlich</strong></mat-error>
+      }
     </mat-form-field>
   </mat-dialog-content>
 

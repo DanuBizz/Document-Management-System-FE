@@ -1,4 +1,4 @@
-import {Component, Inject, OnInit} from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import {
   MAT_DIALOG_DATA,
   MatDialogActions,
@@ -6,18 +6,18 @@ import {
   MatDialogRef,
   MatDialogTitle,
 } from '@angular/material/dialog';
-import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
-import {MatFormField, MatLabel, MatSuffix} from '@angular/material/form-field';
-import {MatOption, MatSelect} from '@angular/material/select';
-import {MatInput} from '@angular/material/input';
-import {MatButton, MatMiniFabButton} from '@angular/material/button';
-import {Observable} from 'rxjs';
-import {Store} from '@ngrx/store';
-import {CommonModule} from '@angular/common';
-import {selectCategoryData} from '../../categories/store/category.reducers';
-import {DocumentResponseInterface} from '../../type/document-response.interface';
-import {CategoryResponseInterface} from '../../type/category-response.interface';
-import {MatIcon} from "@angular/material/icon";
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { MatFormFieldModule, MatLabel, MatSuffix } from '@angular/material/form-field';
+import { MatOption, MatSelect } from '@angular/material/select';
+import { MatInput } from '@angular/material/input';
+import { MatButton, MatMiniFabButton } from '@angular/material/button';
+import { Observable } from 'rxjs';
+import { Store } from '@ngrx/store';
+import { CommonModule } from '@angular/common';
+import { selectCategoryData } from '../../categories/store/category.reducers';
+import { DocumentResponseInterface } from '../../type/document-response.interface';
+import { CategoryResponseInterface } from '../../type/category-response.interface';
+import { MatIcon } from '@angular/material/icon';
 
 @Component({
   selector: 'app-create-document-dialog',
@@ -26,7 +26,7 @@ import {MatIcon} from "@angular/material/icon";
     CommonModule,
     MatDialogTitle,
     MatDialogContent,
-    MatFormField,
+    MatFormFieldModule,
     MatSelect,
     MatOption,
     MatDialogActions,
@@ -36,7 +36,7 @@ import {MatIcon} from "@angular/material/icon";
     MatLabel,
     MatSuffix,
     MatIcon,
-    MatMiniFabButton
+    MatMiniFabButton,
   ],
   templateUrl: './create-document-dialog.component.html',
   styleUrl: './create-document-dialog.component.scss',
@@ -106,10 +106,9 @@ export class CreateDocumentDialogComponent implements OnInit {
    * Otherwise, combines the form data with the document name and closes the dialog.
    */
   save() {
-
     let data = {
       ...this.form.value,
-      file: this.file
+      file: this.file,
     };
 
     // If a document exists, close the dialog with the form value
@@ -121,7 +120,7 @@ export class CreateDocumentDialogComponent implements OnInit {
     data = {
       name: this.formName,
       ...this.form.value,
-      file: this.file
+      file: this.file,
     };
 
     this.dialogRef.close(data);
@@ -140,11 +139,8 @@ export class CreateDocumentDialogComponent implements OnInit {
       this.file = event.target.files[0];
       // Patch the form value with the selected file name
       this.form.patchValue({
-        fileName: this.file.name
+        fileName: this.file.name,
       });
     }
   }
-
-
-
 }
