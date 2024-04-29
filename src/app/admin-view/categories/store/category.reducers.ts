@@ -8,6 +8,10 @@ export const initialState: CategoryStateInterface = {
   error: null,
   data: [],
   totalElements: '0',
+  queryParams: {
+    pageNumber: '0',
+    pageSize: '5'
+  }
 };
 
 export const categoriesFeature = createFeature({
@@ -30,9 +34,10 @@ export const categoriesFeature = createFeature({
       error: action.error,
     })),
 
-    on(categoryActions.getCategoriesWithQuery, state => ({
+    on(categoryActions.getCategoriesWithQuery, (state, action) => ({
       ...state,
       isLoading: true,
+      queryParams: action.queryParams,
     })),
     on(categoryActions.getCategoriesWithQuerySuccess, (state, { categories, totalElements }) => ({
       ...state,
@@ -44,8 +49,21 @@ export const categoriesFeature = createFeature({
       ...state,
       isLoading: false,
       error: action.error,
-    }))
+    })),
 
+      on(categoryActions.createCategory, state => ({
+        ...state,
+        isLoading: true,
+      })),
+      on(categoryActions.createCategorySuccess, (state, action) => ({
+        ...state,
+        isLoading: false,
+      })),
+      on(categoryActions.createCategoryFailure, (state, action) => ({
+        ...state,
+        isLoading: false,
+        error: action.error,
+      }))
     // Handling router navigated action
     /*
     on(routerNavigatedAction, () => (initialState))
@@ -61,4 +79,5 @@ export const {
   selectError,
   selectData: selectCategoryData,
   selectTotalElements,
+  selectQueryParams,
 } = categoriesFeature;

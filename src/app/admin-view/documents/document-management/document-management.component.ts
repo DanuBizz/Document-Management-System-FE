@@ -131,7 +131,6 @@ export class DocumentManagementComponent implements OnInit {
     openCreateDocumentDialog(this.dialog, null)
       .pipe(filter(val => !!val))
       .subscribe(val => {
-        console.log('New document value:', val);
         const date = Date.now();
         const newDocumentVersion: DocVersionRequest = {
           ...val,

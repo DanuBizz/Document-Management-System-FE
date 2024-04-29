@@ -1,21 +1,31 @@
-import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { MatButton } from '@angular/material/button';
-import { MatDialogActions, MatDialogContent, MatDialogRef, MatDialogTitle } from '@angular/material/dialog';
-import { MatFormField, MatLabel } from '@angular/material/form-field';
-import { MatInput } from '@angular/material/input';
-import { MatOption, MatSelect } from '@angular/material/select';
+import {Component} from '@angular/core';
+import {FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
+import {MatButton} from '@angular/material/button';
+import {MatDialogActions, MatDialogContent, MatDialogRef, MatDialogTitle} from '@angular/material/dialog';
+import {MatFormFieldModule, MatLabel} from '@angular/material/form-field';
+import {MatInput} from '@angular/material/input';
+import {MatOption, MatSelect} from '@angular/material/select';
+import {Store} from "@ngrx/store";
+import {selectUserData} from "../../users/store/user.reducers";
+import {Observable} from "rxjs";
+import {UserResponseInterface} from "../../type/user-response.interface";
+import {userActions} from "../../users/store/user.actions";
+import {CommonModule} from "@angular/common";
+import {CategoryResponseInterface} from "../../type/category-response.interface";
+import {selectCategoryData} from "../store/category.reducers";
+import {categoryActions} from "../store/category.actions";
 
 @Component({
   selector: 'app-create-category-dialog',
   standalone: true,
   imports: [
+    CommonModule,
     FormsModule,
     MatButton,
     MatDialogActions,
     MatDialogContent,
     MatDialogTitle,
-    MatFormField,
+    MatFormFieldModule,
     MatInput,
     MatLabel,
     MatSelect,
@@ -29,27 +39,36 @@ export class CreateCategoryDialogComponent {
   // Form group for the dialog
   form: FormGroup;
 
-  // Temporary Array to simulate users
-  userList: string[] = [];
+  users$: Observable<UserResponseInterface[]> = this.store.select(selectUserData)
+  categories: CategoryResponseInterface[] = [];
 
   /**
    * @param fb - The FormBuilder service for creating form controls and groups.
    * @param dialogRef - The MatDialogRef service for managing dialog reference.
+   * @param store - The Redux store instance injected via dependency injection.
    */
   constructor(
     private fb: FormBuilder,
-    private dialogRef: MatDialogRef<CreateCategoryDialogComponent>
+    private dialogRef: MatDialogRef<CreateCategoryDialogComponent>,
+    private store: Store
   ) {
     // Initialize form with form controls and validators
     this.form = this.fb.group({
-      name: ['', Validators.required],
-      user: ['', Validators.required],
+      name: ['', [Validators.required, this.validateCategoryName.bind(this)]],
+      userIds: ['', Validators.required],
     });
 
-    // Populate userList array with dummy users
-    for (let i = 1; i <= 50; i++) {
-      this.userList.push(`User${i}`);
-    }
+    this.store.dispatch(userActions.getAllUsers())
+    this.store.dispatch(categoryActions.getAllCategories())
+
+    this.store.select(selectCategoryData).subscribe(categories => {
+      this.categories = categories;
+    });
+  }
+
+  validateCategoryName(control: FormControl): { [key: string]: boolean } | null {
+    const existingCategory = this.categories.find(category => category.name.toLowerCase() === control.value.toLowerCase());
+    return existingCategory ? { 'duplicateName': true } : null;
   }
 
   /**

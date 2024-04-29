@@ -1,22 +1,34 @@
+<ng-container ></ng-container>
 <div class="edit-course-form">
   <!-- Dialog title -->
   <h2 mat-dialog-title>Neue Kategorie erstellen</h2>
 
   <!-- Dialog content with form -->
   <mat-dialog-content [formGroup]="form">
+
     <!-- Text input for category name -->
     <mat-form-field appearance="outline">
       <input matInput placeholder="Kategorie Name" formControlName="name" />
+      <!-- Error message for duplicate name -->
+      @if (form.controls['name'].hasError('duplicateName')) {
+      <mat-error>Dieser Kategoriename existiert bereits.</mat-error>
+      }
+      @if (form.controls['name'].hasError('required')) {
+      <mat-error>Name ist <strong>erforderlich</strong></mat-error>
+      }
     </mat-form-field>
 
     <!-- Select field for adding users -->
     <mat-form-field appearance="outline" class="select-field">
       <mat-label>Benutzer hinzufügen</mat-label>
-      <mat-select formControlName="user" multiple>
-        @for (user of userList; track user) {
-          <mat-option [value]="user">{{ user }}</mat-option>
+      <mat-select formControlName="userIds" multiple>
+        @for (user of users$ | async; track user) {
+          <mat-option [value]="user.id">{{ user.username }}</mat-option>
         }
       </mat-select>
+      @if (form.controls['userIds'].hasError('required')) {
+      <mat-error>Benutzer ist <strong>erforderlich</strong></mat-error>
+      }
     </mat-form-field>
   </mat-dialog-content>
 
@@ -25,6 +37,6 @@
     <!-- Button to close the dialog -->
     <button mat-raised-button color="accent" (click)="close()">Schließen</button>
     <!-- Button to save changes -->
-    <button mat-raised-button color="primary" (click)="save()">Speichern</button>
+    <button mat-raised-button color="primary" [disabled]="!form.valid" (click)="save()">Speichern</button>
   </mat-dialog-actions>
 </div>

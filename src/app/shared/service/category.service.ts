@@ -1,9 +1,10 @@
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { delay, map, Observable } from 'rxjs';
-import { CategoryResponseInterface } from '../../admin-view/type/category-response.interface';
-import { environment } from '../../../environments/environment';
-import { PaginationQueryParamsInterface } from '../type/pagination-query-params.interface';
+import {Injectable} from '@angular/core';
+import {HttpClient} from '@angular/common/http';
+import {delay, map, Observable} from 'rxjs';
+import {CategoryResponseInterface} from '../../admin-view/type/category-response.interface';
+import {environment} from '../../../environments/environment';
+import {PaginationQueryParamsInterface} from '../type/pagination-query-params.interface';
+import {CategoryRequestInterface} from "../../admin-view/type/category-request.interface";
 
 @Injectable({
   providedIn: 'root',
@@ -17,7 +18,7 @@ export class CategoryService {
    * Retrieves all categories from the backend.
    * @returns An observable of an array of category response objects.
    */
-  getAllCategories(): Observable<CategoryResponseInterface[]> {
+  fetchAllCategories(): Observable<CategoryResponseInterface[]> {
     const queryParamRetrieveAll: string = '?page=0&size=1000';
     const fullUrl = this.baseUrl + queryParamRetrieveAll;
     return this.http.get<{ content: CategoryResponseInterface[] }>(fullUrl).pipe(map(response => response.content));
@@ -47,4 +48,19 @@ export class CategoryService {
         }))
       );
   }
+
+  /**
+   * Method to create a new category.
+   * Upon successful creation, returns an observable containing a success message.
+   * @param newCategory The data of the new category to be created.
+   * @returns An observable containing a success message upon successful creation.
+   */
+  createCategory(newCategory: CategoryRequestInterface): Observable<{message: string}> {
+    return this.http
+        .post<{ message: string }>(this.baseUrl, newCategory)
+        .pipe(
+            map(() => ({ message: 'Erfolgreich hochgeladen' }))
+        );
+  }
+
 }

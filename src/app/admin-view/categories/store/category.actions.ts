@@ -1,7 +1,8 @@
-import { createActionGroup, emptyProps, props } from '@ngrx/store';
-import { CategoryResponseInterface } from '../../type/category-response.interface';
-import { BackendErrorsInterface } from '../../../shared/type/backend-erros.interface';
-import { PaginationQueryParamsInterface } from '../../../shared/type/pagination-query-params.interface';
+import {createActionGroup, emptyProps, props} from '@ngrx/store';
+import {CategoryResponseInterface} from '../../type/category-response.interface';
+import {BackendErrorsInterface} from '../../../shared/type/backend-erros.interface';
+import {PaginationQueryParamsInterface} from '../../../shared/type/pagination-query-params.interface';
+import {CategoryRequestInterface} from "../../type/category-request.interface";
 
 export const categoryActions = createActionGroup({
   source: 'category',
@@ -13,5 +14,9 @@ export const categoryActions = createActionGroup({
     'get categories with query': props<{ queryParams: PaginationQueryParamsInterface }>(),
     'get categories with query success': props<{ categories: CategoryResponseInterface[]; totalElements: string }>(),
     'get categories with query failure': props<{ error: BackendErrorsInterface }>(),
+
+    'create category': props<{ category: CategoryRequestInterface }>(),
+    'create category success': props<{ message: string }>(),
+    'create category failure': props<{ error: BackendErrorsInterface }>(),
   },
 });
