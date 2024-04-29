@@ -20,7 +20,7 @@ describe('openCreateCategoryDialog', () => {
     config.disableClose = true;
     config.autoFocus = true;
     config.panelClass = 'modal-panel';
-    config.width = '500px';
+    config.width = '900px';
     (dialog.open as jasmine.Spy).and.returnValue(dialogRefSpyObj);
 
     openCreateCategoryDialog(dialog);

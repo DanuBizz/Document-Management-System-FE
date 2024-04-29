@@ -68,7 +68,7 @@ describe('CategoryManagementComponent', () => {
     expect(button.disabled).toBeTruthy();
   });
 
-  it('should disable createNewVersion()-Button if no document is selected', () => {
+  it('should disable open-in-Browser()-Button if no document is selected', () => {
     fixture.detectChanges();
 
     const button = fixture.debugElement.query(By.css('#test-open-browser-button')).nativeElement;

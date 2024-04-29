@@ -1,19 +1,19 @@
-import {Component} from '@angular/core';
-import {FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
-import {MatButton} from '@angular/material/button';
-import {MatDialogActions, MatDialogContent, MatDialogRef, MatDialogTitle} from '@angular/material/dialog';
-import {MatFormFieldModule, MatLabel} from '@angular/material/form-field';
-import {MatInput} from '@angular/material/input';
-import {MatOption, MatSelect} from '@angular/material/select';
-import {Store} from "@ngrx/store";
-import {selectUserData} from "../../users/store/user.reducers";
-import {Observable} from "rxjs";
-import {UserResponseInterface} from "../../type/user-response.interface";
-import {userActions} from "../../users/store/user.actions";
-import {CommonModule} from "@angular/common";
-import {CategoryResponseInterface} from "../../type/category-response.interface";
-import {selectCategoryData} from "../store/category.reducers";
-import {categoryActions} from "../store/category.actions";
+import { Component } from '@angular/core';
+import { FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { MatButton } from '@angular/material/button';
+import { MatDialogActions, MatDialogContent, MatDialogRef, MatDialogTitle } from '@angular/material/dialog';
+import { MatFormFieldModule, MatLabel } from '@angular/material/form-field';
+import { MatInput } from '@angular/material/input';
+import { MatOption, MatSelect } from '@angular/material/select';
+import { Store } from '@ngrx/store';
+import { selectUserData } from '../../users/store/user.reducers';
+import { Observable } from 'rxjs';
+import { UserResponseInterface } from '../../type/user-response.interface';
+import { userActions } from '../../users/store/user.actions';
+import { CommonModule } from '@angular/common';
+import { CategoryResponseInterface } from '../../type/category-response.interface';
+import { selectCategoryData } from '../store/category.reducers';
+import { categoryActions } from '../store/category.actions';
 
 @Component({
   selector: 'app-create-category-dialog',
@@ -39,7 +39,7 @@ export class CreateCategoryDialogComponent {
   // Form group for the dialog
   form: FormGroup;
 
-  users$: Observable<UserResponseInterface[]> = this.store.select(selectUserData)
+  users$: Observable<UserResponseInterface[]> = this.store.select(selectUserData);
   categories: CategoryResponseInterface[] = [];
 
   /**
@@ -58,8 +58,8 @@ export class CreateCategoryDialogComponent {
       userIds: ['', Validators.required],
     });
 
-    this.store.dispatch(userActions.getAllUsers())
-    this.store.dispatch(categoryActions.getAllCategories())
+    this.store.dispatch(userActions.getAllUsers());
+    this.store.dispatch(categoryActions.getAllCategories());
 
     this.store.select(selectCategoryData).subscribe(categories => {
       this.categories = categories;
@@ -67,8 +67,10 @@ export class CreateCategoryDialogComponent {
   }
 
   validateCategoryName(control: FormControl): { [key: string]: boolean } | null {
-    const existingCategory = this.categories.find(category => category.name.toLowerCase() === control.value.toLowerCase());
-    return existingCategory ? { 'duplicateName': true } : null;
+    const existingCategory = this.categories.find(
+      category => category.name.toLowerCase() === control.value.toLowerCase()
+    );
+    return existingCategory ? { duplicateName: true } : null;
   }
 
   /**

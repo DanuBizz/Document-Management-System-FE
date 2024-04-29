@@ -4,14 +4,15 @@ import { categoryActions } from './category.actions';
 
 // Initial state for the categories feature
 export const initialState: CategoryStateInterface = {
+  isSubmitting: false,
   isLoading: false,
   error: null,
   data: [],
   totalElements: '0',
   queryParams: {
     pageNumber: '0',
-    pageSize: '5'
-  }
+    pageSize: '5',
+  },
 };
 
 export const categoriesFeature = createFeature({
@@ -51,19 +52,19 @@ export const categoriesFeature = createFeature({
       error: action.error,
     })),
 
-      on(categoryActions.createCategory, state => ({
-        ...state,
-        isLoading: true,
-      })),
-      on(categoryActions.createCategorySuccess, (state, action) => ({
-        ...state,
-        isLoading: false,
-      })),
-      on(categoryActions.createCategoryFailure, (state, action) => ({
-        ...state,
-        isLoading: false,
-        error: action.error,
-      }))
+    on(categoryActions.createCategory, state => ({
+      ...state,
+      isSubmitting: true,
+    })),
+    on(categoryActions.createCategorySuccess, state => ({
+      ...state,
+      isSubmitting: false,
+    })),
+    on(categoryActions.createCategoryFailure, (state, action) => ({
+      ...state,
+      isSubmitting: false,
+      error: action.error,
+    }))
     // Handling router navigated action
     /*
     on(routerNavigatedAction, () => (initialState))
@@ -75,6 +76,7 @@ export const categoriesFeature = createFeature({
 export const {
   name: categoryFeatureKey,
   reducer: categoryReducer,
+  selectIsSubmitting,
   selectIsLoading,
   selectError,
   selectData: selectCategoryData,
