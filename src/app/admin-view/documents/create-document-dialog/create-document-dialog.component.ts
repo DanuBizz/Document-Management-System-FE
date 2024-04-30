@@ -1,4 +1,4 @@
-import {Component, Inject, OnInit} from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import {
   MAT_DIALOG_DATA,
   MatDialogActions,
@@ -6,21 +6,21 @@ import {
   MatDialogRef,
   MatDialogTitle,
 } from '@angular/material/dialog';
-import {FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
-import {MatFormFieldModule, MatLabel, MatSuffix} from '@angular/material/form-field';
-import {MatOption, MatSelect} from '@angular/material/select';
-import {MatInput} from '@angular/material/input';
-import {MatButton, MatMiniFabButton} from '@angular/material/button';
-import {Observable} from 'rxjs';
-import {Store} from '@ngrx/store';
-import {CommonModule} from '@angular/common';
-import {selectCategoryData} from '../../categories/store/category.reducers';
-import {DocumentResponseInterface} from '../../type/document-response.interface';
-import {CategoryResponseInterface} from '../../type/category-response.interface';
-import {MatIcon} from '@angular/material/icon';
-import {DocCategoryResponseInterface} from "../../../shared/type/doc-category-response.interface";
-import {docCategoryActions} from "../../../shared/store/doc-category.actions";
-import {selectDocCategoryData} from "../../../shared/store/doc-category.reducers";
+import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { MatFormFieldModule, MatLabel, MatSuffix } from '@angular/material/form-field';
+import { MatOption, MatSelect } from '@angular/material/select';
+import { MatInput } from '@angular/material/input';
+import { MatButton, MatMiniFabButton } from '@angular/material/button';
+import { Observable } from 'rxjs';
+import { Store } from '@ngrx/store';
+import { CommonModule } from '@angular/common';
+import { selectCategoryData } from '../../categories/store/category.reducers';
+import { DocumentResponseInterface } from '../../type/document-response.interface';
+import { CategoryResponseInterface } from '../../type/category-response.interface';
+import { MatIcon } from '@angular/material/icon';
+import { DocCategoryResponseInterface } from '../../../shared/type/doc-category-response.interface';
+import { docCategoryActions } from '../../../shared/store/doc-category.actions';
+import { selectDocCategoryData } from '../../../shared/store/doc-category.reducers';
 
 @Component({
   selector: 'app-create-document-dialog',
@@ -100,7 +100,10 @@ export class CreateDocumentDialogComponent implements OnInit {
    */
   initializeForm() {
     this.form = this.fb.group({
-      name: [{ value: this.formName, disabled: this.isDisabled }, this.isDisabled ? [] : [Validators.required, this.validateDocumentCategoryName.bind(this)]],
+      name: [
+        { value: this.formName, disabled: this.isDisabled },
+        this.isDisabled ? [] : [Validators.required, this.validateDocumentCategoryName.bind(this)],
+      ],
       fileName: ['', Validators.required],
       categories: ['', Validators.required],
     });
@@ -108,7 +111,7 @@ export class CreateDocumentDialogComponent implements OnInit {
 
   validateDocumentCategoryName(control: FormControl): { [key: string]: boolean } | null {
     const existingDocCategory = this.documentCategories.find(
-        docCategory => docCategory.name.toLowerCase() === control.value.toLowerCase()
+      docCategory => docCategory.name.toLowerCase() === control.value.toLowerCase()
     );
     return existingDocCategory ? { duplicateName: true } : null;
   }

@@ -1,14 +1,14 @@
-import {Actions, createEffect, ofType} from '@ngrx/effects';
-import {inject} from '@angular/core';
-import {map, mergeMap, of, switchMap, take} from 'rxjs';
-import {catchError, tap} from 'rxjs/operators';
-import {HttpErrorResponse} from '@angular/common/http';
-import {documentActions} from './document.actions';
-import {SnackbarService} from '../../../shared/service/snackbar.service';
-import {Store} from '@ngrx/store';
-import {selectError} from '../../categories/store/category.reducers';
-import {selectQueryParams} from "./document.reducers";
-import {DocumentService} from "../../../shared/service/document.service";
+import { Actions, createEffect, ofType } from '@ngrx/effects';
+import { inject } from '@angular/core';
+import { map, mergeMap, of, switchMap, take } from 'rxjs';
+import { catchError, tap } from 'rxjs/operators';
+import { HttpErrorResponse } from '@angular/common/http';
+import { documentActions } from './document.actions';
+import { SnackbarService } from '../../../shared/service/snackbar.service';
+import { Store } from '@ngrx/store';
+import { selectError } from '../../categories/store/category.reducers';
+import { selectQueryParams } from './document.reducers';
+import { DocumentService } from '../../../shared/service/document.service';
 
 export const getDocumentsWithQuery = createEffect(
   // Injecting dependencies
@@ -43,8 +43,7 @@ export const openSnackbarErrorEffect = createEffect(
   (actions$ = inject(Actions), snackbarService = inject(SnackbarService), store = inject(Store)) => {
     return actions$.pipe(
       // Listening for actions of type
-      ofType(documentActions.getDocumentsWithQueryFailure,
-          documentActions.createDocumentVersionFailure),
+      ofType(documentActions.getDocumentsWithQueryFailure, documentActions.createDocumentVersionFailure),
       tap(() => {
         // Subscribing to selectError selector to get the error from the store
         store.select(selectError).subscribe(error => {
@@ -66,7 +65,7 @@ export const createDocumentVersionEffect = createEffect(
       switchMap(({ doc }) => {
         // Calling the service method to create document
         return documentService.createDocVersion(doc).pipe(
-          map(({message}) =>
+          map(({ message }) =>
             // Handling the response and dispatching action when successful
             documentActions.createDocumentVersionSuccess({ message })
           ),
@@ -88,21 +87,19 @@ export const createDocumentVersionEffect = createEffect(
  * and dispatches the 'get' action to fetch updated data.
  */
 export const openSnackbarSuccessEffect = createEffect(
-    (actions$ = inject(Actions),
-     snackbarService = inject(SnackbarService),
-     store = inject(Store)) => {
-        return actions$.pipe(
-            ofType(documentActions.createDocumentVersionSuccess),
-            tap(({message}) => {
-                snackbarService.openSnackBar(message);
-            }),
-            mergeMap(() => {
-                return store.select(selectQueryParams).pipe(
-                    take(1),
-                    map(queryParams => documentActions.getDocumentsWithQuery({ queryParams }))
-                );
-            })
+  (actions$ = inject(Actions), snackbarService = inject(SnackbarService), store = inject(Store)) => {
+    return actions$.pipe(
+      ofType(documentActions.createDocumentVersionSuccess),
+      tap(({ message }) => {
+        snackbarService.openSnackBar(message);
+      }),
+      mergeMap(() => {
+        return store.select(selectQueryParams).pipe(
+          take(1),
+          map(queryParams => documentActions.getDocumentsWithQuery({ queryParams }))
         );
-    },
-    { functional: true, dispatch: true}
+      })
+    );
+  },
+  { functional: true, dispatch: true }
 );

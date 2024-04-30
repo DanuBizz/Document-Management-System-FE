@@ -19,8 +19,8 @@ import { provideStoreDevtools } from '@ngrx/store-devtools';
 import { documentFeatureKey, documentReducer } from './admin-view/documents/store/document.reducers';
 import { authFeatureKey, authReducer } from './auth/store/auth.reducers';
 import { authInterceptor } from './shared/service/auth-interceptor.service';
-import {userFeatureKey, userReducer} from "./admin-view/users/store/user.reducers";
-import {docCategoryFeatureKey, docCategoryReducer} from "./shared/store/doc-category.reducers";
+import { userFeatureKey, userReducer } from './admin-view/users/store/user.reducers';
+import { docCategoryFeatureKey, docCategoryReducer } from './shared/store/doc-category.reducers';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -39,8 +39,7 @@ export const appConfig: ApplicationConfig = {
     provideState(userFeatureKey, userReducer),
     provideState(docCategoryFeatureKey, docCategoryReducer),
     // Provide effects
-    provideEffects([categoriesEffects, documentEffects,
-      authEffects, userEffects, docCategoryEffects]),
+    provideEffects([categoriesEffects, documentEffects, authEffects, userEffects, docCategoryEffects]),
     // Provide router store
     provideRouterStore(),
     // Provide store devtools configuration

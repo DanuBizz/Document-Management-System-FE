@@ -1,4 +1,4 @@
 export interface DocCategoryResponseInterface {
-    id: number;
-    name: string;
+  id: number;
+  name: string;
 }

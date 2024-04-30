@@ -1,5 +1,5 @@
-import {BackendErrorsInterface} from "../../shared/type/backend-erros.interface";
-import {UserResponseInterface} from "./user-response.interface";
+import { BackendErrorsInterface } from '../../shared/type/backend-erros.interface';
+import { UserResponseInterface } from './user-response.interface';
 
 export interface UserStateInterface {
   isLoading: boolean;
