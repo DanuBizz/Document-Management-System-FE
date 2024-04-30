@@ -74,7 +74,7 @@ export class CreateDocumentDialogComponent implements OnInit {
     // If document data exists, set formName and disable form fields
     if (this.document !== null) {
       this.isDisabled = true;
-      this.formName = this.document.name;
+      this.formName = this.document.documentName;
       this.dialogTitle = 'Neue Version erstellen';
     }
     // Initialize the form

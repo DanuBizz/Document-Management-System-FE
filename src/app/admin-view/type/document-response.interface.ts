@@ -1,8 +1,10 @@
 export interface DocumentResponseInterface {
   id: number;
-  name: string;
+  documentName: string;
   filePath: string;
-  categoryIds: number[];
-  read: boolean;
-  visible: boolean;
+  timestamp: Date;
+  categoryNames: string[];
+  isRead: boolean;
+  isLatest: boolean;
+  isVisible: boolean;
 }

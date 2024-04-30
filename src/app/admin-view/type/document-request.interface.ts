@@ -1,6 +1,6 @@
 import { CategoryResponseInterface } from './category-response.interface';
 
-export interface DocVersionRequest {
+export interface DocumentRequestInterface {
   file: File;
   name: string;
   categories: CategoryResponseInterface[];
