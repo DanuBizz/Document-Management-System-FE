@@ -1,7 +1,6 @@
-import {createActionGroup, emptyProps, props} from "@ngrx/store";
-import {BackendErrorsInterface} from "../../../shared/type/backend-erros.interface";
-import {UserResponseInterface} from "../../type/user-response.interface";
-
+import { createActionGroup, emptyProps, props } from '@ngrx/store';
+import { BackendErrorsInterface } from '../../../shared/type/backend-erros.interface';
+import { UserResponseInterface } from '../../type/user-response.interface';
 
 export const userActions = createActionGroup({
   source: 'user',

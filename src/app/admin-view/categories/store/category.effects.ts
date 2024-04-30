@@ -1,14 +1,14 @@
-import {Actions, createEffect, ofType} from '@ngrx/effects';
-import {inject} from '@angular/core';
-import {map, mergeMap, of, switchMap, take} from 'rxjs';
-import {catchError, tap} from 'rxjs/operators';
-import {CategoryService} from '../../../shared/service/category.service';
-import {categoryActions} from './category.actions';
-import {CategoryResponseInterface} from '../../type/category-response.interface';
-import {HttpErrorResponse} from '@angular/common/http';
-import {SnackbarService} from '../../../shared/service/snackbar.service';
-import {Store} from '@ngrx/store';
-import {selectError, selectQueryParams} from './category.reducers';
+import { Actions, createEffect, ofType } from '@ngrx/effects';
+import { inject } from '@angular/core';
+import { map, mergeMap, of, switchMap, take } from 'rxjs';
+import { catchError, tap } from 'rxjs/operators';
+import { CategoryService } from '../../../shared/service/category.service';
+import { categoryActions } from './category.actions';
+import { CategoryResponseInterface } from '../../type/category-response.interface';
+import { HttpErrorResponse } from '@angular/common/http';
+import { SnackbarService } from '../../../shared/service/snackbar.service';
+import { Store } from '@ngrx/store';
+import { selectError, selectQueryParams } from './category.reducers';
 
 export const getAllCategoriesEffect = createEffect(
   // Injecting dependencies
@@ -87,23 +87,22 @@ export const openSnackbarErrorEffect = createEffect(
  * otherwise, it dispatches the 'createCategoryFailure' action with the error details.
  */
 export const createCategoryEffect = createEffect(
-    (actions$ = inject(Actions),
-     categoriesService = inject(CategoryService)) => {
-        return actions$.pipe(
-            ofType(categoryActions.createCategory),
-            switchMap(({category}) => {
-                return categoriesService.createCategory(category).pipe(
-                    map(({message}) => {
-                        return categoryActions.createCategorySuccess({ message });
-                    }),
-                    catchError((errorResponse: HttpErrorResponse) => {
-                        return of(categoryActions.createCategoryFailure(errorResponse.error));
-                    })
-                );
-            })
+  (actions$ = inject(Actions), categoriesService = inject(CategoryService)) => {
+    return actions$.pipe(
+      ofType(categoryActions.createCategory),
+      switchMap(({ category }) => {
+        return categoriesService.createCategory(category).pipe(
+          map(({ message }) => {
+            return categoryActions.createCategorySuccess({ message });
+          }),
+          catchError((errorResponse: HttpErrorResponse) => {
+            return of(categoryActions.createCategoryFailure(errorResponse.error));
+          })
         );
-    },
-    { functional: true }
+      })
+    );
+  },
+  { functional: true }
 );
 
 /**
@@ -114,21 +113,19 @@ export const createCategoryEffect = createEffect(
  * and dispatches the 'getCategoriesWithQuery' action to fetch updated category data.
  */
 export const openSnackbarSuccessEffect = createEffect(
-    (actions$ = inject(Actions),
-     snackbarService = inject(SnackbarService),
-     store = inject(Store)) => {
-        return actions$.pipe(
-            ofType(categoryActions.createCategorySuccess),
-            tap(({message}) => {
-                snackbarService.openSnackBar(message);
-            }),
-            mergeMap(() => {
-                return store.select(selectQueryParams).pipe(
-                    take(1), // Hier wird nur ein einziges Mal abonniert, um die aktuellen Query-Parameter zu erhalten
-                    map(queryParams => categoryActions.getCategoriesWithQuery({ queryParams }))
-                );
-            })
+  (actions$ = inject(Actions), snackbarService = inject(SnackbarService), store = inject(Store)) => {
+    return actions$.pipe(
+      ofType(categoryActions.createCategorySuccess),
+      tap(({ message }) => {
+        snackbarService.openSnackBar(message);
+      }),
+      mergeMap(() => {
+        return store.select(selectQueryParams).pipe(
+          take(1), // Hier wird nur ein einziges Mal abonniert, um die aktuellen Query-Parameter zu erhalten
+          map(queryParams => categoryActions.getCategoriesWithQuery({ queryParams }))
         );
-    },
-    { functional: true, dispatch: true}
+      })
+    );
+  },
+  { functional: true, dispatch: true }
 );

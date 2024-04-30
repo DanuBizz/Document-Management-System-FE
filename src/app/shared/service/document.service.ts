@@ -4,12 +4,13 @@ import { delay, map, Observable } from 'rxjs';
 import { DocumentResponseInterface } from '../../admin-view/type/document-response.interface';
 import { environment } from '../../../environments/environment';
 import { PaginationQueryParamsInterface } from '../type/pagination-query-params.interface';
+import { DocumentRequestInterface } from '../../admin-view/type/document-request.interface';
 
 @Injectable({
   providedIn: 'root',
 })
 export class DocumentService {
-  private baseUrl: string = environment.apiUrl + '/documents';
+  private baseUrl: string = environment.apiUrl + '/documentVersions';
 
   constructor(private http: HttpClient) {}
 
@@ -36,5 +37,17 @@ export class DocumentService {
           totalElements: response.totalElements.toString(),
         }))
       );
+  }
+
+  /**
+   * Method to create a new document.
+   * Upon successful creation, returns an observable containing a success message.
+   * @param newDocumentVersion The data of the new category to be created.
+   * @returns An observable containing a success message upon successful creation.
+   */
+  createDocVersion(newDocumentVersion: DocumentRequestInterface): Observable<{ message: string }> {
+    return this.http
+      .post<{ message: string }>(this.baseUrl, newDocumentVersion)
+      .pipe(map(() => ({ message: 'Erfolgreich hochgeladen' })));
   }
 }

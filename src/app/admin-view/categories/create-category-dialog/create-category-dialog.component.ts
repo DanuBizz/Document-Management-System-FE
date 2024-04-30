@@ -39,7 +39,10 @@ export class CreateCategoryDialogComponent {
   // Form group for the dialog
   form: FormGroup;
 
+  // Observable for retrieving users from the store
   users$: Observable<UserResponseInterface[]> = this.store.select(selectUserData);
+
+  // List of current categories
   categories: CategoryResponseInterface[] = [];
 
   /**
@@ -53,6 +56,7 @@ export class CreateCategoryDialogComponent {
     private store: Store
   ) {
     // Initialize form with form controls and validators
+    // the form name is required and must be unique.
     this.form = this.fb.group({
       name: ['', [Validators.required, this.validateCategoryName.bind(this)]],
       userIds: ['', Validators.required],

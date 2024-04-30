@@ -1,10 +1,10 @@
-import {Injectable} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
-import {delay, map, Observable} from 'rxjs';
-import {CategoryResponseInterface} from '../../admin-view/type/category-response.interface';
-import {environment} from '../../../environments/environment';
-import {PaginationQueryParamsInterface} from '../type/pagination-query-params.interface';
-import {CategoryRequestInterface} from "../../admin-view/type/category-request.interface";
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { delay, map, Observable } from 'rxjs';
+import { CategoryResponseInterface } from '../../admin-view/type/category-response.interface';
+import { environment } from '../../../environments/environment';
+import { PaginationQueryParamsInterface } from '../type/pagination-query-params.interface';
+import { CategoryRequestInterface } from '../../admin-view/type/category-request.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -55,12 +55,9 @@ export class CategoryService {
    * @param newCategory The data of the new category to be created.
    * @returns An observable containing a success message upon successful creation.
    */
-  createCategory(newCategory: CategoryRequestInterface): Observable<{message: string}> {
+  createCategory(newCategory: CategoryRequestInterface): Observable<{ message: string }> {
     return this.http
-        .post<{ message: string }>(this.baseUrl, newCategory)
-        .pipe(
-            map(() => ({ message: 'Erfolgreich hochgeladen' }))
-        );
+      .post<{ message: string }>(this.baseUrl, newCategory)
+      .pipe(map(() => ({ message: 'Erfolgreich hochgeladen' })));
   }
-
 }

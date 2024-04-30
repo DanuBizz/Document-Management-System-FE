@@ -76,15 +76,15 @@
           <ng-container matColumnDef="name">
             <th mat-header-cell *matHeaderCellDef>Name</th>
             <td mat-cell *matCellDef="let document">
-              {{ document.name }}
+              {{ document.documentName }}
             </td>
           </ng-container>
 
           <!-- Categories column -->
           <ng-container matColumnDef="categories">
-            <th mat-header-cell *matHeaderCellDef>Kategorie</th>
+            <th mat-header-cell *matHeaderCellDef>Kategorien</th>
             <td mat-cell *matCellDef="let document">
-              {{ document.categoryIds }}
+              {{ document.categoryNames }}
             </td>
           </ng-container>
 
@@ -122,15 +122,15 @@
                 <ng-container matColumnDef="name">
                   <th mat-header-cell *matHeaderCellDef>Name</th>
                   <td mat-cell *matCellDef="let document">
-                    {{ document.name }}
+                    {{ document.documentName }}
                   </td>
                 </ng-container>
 
                 <!-- Categories column inside expanded detail -->
                 <ng-container matColumnDef="categories">
-                  <th mat-header-cell *matHeaderCellDef>Kategorie</th>
+                  <th mat-header-cell *matHeaderCellDef>Kategorien</th>
                   <td mat-cell *matCellDef="let document">
-                    {{ document.categoryIds }}
+                    {{ document.categoryNames }}
                   </td>
                 </ng-container>
 

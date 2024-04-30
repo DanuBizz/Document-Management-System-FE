@@ -4,10 +4,15 @@ import { documentActions } from './document.actions';
 
 // Initial state for the documents feature
 export const initialState: DocumentStateInterface = {
+  isSubmitting: false,
   isLoading: false,
   error: null,
   data: [],
   totalElements: '0',
+  queryParams: {
+    pageNumber: '0',
+    pageSize: '5',
+  },
 };
 
 export const documentFeature = createFeature({
@@ -15,9 +20,10 @@ export const documentFeature = createFeature({
   // Reducer functions for the feature
   reducer: createReducer(
     initialState,
-    on(documentActions.getDocumentsWithQuery, state => ({
+    on(documentActions.getDocumentsWithQuery, (state, action) => ({
       ...state,
       isLoading: true,
+      queryParams: action.queryParams,
     })),
     on(documentActions.getDocumentsWithQuerySuccess, (state, { documents, totalElements }) => ({
       ...state,
@@ -33,15 +39,16 @@ export const documentFeature = createFeature({
 
     on(documentActions.createDocumentVersion, state => ({
       ...state,
-      isLoading: true,
+      isSubmitting: true,
     })),
     on(documentActions.createDocumentVersionSuccess, state => ({
       ...state,
-      isLoading: false,
+      isSubmitting: false,
     })),
-    on(documentActions.createDocumentVersionFailure, state => ({
+    on(documentActions.createDocumentVersionFailure, (state, action) => ({
       ...state,
-      isLoading: false,
+      isSubmitting: false,
+      error: action.error,
     }))
     /*
     on(routerNavigatedAction, () => (initialState))
@@ -53,8 +60,10 @@ export const documentFeature = createFeature({
 export const {
   name: documentFeatureKey,
   reducer: documentReducer,
+  selectIsSubmitting,
   selectIsLoading,
   selectError,
   selectData: selectDocumentData,
   selectTotalElements,
+  selectQueryParams,
 } = documentFeature;

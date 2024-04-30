@@ -8,7 +8,7 @@ import { environment } from '../../../environments/environment';
 describe('DocumentService', () => {
   let service: DocumentService;
   let httpMock: HttpTestingController;
-  const baseUrl = environment.apiUrl + '/documents';
+  const baseUrl = environment.apiUrl + '/documentVersions';
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -29,8 +29,26 @@ describe('DocumentService', () => {
 
   it('should return documents with pagination query', () => {
     const dummyDocuments: DocumentResponseInterface[] = [
-      { id: 1, name: 'Document 1', filePath: '/path/to/document1', categoryIds: [1], read: false, visible: true },
-      { id: 2, name: 'Document 2', filePath: '/path/to/document2', categoryIds: [2], read: true, visible: true },
+      {
+        id: 1,
+        documentName: 'Document 1',
+        filePath: '/path/to/document1',
+        timestamp: new Date(),
+        categoryNames: ['Category 1'],
+        isRead: true,
+        isLatest: true,
+        isVisible: true,
+      },
+      {
+        id: 2,
+        documentName: 'Document 2',
+        filePath: '/path/to/document2',
+        timestamp: new Date(),
+        categoryNames: ['Category 1'],
+        isRead: true,
+        isLatest: true,
+        isVisible: true,
+      },
     ];
     const dummyTotalElements = '2';
     const dummyPaginationQuery: PaginationQueryParamsInterface = { pageNumber: '0', pageSize: '20' };

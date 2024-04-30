@@ -1,6 +1,6 @@
-import {UserStateInterface} from "../../type/user-state.interface";
+import { UserStateInterface } from '../../type/user-state.interface';
 import { createFeature, createReducer, on } from '@ngrx/store';
-import {userActions} from "./user.actions";
+import { userActions } from './user.actions';
 
 // Initial state for the categories feature
 export const initialState: UserStateInterface = {
@@ -28,7 +28,7 @@ export const userFeature = createFeature({
       ...state,
       isLoading: false,
       error: action.error,
-    })),
+    }))
 
     // Handling router navigated action
     /*
@@ -44,5 +44,5 @@ export const {
   selectIsLoading,
   selectError,
   selectData: selectUserData,
-  selectTotalElements: selectTotalUserElements
+  selectTotalElements: selectTotalUserElements,
 } = userFeature;

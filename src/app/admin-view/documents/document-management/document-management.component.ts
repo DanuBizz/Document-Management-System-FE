@@ -24,7 +24,7 @@ import { openCreateDocumentDialog } from '../create-document-dialog/document-dia
 import { PaginationQueryParamsInterface } from '../../../shared/type/pagination-query-params.interface';
 import { PaginationConfigService } from '../../../shared/service/pagination-config.service';
 import { categoryActions } from '../../categories/store/category.actions';
-import { DocVersionRequest } from '../../type/doc-version-request.interface';
+import { DocumentRequestInterface } from '../../type/document-request.interface';
 
 @Component({
   selector: 'app-document-management',
@@ -132,7 +132,7 @@ export class DocumentManagementComponent implements OnInit {
       .pipe(filter(val => !!val))
       .subscribe(val => {
         const date = Date.now();
-        const newDocumentVersion: DocVersionRequest = {
+        const newDocumentVersion: DocumentRequestInterface = {
           ...val,
           date,
         };

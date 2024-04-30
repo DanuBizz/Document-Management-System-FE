@@ -1,4 +1,4 @@
 export interface CategoryRequestInterface {
-    name: string;
-    userIds: number[];
+  name: string;
+  userIds: number[];
 }

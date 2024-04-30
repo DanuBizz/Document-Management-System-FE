@@ -2,6 +2,7 @@ import { documentReducer, initialState } from './document.reducers';
 import { documentActions } from './document.actions';
 import { DocumentResponseInterface } from '../../type/document-response.interface';
 import { PaginationQueryParamsInterface } from '../../../shared/type/pagination-query-params.interface';
+import { DocumentRequestInterface } from '../../type/document-request.interface';
 
 describe('DocumentReducers', () => {
   const requestParams: PaginationQueryParamsInterface = {
@@ -13,10 +14,15 @@ describe('DocumentReducers', () => {
     const action = { type: 'UNKNOWN' };
     const state = documentReducer(initialState, action);
     const newState = {
-      error: null,
+      isSubmitting: false,
       isLoading: false,
+      error: null,
       data: [],
       totalElements: '0',
+      queryParams: {
+        pageNumber: '0',
+        pageSize: '5',
+      },
     };
 
     expect(state).toEqual(newState);
@@ -36,12 +42,14 @@ describe('DocumentReducers', () => {
   it('should get documents and totalElements when success', () => {
     const documents: DocumentResponseInterface[] = [
       {
-        id: 10,
-        name: 'test',
-        filePath: 'asdf',
-        categoryIds: [1, 2, 3],
-        read: false,
-        visible: true,
+        id: 1,
+        documentName: 'Document 1',
+        filePath: '/path/to/document1',
+        timestamp: new Date(),
+        categoryNames: ['Category 1'],
+        isRead: true,
+        isLatest: true,
+        isVisible: true,
       },
     ];
     const totalElements = '1';
@@ -65,6 +73,54 @@ describe('DocumentReducers', () => {
     const newState = {
       ...initialState,
       error: { ['error500']: ['Server error'] },
+    };
+
+    expect(state).toEqual(newState);
+  });
+
+  it('should set isSubmitting to true when createDocumentVersion is called', () => {
+    const document: DocumentRequestInterface = {
+      file: new File([''], 'dummy-file.txt'),
+      name: 'Document 1',
+      timestamp: new Date(),
+      categories: [
+        {
+          id: 1,
+          name: 'teste',
+          userNames: ['test'],
+        },
+      ],
+    };
+
+    const action = documentActions.createDocumentVersion({ doc: document });
+    const state = documentReducer(initialState, action);
+    const newState = {
+      ...initialState,
+      isSubmitting: true,
+    };
+
+    expect(state).toEqual(newState);
+  });
+
+  it('should set isSubmitting to false when createDocumentVersionSuccess is called', () => {
+    const action = documentActions.createDocumentVersionSuccess({ message: 'test' });
+    const state = documentReducer(initialState, action);
+    const newState = {
+      ...initialState,
+      isSubmitting: false,
+    };
+
+    expect(state).toEqual(newState);
+  });
+
+  it('should set isSubmitting to false and error when createDocumentVersionFailure is called', () => {
+    const error = { ['error500']: ['Server error'] };
+    const action = documentActions.createDocumentVersionFailure({ error: error });
+    const state = documentReducer(initialState, action);
+    const newState = {
+      ...initialState,
+      isSubmitting: false,
+      error: error,
     };
 
     expect(state).toEqual(newState);

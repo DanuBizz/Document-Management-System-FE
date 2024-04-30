@@ -5,6 +5,7 @@ import { CreateDocumentDialogComponent } from './create-document-dialog.componen
 import { Store } from '@ngrx/store';
 import { DocumentResponseInterface } from '../../type/document-response.interface';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
+import { of } from 'rxjs';
 
 describe('CreateDocumentDialogComponentNewDocument', () => {
   let component: CreateDocumentDialogComponent;
@@ -13,16 +14,19 @@ describe('CreateDocumentDialogComponentNewDocument', () => {
   let storeSpy: jasmine.SpyObj<Store>;
   const documentMock: DocumentResponseInterface = {
     id: 1,
-    name: 'Test Document',
-    filePath: '/path/to/document',
-    categoryIds: [1, 2],
-    read: false,
-    visible: true,
+    documentName: 'Document 1',
+    filePath: '/path/to/document1',
+    timestamp: new Date(),
+    categoryNames: ['Category 1'],
+    isRead: true,
+    isLatest: true,
+    isVisible: true,
   };
 
   beforeEach(async () => {
     dialogRefSpy = jasmine.createSpyObj('MatDialogRef', ['close']);
-    storeSpy = jasmine.createSpyObj('Store', ['select']);
+    storeSpy = jasmine.createSpyObj('Store', ['dispatch', 'select']);
+    storeSpy.select.and.returnValue(of('Document 1'));
 
     await TestBed.configureTestingModule({
       imports: [CreateDocumentDialogComponent],
@@ -51,7 +55,7 @@ describe('CreateDocumentDialogComponentNewDocument', () => {
   });
 
   it('should initialize form when document is present', () => {
-    expect(component.form.controls['name'].value).toEqual('Test Document');
+    expect(component.form.controls['name'].value).toEqual('Document 1');
   });
 
   it('should close dialog on close button click', () => {
@@ -68,7 +72,8 @@ describe('CreateDocumentDialogComponentNewVersion', () => {
 
   beforeEach(async () => {
     dialogRefSpy = jasmine.createSpyObj('MatDialogRef', ['close']);
-    storeSpy = jasmine.createSpyObj('Store', ['select']);
+    storeSpy = jasmine.createSpyObj('Store', ['dispatch', 'select']);
+    storeSpy.select.and.returnValue(of([{ name: 'Document 1' }]));
 
     await TestBed.configureTestingModule({
       imports: [CreateDocumentDialogComponent],

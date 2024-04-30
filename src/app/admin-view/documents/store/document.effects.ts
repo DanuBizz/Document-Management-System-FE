@@ -1,14 +1,14 @@
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { inject } from '@angular/core';
-import { map, of, switchMap } from 'rxjs';
+import { map, mergeMap, of, switchMap, take } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 import { HttpErrorResponse } from '@angular/common/http';
-import { DocumentService } from '../../../shared/service/document.service';
 import { documentActions } from './document.actions';
 import { SnackbarService } from '../../../shared/service/snackbar.service';
 import { Store } from '@ngrx/store';
 import { selectError } from '../../categories/store/category.reducers';
-import { DocVersionService } from '../../../shared/service/docVersion.service';
+import { selectQueryParams } from './document.reducers';
+import { DocumentService } from '../../../shared/service/document.service';
 
 export const getDocumentsWithQuery = createEffect(
   // Injecting dependencies
@@ -38,17 +38,17 @@ export const getDocumentsWithQuery = createEffect(
 );
 
 // Effect to open a snackbar with error message when fetching documents fails
-export const openSnackbarEffect = createEffect(
+export const openSnackbarErrorEffect = createEffect(
   // Injecting dependencies
   (actions$ = inject(Actions), snackbarService = inject(SnackbarService), store = inject(Store)) => {
     return actions$.pipe(
       // Listening for actions of type
-      ofType(documentActions.getDocumentsWithQueryFailure),
+      ofType(documentActions.getDocumentsWithQueryFailure, documentActions.createDocumentVersionFailure),
       tap(() => {
         // Subscribing to selectError selector to get the error from the store
         store.select(selectError).subscribe(error => {
           // Opening a snackbar to display the error message
-          snackbarService.openSnackBar('Fehler beim Laden der Dokumente.\nError: ' + JSON.stringify(error));
+          snackbarService.openSnackBar('Fehler beim Laden/Hochladen der Dokumente.\nError: ' + JSON.stringify(error));
         });
       })
     );
@@ -58,24 +58,48 @@ export const openSnackbarEffect = createEffect(
 
 export const createDocumentVersionEffect = createEffect(
   // Injecting dependencies
-  (actions$ = inject(Actions), docVersionService = inject(DocVersionService)) => {
+  (actions$ = inject(Actions), documentService = inject(DocumentService)) => {
     return actions$.pipe(
       // Listening for actions of type
       ofType(documentActions.createDocumentVersion),
       switchMap(({ doc }) => {
-        // Calling the service method to fetch documents
-        return docVersionService.createDocVersion(doc).pipe(
-          map(() =>
+        // Calling the service method to create document
+        return documentService.createDocVersion(doc).pipe(
+          map(({ message }) =>
             // Handling the response and dispatching action when successful
-            documentActions.createDocumentVersionSuccess()
+            documentActions.createDocumentVersionSuccess({ message })
           ),
-          catchError(() => {
+          catchError((errorResponse: HttpErrorResponse) => {
             // Handling errors and dispatching action when fetching fails
-            return of(documentActions.createDocumentVersionFailure());
+            return of(documentActions.createDocumentVersionFailure(errorResponse.error));
           })
         );
       })
     );
   },
   { functional: true }
+);
+
+/**
+ * Effect for displaying a snackbar notification and dispatch get documents action.
+ * Upon receiving such a success-action, it displays a snackbar notification containing the success message
+ * using the provided SnackbarService. It then retrieves the current query parameters from the store
+ * and dispatches the 'get' action to fetch updated data.
+ */
+export const openSnackbarSuccessEffect = createEffect(
+  (actions$ = inject(Actions), snackbarService = inject(SnackbarService), store = inject(Store)) => {
+    return actions$.pipe(
+      ofType(documentActions.createDocumentVersionSuccess),
+      tap(({ message }) => {
+        snackbarService.openSnackBar(message);
+      }),
+      mergeMap(() => {
+        return store.select(selectQueryParams).pipe(
+          take(1),
+          map(queryParams => documentActions.getDocumentsWithQuery({ queryParams }))
+        );
+      })
+    );
+  },
+  { functional: true, dispatch: true }
 );
