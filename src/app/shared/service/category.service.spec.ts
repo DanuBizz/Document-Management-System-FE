@@ -12,8 +12,8 @@ describe('CategoryService', () => {
   const baseUrl = environment.apiUrl + '/categories';
 
   const dummyCategories: CategoryResponseInterface[] = [
-    { id: 1, name: 'Document 1', userIds: [1, 3] },
-    { id: 2, name: 'Document 2', userIds: [2, 4, 6] },
+    { id: 1, name: 'Category 1', userNames: ['user1'] },
+    { id: 2, name: 'Category 2', userNames: ['user1', 'user2'] },
   ];
 
   beforeEach(() => {

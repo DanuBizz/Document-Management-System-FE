@@ -11,9 +11,15 @@ describe('CategoryManagementComponent', () => {
   let store: MockStore;
   const initialState = {
     categories: {
+      isSubmitting: false,
       isLoading: false,
       error: null,
-      data: [{ id: 10, name: 'test' }],
+      data: [{ id: 10, name: 'test', userNames: ['testuser1'] }],
+      totalElements: '0',
+      queryParams: {
+        pageNumber: '0',
+        pageSize: '5',
+      },
     },
   };
 

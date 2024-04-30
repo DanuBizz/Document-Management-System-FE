@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatDialogRef } from '@angular/material/dialog';
 import { CreateCategoryDialogComponent } from './create-category-dialog.component';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
-import { MockStore, provideMockStore } from '@ngrx/store/testing';
+import { provideMockStore } from '@ngrx/store/testing';
 import { By } from '@angular/platform-browser';
 
 describe('CreateCategoryDialogComponent', () => {
@@ -17,7 +17,7 @@ describe('CreateCategoryDialogComponent', () => {
         {
           id: 1,
           name: 'test',
-          userIds: [1, 2, 3],
+          userNames: ['user1', 'user2', 'user3'],
         },
       ],
       queryParams: false,
@@ -28,7 +28,7 @@ describe('CreateCategoryDialogComponent', () => {
       data: [
         {
           id: 1,
-          name: 'test user',
+          name: 'user1',
         },
       ],
     },
@@ -52,7 +52,7 @@ describe('CreateCategoryDialogComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(CreateCategoryDialogComponent);
     component = fixture.componentInstance;
-    store = TestBed.inject(MockStore);
+    //store = TestBed.inject(MockStore);
     fixture.detectChanges();
   });
 

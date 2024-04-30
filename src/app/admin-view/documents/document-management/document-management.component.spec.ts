@@ -5,24 +5,32 @@ import { provideAnimationsAsync } from '@angular/platform-browser/animations/asy
 import { By } from '@angular/platform-browser';
 import { DocumentResponseInterface } from '../../type/document-response.interface';
 
-describe('CategoryManagementComponent', () => {
+describe('DocumentManagementComponent', () => {
   let component: DocumentManagementComponent;
   let fixture: ComponentFixture<DocumentManagementComponent>;
   let store: MockStore;
   const initialState = {
     document: {
+      isSubmitting: false,
       isLoading: false,
       error: null,
       data: [
         {
-          id: 10,
-          name: 'test',
-          filePath: 'asdf',
-          categoryIds: [1, 2, 3],
-          read: false,
-          visible: true,
+          id: 1,
+          documentName: 'Document 1',
+          filePath: '/path/to/document1',
+          timestamp: new Date(),
+          categoryNames: ['Category 1'],
+          isRead: true,
+          isLatest: true,
+          isVisible: true,
         },
       ],
+      totalElements: '0',
+      queryParams: {
+        pageNumber: '0',
+        pageSize: '5',
+      },
     },
   };
 
@@ -51,7 +59,7 @@ describe('CategoryManagementComponent', () => {
     const rows = fixture.debugElement.queryAll(By.css('tbody tr'));
 
     expect(rows.length).toBeGreaterThan(0);
-    expect(rows[0].nativeElement.textContent).toContain('test');
+    expect(rows[0].nativeElement.textContent).toContain('Document');
   });
 
   it('should call createNewDocument() when FAB button is clicked', () => {
@@ -91,11 +99,13 @@ describe('CategoryManagementComponent', () => {
   it('should toggle document selection', () => {
     const dummyDocument: DocumentResponseInterface = {
       id: 1,
-      name: 'Test Document',
-      filePath: '/path/to/document',
-      categoryIds: [1],
-      read: false,
-      visible: true,
+      documentName: 'Document 1',
+      filePath: '/path/to/document1',
+      timestamp: new Date(),
+      categoryNames: ['Category 1'],
+      isRead: true,
+      isLatest: true,
+      isVisible: true,
     };
 
     expect(component.selection.isSelected(dummyDocument)).toBeFalse();

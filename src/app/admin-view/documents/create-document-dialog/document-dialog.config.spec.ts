@@ -18,11 +18,13 @@ describe('openCreateDocumentDialog', () => {
   it('should open create document dialog with correct config', () => {
     const document: DocumentResponseInterface = {
       id: 1,
-      name: 'Test Document',
-      filePath: '/path/to/document',
-      categoryIds: [1, 2],
-      read: false,
-      visible: true,
+      documentName: 'Document 1',
+      filePath: '/path/to/document1',
+      timestamp: new Date(),
+      categoryNames: ['Category 1'],
+      isRead: true,
+      isLatest: true,
+      isVisible: true,
     };
     const dialogRefSpyObj = jasmine.createSpyObj({ afterClosed: of({}) });
     const config = new MatDialogConfig();
