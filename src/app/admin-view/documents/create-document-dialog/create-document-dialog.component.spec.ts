@@ -93,7 +93,7 @@ describe('CreateDocumentDialogComponentNewVersion', () => {
   });
 
   it('should close dialog and return form value on save button click', fakeAsync(() => {
-    const formValue = { name: 'Test', version: '1.0', filePath: '/test/path', categories: [1, 2] };
+    const formValue = { name: 'Test', fileName: 'test.pdf', categories: [1, 2] };
     component.form.setValue(formValue);
     component.save();
     tick();

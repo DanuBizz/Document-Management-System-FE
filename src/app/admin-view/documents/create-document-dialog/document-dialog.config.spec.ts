@@ -29,7 +29,7 @@ describe('openCreateDocumentDialog', () => {
     config.disableClose = true;
     config.autoFocus = true;
     config.panelClass = 'modal-panel';
-    config.width = '500px';
+    config.width = '900px';
     config.data = document;
     (dialog.open as jasmine.Spy).and.returnValue(dialogRefSpyObj);
 

@@ -4,11 +4,17 @@ import { CategoryService } from './category.service';
 import { PaginationQueryParamsInterface } from '../type/pagination-query-params.interface';
 import { CategoryResponseInterface } from '../../admin-view/type/category-response.interface';
 import { environment } from '../../../environments/environment';
+import { CategoryRequestInterface } from '../../admin-view/type/category-request.interface';
 
 describe('CategoryService', () => {
   let service: CategoryService;
   let httpMock: HttpTestingController;
   const baseUrl = environment.apiUrl + '/categories';
+
+  const dummyCategories: CategoryResponseInterface[] = [
+    { id: 1, name: 'Document 1', userIds: [1, 3] },
+    { id: 2, name: 'Document 2', userIds: [2, 4, 6] },
+  ];
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -29,12 +35,8 @@ describe('CategoryService', () => {
 
   it('should retrieve all categories from the API', () => {
     const queryParamRetrieveAll: string = '?page=0&size=1000';
-    const dummyCategories = [
-      { id: 1, name: 'Category 1' },
-      { id: 2, name: 'Category 2' },
-    ];
 
-    service.getAllCategories().subscribe(categories => {
+    service.fetchAllCategories().subscribe(categories => {
       expect(categories.length).toBe(2);
       expect(categories).toEqual(dummyCategories);
     });
@@ -45,10 +47,6 @@ describe('CategoryService', () => {
   });
 
   it('should return categories with pagination query from the api', () => {
-    const dummyCategories: CategoryResponseInterface[] = [
-      { id: 1, name: 'Document 1' },
-      { id: 2, name: 'Document 2' },
-    ];
     const dummyTotalElements = '2';
     const dummyPaginationQuery: PaginationQueryParamsInterface = { pageNumber: '0', pageSize: '20' };
 
@@ -63,5 +61,17 @@ describe('CategoryService', () => {
     );
     expect(req.request.method).toBe('GET');
     req.flush({ content: dummyCategories, totalElements: dummyTotalElements });
+  });
+
+  it('should create a new category', () => {
+    const dummyNewCategory: CategoryRequestInterface = { name: 'New Category', userIds: [2, 3] };
+
+    service.createCategory(dummyNewCategory).subscribe(response => {
+      expect(response.message).toBe('Erfolgreich hochgeladen');
+    });
+
+    const req = httpMock.expectOne(baseUrl);
+    expect(req.request.method).toBe('POST');
+    req.flush({});
   });
 });
