@@ -9,7 +9,6 @@ describe('CreateCategoryDialogComponent', () => {
   let component: CreateCategoryDialogComponent;
   let fixture: ComponentFixture<CreateCategoryDialogComponent>;
   let matDialogRefStub: Partial<MatDialogRef<CreateCategoryDialogComponent>>;
-  let store: MockStore;
   const initialState = {
     categories: {
       isLoading: false,
