@@ -63,7 +63,7 @@ export class DocumentManagementComponent implements OnInit {
   expandedDocument: DocumentResponseInterface | null = null;
 
   // Columns to display in the document table
-  displayedColumns: string[] = ['select', 'id', 'name', 'categories'];
+  displayedColumns: string[] = ['select', 'id', 'name', 'version', 'categories'];
 
   // Selection model for documents. Represents the current selected column document
   selection = new SelectionModel<DocumentResponseInterface>(false, []);
