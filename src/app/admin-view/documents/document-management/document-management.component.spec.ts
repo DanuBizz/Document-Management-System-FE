@@ -3,7 +3,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { By } from '@angular/platform-browser';
-import { DocumentResponseInterface } from '../../type/document-response.interface';
+import { DocumentVersionsResponseInterface } from '../../type/document-versions-response.interface';
 
 describe('DocumentManagementComponent', () => {
   let component: DocumentManagementComponent;
@@ -24,6 +24,7 @@ describe('DocumentManagementComponent', () => {
           isRead: true,
           isLatest: true,
           isVisible: true,
+          oldVersions: [],
         },
       ],
       totalElements: '0',
@@ -52,7 +53,7 @@ describe('DocumentManagementComponent', () => {
 
   it('should render title', () => {
     const title = fixture.debugElement.query(By.css('h1'));
-    expect(title.nativeElement.textContent).toContain('Dokument Management');
+    expect(title.nativeElement.textContent).toEqual('Dokument Management');
   });
 
   it('should render document data rows correctly', () => {
@@ -97,7 +98,7 @@ describe('DocumentManagementComponent', () => {
   });
 
   it('should toggle document selection', () => {
-    const dummyDocument: DocumentResponseInterface = {
+    const dummyDocument: DocumentVersionsResponseInterface = {
       id: 1,
       documentName: 'Document 1',
       filePath: '/path/to/document1',
@@ -106,6 +107,7 @@ describe('DocumentManagementComponent', () => {
       isRead: true,
       isLatest: true,
       isVisible: true,
+      oldVersions: [],
     };
 
     expect(component.selection.isSelected(dummyDocument)).toBeFalse();
