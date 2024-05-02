@@ -1,9 +1,9 @@
 import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { DocumentService } from './document.service';
-import { DocumentResponseInterface } from '../../admin-view/type/document-response.interface';
 import { PaginationQueryParamsInterface } from '../type/pagination-query-params.interface';
 import { environment } from '../../../environments/environment';
+import { DocumentVersionsResponseInterface } from '../../admin-view/type/document-versions-response.interface';
 
 describe('DocumentService', () => {
   let service: DocumentService;
@@ -27,8 +27,8 @@ describe('DocumentService', () => {
     expect(service).toBeTruthy();
   });
 
-  it('should return documents with pagination query', () => {
-    const dummyDocuments: DocumentResponseInterface[] = [
+  it('should return documents with associated versions with pagination query', () => {
+    const dummyDocuments: DocumentVersionsResponseInterface[] = [
       {
         id: 1,
         documentName: 'Document 1',
@@ -38,6 +38,7 @@ describe('DocumentService', () => {
         isRead: true,
         isLatest: true,
         isVisible: true,
+        oldVersions: [],
       },
       {
         id: 2,
@@ -48,19 +49,22 @@ describe('DocumentService', () => {
         isRead: true,
         isLatest: true,
         isVisible: true,
+        oldVersions: [],
       },
     ];
     const dummyTotalElements = '2';
     const dummyPaginationQuery: PaginationQueryParamsInterface = { pageNumber: '0', pageSize: '20' };
 
-    service.fetchDocumentsWithQuery({ queryParams: dummyPaginationQuery }).subscribe(response => {
+    service.fetchDocumentsWithAssociatedVersionsWithQuery({ queryParams: dummyPaginationQuery }).subscribe(response => {
       expect(response.documents.length).toBe(2);
       expect(response.documents).toEqual(dummyDocuments);
       expect(response.totalElements).toBe(dummyTotalElements);
     });
 
     const req = httpMock.expectOne(
-      baseUrl + `?page=${dummyPaginationQuery.pageNumber}&size=${dummyPaginationQuery.pageSize}`
+      baseUrl +
+        '/latest-with-associated-versions' +
+        `?page=${dummyPaginationQuery.pageNumber}&size=${dummyPaginationQuery.pageSize}`
     );
     expect(req.request.method).toBe('GET');
     req.flush({ content: dummyDocuments, totalElements: dummyTotalElements });

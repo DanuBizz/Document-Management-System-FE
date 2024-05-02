@@ -1,8 +1,8 @@
 import { documentReducer, initialState } from './document.reducers';
 import { documentActions } from './document.actions';
-import { DocumentResponseInterface } from '../../type/document-response.interface';
 import { PaginationQueryParamsInterface } from '../../../shared/type/pagination-query-params.interface';
 import { DocumentRequestInterface } from '../../type/document-request.interface';
+import { DocumentVersionsResponseInterface } from '../../type/document-versions-response.interface';
 
 describe('DocumentReducers', () => {
   const requestParams: PaginationQueryParamsInterface = {
@@ -40,7 +40,7 @@ describe('DocumentReducers', () => {
   });
 
   it('should get documents and totalElements when success', () => {
-    const documents: DocumentResponseInterface[] = [
+    const documents: DocumentVersionsResponseInterface[] = [
       {
         id: 1,
         documentName: 'Document 1',
@@ -50,6 +50,7 @@ describe('DocumentReducers', () => {
         isRead: true,
         isLatest: true,
         isVisible: true,
+        oldVersions: [],
       },
     ];
     const totalElements = '1';

@@ -2,7 +2,7 @@
 <ng-container *ngIf="data$ | async as data">
   <div class="container">
     <!-- Title -->
-    <h1 class="text-center mobile-title">{{ title }}t</h1>
+    <h1 class="text-center mobile-title">{{ title }}</h1>
 
     <!-- Buttons for actions -->
     <div class="d-flex justify-content-center mobile-without-title mb-4">
@@ -47,9 +47,9 @@
         <table
           mat-table
           class="default-table-design"
-          [dataSource]="data.document"
+          [dataSource]="data.documents"
           matSort
-          matSortActive="id"
+          matSortActive="name"
           matSortDirection="asc"
           multiTemplateDataRows>
           <!-- Select column -->
@@ -66,7 +66,7 @@
 
           <!-- ID column -->
           <ng-container matColumnDef="id" sticky>
-            <th mat-header-cell *matHeaderCellDef mat-sort-header>ID</th>
+            <th mat-header-cell *matHeaderCellDef>ID</th>
             <td mat-cell *matCellDef="let document">
               {{ document.id }}
             </td>
@@ -77,6 +77,14 @@
             <th mat-header-cell *matHeaderCellDef>Name</th>
             <td mat-cell *matCellDef="let document">
               {{ document.documentName }}
+            </td>
+          </ng-container>
+
+          <!-- version column -->
+          <ng-container matColumnDef="version">
+            <th mat-header-cell *matHeaderCellDef>Versionsdatum</th>
+            <td mat-cell *matCellDef="let document">
+              {{ document.timestamp | date: 'dd.MM.yyyy HH:mm:ss' }}
             </td>
           </ng-container>
 
@@ -91,55 +99,60 @@
           <!-- Expanded detail column -->
           <ng-container matColumnDef="expandedDetail">
             <td mat-cell *matCellDef="let document" colspan="5" class="px-0">
-              <table
-                mat-table
-                class="documents-table inner-table"
-                [dataSource]="data.document"
-                matSort
-                matSortActive="id"
-                matSortDirection="asc"
-                multiTemplateDataRows>
-                <!-- Select column inside expanded detail -->
-                <ng-container matColumnDef="select" sticky>
-                  <th mat-header-cell *matHeaderCellDef>
-                    <mat-icon>add_task</mat-icon>
-                  </th>
-                  <td mat-cell *matCellDef="let document" (click)="$event.stopPropagation()">
-                    <mat-checkbox (change)="onDocumentToggled(document)" [checked]="selection.isSelected(document)">
-                    </mat-checkbox>
-                  </td>
-                </ng-container>
+              @if (document.oldVersions.length > 0) {
+                <table mat-table class="inner-table" [dataSource]="getMatTableData(document.oldVersions)">
+                  <!-- Select column inside expanded detail -->
+                  <ng-container matColumnDef="select" sticky>
+                    <th mat-header-cell *matHeaderCellDef>
+                      <mat-icon>add_task</mat-icon>
+                    </th>
+                    <td mat-cell *matCellDef="let document" (click)="$event.stopPropagation()">
+                      <mat-checkbox (change)="onDocumentToggled(document)" [checked]="selection.isSelected(document)">
+                      </mat-checkbox>
+                    </td>
+                  </ng-container>
 
-                <!-- ID column inside expanded detail -->
-                <ng-container matColumnDef="id" sticky>
-                  <th mat-header-cell *matHeaderCellDef mat-sort-header>ID</th>
-                  <td mat-cell *matCellDef="let document">
-                    {{ document.id }}
-                  </td>
-                </ng-container>
+                  <!-- ID column inside expanded detail -->
+                  <ng-container matColumnDef="id" sticky>
+                    <th mat-header-cell *matHeaderCellDef>ID</th>
+                    <td mat-cell *matCellDef="let document">
+                      {{ document.id }}
+                    </td>
+                  </ng-container>
 
-                <!-- Name column inside expanded detail -->
-                <ng-container matColumnDef="name">
-                  <th mat-header-cell *matHeaderCellDef>Name</th>
-                  <td mat-cell *matCellDef="let document">
-                    {{ document.documentName }}
-                  </td>
-                </ng-container>
+                  <!-- Name column inside expanded detail -->
+                  <ng-container matColumnDef="name">
+                    <th mat-header-cell *matHeaderCellDef>Name</th>
+                    <td mat-cell *matCellDef="let document">
+                      {{ document.documentName }}
+                    </td>
+                  </ng-container>
 
-                <!-- Categories column inside expanded detail -->
-                <ng-container matColumnDef="categories">
-                  <th mat-header-cell *matHeaderCellDef>Kategorien</th>
-                  <td mat-cell *matCellDef="let document">
-                    {{ document.categoryNames }}
-                  </td>
-                </ng-container>
+                  <!-- version column -->
+                  <ng-container matColumnDef="version">
+                    <th mat-header-cell *matHeaderCellDef>Versionsdatum</th>
+                    <td mat-cell *matCellDef="let document">
+                      {{ document.timestamp | date: 'dd.MM.yyyy HH:mm:ss' }}
+                    </td>
+                  </ng-container>
 
-                <!-- Row definition for expanded detail -->
-                <tr
-                  mat-row
-                  *matRowDef="let document; columns: displayedColumns"
-                  (click)="onToggleDocument(document)"></tr>
-              </table>
+                  <!-- Categories column inside expanded detail -->
+                  <ng-container matColumnDef="categories">
+                    <th mat-header-cell *matHeaderCellDef>Kategorien</th>
+                    <td mat-cell *matCellDef="let document">
+                      {{ document.categoryNames }}
+                    </td>
+                  </ng-container>
+
+                  <!-- Row definition for expanded detail -->
+                  <tr
+                    mat-row
+                    *matRowDef="let document; columns: displayedColumns"
+                    (click)="onToggleDocument(document)"></tr>
+                </table>
+              } @else {
+                Keine weiteren Versionen vorhanden!
+              }
             </td>
           </ng-container>
 

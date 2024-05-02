@@ -4,7 +4,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSortModule } from '@angular/material/sort';
-import { MatTableModule } from '@angular/material/table';
+import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatButtonModule } from '@angular/material/button';
 import { combineLatest, filter } from 'rxjs';
 import { DocumentService } from '../../../shared/service/document.service';
@@ -14,7 +14,6 @@ import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { SelectionModel } from '@angular/cdk/collections';
 import { MatCheckbox } from '@angular/material/checkbox';
 import { FabButtonComponent } from '../../../shared/component/fab-button/fab-button.component';
-import { DocumentResponseInterface } from '../../type/document-response.interface';
 import { Store } from '@ngrx/store';
 import { selectDocumentData, selectError, selectIsLoading, selectTotalElements } from '../store/document.reducers';
 import { documentActions } from '../store/document.actions';
@@ -25,6 +24,8 @@ import { PaginationQueryParamsInterface } from '../../../shared/type/pagination-
 import { PaginationConfigService } from '../../../shared/service/pagination-config.service';
 import { categoryActions } from '../../categories/store/category.actions';
 import { DocumentRequestInterface } from '../../type/document-request.interface';
+import { DocumentResponseInterface } from '../../type/document-response.interface';
+import { DocumentVersionsResponseInterface } from '../../type/document-versions-response.interface';
 
 @Component({
   selector: 'app-document-management',
@@ -53,20 +54,20 @@ export class DocumentManagementComponent implements OnInit {
 
   // Observable combining necessary data from the store for the component
   data$ = combineLatest({
-    document: this.store.select(selectDocumentData),
+    documents: this.store.select(selectDocumentData),
     isLoading: this.store.select(selectIsLoading),
     error: this.store.select(selectError),
     totalElements: this.store.select(selectTotalElements),
   });
 
   // Currently expanded document
-  expandedDocument: DocumentResponseInterface | null = null;
+  expandedDocument: DocumentVersionsResponseInterface | null = null;
 
   // Columns to display in the document table
-  displayedColumns: string[] = ['select', 'id', 'name', 'categories'];
+  displayedColumns: string[] = ['select', 'id', 'name', 'version', 'categories'];
 
   // Selection model for documents. Represents the current selected column document
-  selection = new SelectionModel<DocumentResponseInterface>(false, []);
+  selection = new SelectionModel<DocumentVersionsResponseInterface>(false, []);
 
   /**
    * @param store - The Redux store instance injected via dependency injection.
@@ -105,7 +106,7 @@ export class DocumentManagementComponent implements OnInit {
    * Toggles the selection of a document.
    * @param document - The document to toggle.
    */
-  onDocumentToggled(document: DocumentResponseInterface) {
+  onDocumentToggled(document: DocumentVersionsResponseInterface) {
     this.selection.toggle(document);
   }
 
@@ -114,7 +115,8 @@ export class DocumentManagementComponent implements OnInit {
    * @param document - The document to toggle.
    * Not tested: only provisional
    */
-  onToggleDocument(document: DocumentResponseInterface) {
+  onToggleDocument(document: DocumentVersionsResponseInterface) {
+    console.log(document);
     if (document == this.expandedDocument) {
       this.expandedDocument = null;
     } else {
@@ -145,20 +147,17 @@ export class DocumentManagementComponent implements OnInit {
    * This method is prepared but not fully implemented.
    */
   createNewVersion() {
-    // Subscribe to the data$ observable to get the latest document data
-    this.data$.pipe(filter(data => !data.isLoading && !data.error)).subscribe(data => {
-      // Find the selected document
-      const selectedDocument = data.document.find(document => this.selection.selected.at(0)!.id === document.id);
-
-      if (selectedDocument) {
-        // Open dialog to create new version with the selected document
-        openCreateDocumentDialog(this.dialog, selectedDocument)
-          .pipe(filter(val => !!val))
-          .subscribe(val => console.log('New document value:', val));
-      } else {
-        console.error('Document not found.');
-      }
-    });
+    const newDocument: DocumentResponseInterface = {
+      ...this.selection.selected.at(0)!,
+    };
+    if (newDocument) {
+      // Open dialog to create new version with the selected document
+      openCreateDocumentDialog(this.dialog, newDocument)
+        .pipe(filter(val => !!val))
+        .subscribe(val => console.log('New document value:', val));
+    } else {
+      console.error('Document not found.');
+    }
   }
 
   /**
@@ -176,5 +175,9 @@ export class DocumentManagementComponent implements OnInit {
 
     // Dispatch an action to retrieve documents with the updated pagination query
     this.store.dispatch(documentActions.getDocumentsWithQuery({ queryParams: request }));
+  }
+
+  getMatTableData(document: DocumentResponseInterface[]) {
+    return new MatTableDataSource(document);
   }
 }
