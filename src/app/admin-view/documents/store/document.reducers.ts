@@ -49,6 +49,20 @@ export const documentFeature = createFeature({
       ...state,
       isSubmitting: false,
       error: action.error,
+    })),
+
+    on(documentActions.changeDocumentVisibility, state => ({
+      ...state,
+      isSubmitting: true,
+    })),
+    on(documentActions.changeDocumentVisibilitySuccess, state => ({
+      ...state,
+      isSubmitting: false,
+    })),
+    on(documentActions.changeDocumentVisibilityFailure, (state, action) => ({
+      ...state,
+      isSubmitting: false,
+      error: action.error,
     }))
     /*
     on(routerNavigatedAction, () => (initialState))

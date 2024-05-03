@@ -53,4 +53,15 @@ export class DocumentService {
       .post<{ message: string }>(this.baseUrl, newDocumentVersion)
       .pipe(map(() => ({ message: 'Erfolgreich hochgeladen' })));
   }
+
+  /**
+   * Updates the visibility of a document with the specified ID.
+   * @param id The ID of the document whose visibility should be updated.
+   * @return An Observable that emits a success message upon successful update.
+   */
+  updateDocumentVisibility(id: number): Observable<{ message: string }> {
+    return this.http
+      .put<{ message: string }>(this.baseUrl + `/${id}/toggle-visibility`, null)
+      .pipe(map(() => ({ message: 'Erfolgreich geändert' })));
+  }
 }

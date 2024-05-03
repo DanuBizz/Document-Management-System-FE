@@ -43,12 +43,16 @@ export const openSnackbarErrorEffect = createEffect(
   (actions$ = inject(Actions), snackbarService = inject(SnackbarService), store = inject(Store)) => {
     return actions$.pipe(
       // Listening for actions of type
-      ofType(documentActions.getDocumentsWithQueryFailure, documentActions.createDocumentVersionFailure),
+      ofType(
+        documentActions.getDocumentsWithQueryFailure,
+        documentActions.createDocumentVersionFailure,
+        documentActions.changeDocumentVisibilityFailure
+      ),
       tap(() => {
         // Subscribing to selectError selector to get the error from the store
         store.select(selectError).subscribe(error => {
           // Opening a snackbar to display the error message
-          snackbarService.openSnackBar('Fehler beim Laden/Hochladen der Dokumente.\nError: ' + JSON.stringify(error));
+          snackbarService.openSnackBar('Fehler bei der Übermittlung.\nError: ' + JSON.stringify(error));
         });
       })
     );
@@ -80,6 +84,30 @@ export const createDocumentVersionEffect = createEffect(
   { functional: true }
 );
 
+export const changeDocumentVisibilityEffect = createEffect(
+  // Injecting dependencies
+  (actions$ = inject(Actions), documentService = inject(DocumentService)) => {
+    return actions$.pipe(
+      // Listening for actions of type
+      ofType(documentActions.changeDocumentVisibility),
+      switchMap(({ id }) => {
+        // Calling the service method to create document
+        return documentService.updateDocumentVisibility(id).pipe(
+          map(({ message }) =>
+            // Handling the response and dispatching action when successful
+            documentActions.changeDocumentVisibilitySuccess({ message })
+          ),
+          catchError((errorResponse: HttpErrorResponse) => {
+            // Handling errors and dispatching action when fetching fails
+            return of(documentActions.changeDocumentVisibilityFailure(errorResponse.error));
+          })
+        );
+      })
+    );
+  },
+  { functional: true }
+);
+
 /**
  * Effect for displaying a snackbar notification and dispatch get documents action.
  * Upon receiving such a success-action, it displays a snackbar notification containing the success message
@@ -89,7 +117,7 @@ export const createDocumentVersionEffect = createEffect(
 export const openSnackbarSuccessEffect = createEffect(
   (actions$ = inject(Actions), snackbarService = inject(SnackbarService), store = inject(Store)) => {
     return actions$.pipe(
-      ofType(documentActions.createDocumentVersionSuccess),
+      ofType(documentActions.createDocumentVersionSuccess, documentActions.changeDocumentVisibilitySuccess),
       tap(({ message }) => {
         snackbarService.openSnackBar(message);
       }),
