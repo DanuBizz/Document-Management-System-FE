@@ -152,7 +152,7 @@ body {
 }
 
 .inner-table {
-  background-color: map-get($mat-primary, 100) !important;
+  background-color: map-get($mat-primary, 50) !important;
 }
 
 .mdc-text-field {
@@ -177,4 +177,11 @@ mat-form-field {
 
 .mat-mdc-select-value-text {
   white-space: normal !important;
+}
+
+.table-icon-hint {
+  height: 15px !important;
+  width: 15px !important;
+  font-size: 15px !important;
+  line-height: inherit !important;
 }

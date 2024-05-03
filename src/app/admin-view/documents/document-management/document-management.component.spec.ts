@@ -112,10 +112,10 @@ describe('DocumentManagementComponent', () => {
 
     expect(component.selection.isSelected(dummyDocument)).toBeFalse();
 
-    component.onDocumentToggled(dummyDocument);
+    component.onToggleSelectDocument(dummyDocument);
     expect(component.selection.isSelected(dummyDocument)).toBeTrue();
 
-    component.onDocumentToggled(dummyDocument);
+    component.onToggleSelectDocument(dummyDocument);
     expect(component.selection.isSelected(dummyDocument)).toBeFalse();
   });
 });
