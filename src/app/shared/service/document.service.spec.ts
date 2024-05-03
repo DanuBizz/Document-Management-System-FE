@@ -4,6 +4,7 @@ import { DocumentService } from './document.service';
 import { PaginationQueryParamsInterface } from '../type/pagination-query-params.interface';
 import { environment } from '../../../environments/environment';
 import { DocumentVersionsResponseInterface } from '../../admin-view/type/document-versions-response.interface';
+import { DocumentRequestInterface } from '../../admin-view/type/document-request.interface';
 
 describe('DocumentService', () => {
   let service: DocumentService;
@@ -68,5 +69,36 @@ describe('DocumentService', () => {
     );
     expect(req.request.method).toBe('GET');
     req.flush({ content: dummyDocuments, totalElements: dummyTotalElements });
+  });
+
+  it('should create a new document version', () => {
+    const newDocumentVersion: DocumentRequestInterface = {
+      file: new File(['dummy content'], 'dummy-file.txt'),
+      name: 'Dummy Document',
+      categories: [],
+      timestamp: new Date(),
+    };
+    const dummyResponse = { message: 'Erfolgreich hochgeladen' };
+
+    service.createDocVersion(newDocumentVersion).subscribe(response => {
+      expect(response).toEqual(dummyResponse);
+    });
+
+    const req = httpMock.expectOne(baseUrl);
+    expect(req.request.method).toBe('POST');
+    req.flush(dummyResponse);
+  });
+
+  it('should update the visibility of a document', () => {
+    const documentId = 1;
+    const dummyResponse = { message: 'Erfolgreich geändert' };
+
+    service.updateDocumentVisibility(documentId).subscribe(response => {
+      expect(response).toEqual(dummyResponse);
+    });
+
+    const req = httpMock.expectOne(baseUrl + `/${documentId}/toggle-visibility`);
+    expect(req.request.method).toBe('PUT');
+    req.flush(dummyResponse);
   });
 });

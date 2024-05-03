@@ -11,7 +11,8 @@
         icon="add"
         tooltip="Neues Dokument erstellen"
         [disabled]="selection.selected.length !== 0"
-        (click)="createNewDocument()">
+        (click)="createNewDocument()"
+        id="test-new-document-button">
       </app-fab-button>
 
       <!-- Button to create new version -->
@@ -37,7 +38,7 @@
         tooltip="{{ tooltipVisibilityButton }}"
         [disabled]="selection.selected.length === 0"
         (click)="changeIsVisibleStatusForDocument()"
-        id="test-change-isHidden-status">
+        id="test-change-visibility-status">
       </app-fab-button>
     </div>
 
