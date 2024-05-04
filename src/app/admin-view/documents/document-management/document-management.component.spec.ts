@@ -35,6 +35,18 @@ describe('DocumentManagementComponent', () => {
     },
   };
 
+  const dummyDocument: DocumentVersionsResponseInterface = {
+    id: 1,
+    documentName: 'Document 1',
+    filePath: '/path/to/document1',
+    timestamp: new Date(),
+    categoryNames: ['Category 1'],
+    isRead: true,
+    isLatest: true,
+    isVisible: true,
+    oldVersions: [],
+  };
+
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [DocumentManagementComponent],
@@ -70,18 +82,33 @@ describe('DocumentManagementComponent', () => {
     expect(component.createNewDocument).toHaveBeenCalled();
   });
 
+  it('should disable createNewDocument()-Button if a document is selected', () => {
+    component.onToggleSelectDocument(dummyDocument);
+    fixture.detectChanges();
+
+    const button = fixture.debugElement.query(By.css('#test-new-document-button')).nativeElement;
+    expect(button.getAttribute('ng-reflect-disabled')).toBe('true');
+  });
+
   it('should disable createNewVersion()-Button if no document is selected', () => {
     fixture.detectChanges();
 
     const button = fixture.debugElement.query(By.css('#test-new-version-button')).nativeElement;
-    expect(button.disabled).toBeTruthy();
+    expect(button.getAttribute('ng-reflect-disabled')).toBe('true');
   });
 
   it('should disable open-in-Browser()-Button if no document is selected', () => {
     fixture.detectChanges();
 
     const button = fixture.debugElement.query(By.css('#test-open-browser-button')).nativeElement;
-    expect(button.disabled).toBeTruthy();
+    expect(button.getAttribute('ng-reflect-disabled')).toBe('true');
+  });
+
+  it('should disable changeVisibility()-Button if no document is selected', () => {
+    fixture.detectChanges();
+
+    const button = fixture.debugElement.query(By.css('#test-change-visibility-status')).nativeElement;
+    expect(button.getAttribute('ng-reflect-disabled')).toBe('true');
   });
 
   it('should render loading-bar', () => {
@@ -98,24 +125,12 @@ describe('DocumentManagementComponent', () => {
   });
 
   it('should toggle document selection', () => {
-    const dummyDocument: DocumentVersionsResponseInterface = {
-      id: 1,
-      documentName: 'Document 1',
-      filePath: '/path/to/document1',
-      timestamp: new Date(),
-      categoryNames: ['Category 1'],
-      isRead: true,
-      isLatest: true,
-      isVisible: true,
-      oldVersions: [],
-    };
-
     expect(component.selection.isSelected(dummyDocument)).toBeFalse();
 
-    component.onDocumentToggled(dummyDocument);
+    component.onToggleSelectDocument(dummyDocument);
     expect(component.selection.isSelected(dummyDocument)).toBeTrue();
 
-    component.onDocumentToggled(dummyDocument);
+    component.onToggleSelectDocument(dummyDocument);
     expect(component.selection.isSelected(dummyDocument)).toBeFalse();
   });
 });

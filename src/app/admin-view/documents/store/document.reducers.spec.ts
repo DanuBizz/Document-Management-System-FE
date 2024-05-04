@@ -126,4 +126,39 @@ describe('DocumentReducers', () => {
 
     expect(state).toEqual(newState);
   });
+
+  it('should set isSubmitting to true when changeDocumentVisibility is called', () => {
+    const action = documentActions.changeDocumentVisibility({ id: 1 });
+    const state = documentReducer(initialState, action);
+    const newState = {
+      ...initialState,
+      isSubmitting: true,
+    };
+
+    expect(state).toEqual(newState);
+  });
+
+  it('should set isSubmitting to false when changeDocumentVisibilitySuccess is called', () => {
+    const action = documentActions.changeDocumentVisibilitySuccess({ message: 'test' });
+    const state = documentReducer(initialState, action);
+    const newState = {
+      ...initialState,
+      isSubmitting: false,
+    };
+
+    expect(state).toEqual(newState);
+  });
+
+  it('should set isSubmitting to false and error when changeDocumentVisibilityFailure is called', () => {
+    const error = { ['error500']: ['Server error'] };
+    const action = documentActions.changeDocumentVisibilityFailure({ error: error });
+    const state = documentReducer(initialState, action);
+    const newState = {
+      ...initialState,
+      isSubmitting: false,
+      error: error,
+    };
+
+    expect(state).toEqual(newState);
+  });
 });

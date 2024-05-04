@@ -17,5 +17,9 @@ export const documentActions = createActionGroup({
     'create document version': props<{ doc: DocumentRequestInterface }>(),
     'create document version success': props<{ message: string }>(),
     'create document version failure': props<{ error: BackendErrorsInterface }>(),
+
+    'change document visibility': props<{ id: number }>(),
+    'change document visibility success': props<{ message: string }>(),
+    'change document visibility failure': props<{ error: BackendErrorsInterface }>(),
   },
 });
