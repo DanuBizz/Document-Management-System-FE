@@ -10,6 +10,9 @@
       @if (form.controls['name'].hasError('required')) {
         <mat-error>Name ist <strong>erforderlich</strong></mat-error>
       }
+      @if (form.controls['name'].hasError('duplicateName')) {
+        <mat-error>Name existiert <strong>bereits</strong></mat-error>
+      }
     </mat-form-field>
 
     <!-- Select file input -->
@@ -31,12 +34,12 @@
     <!-- Select field for categories -->
     <mat-form-field appearance="outline" hideRequiredMarker="true" class="select-field">
       <mat-label>Kategorien</mat-label>
-      <mat-select formControlName="categories" multiple class="select-panel">
+      <mat-select formControlName="categoryIds" multiple class="select-panel">
         @for (category of categories$ | async; track category) {
           <mat-option [value]="category.id">{{ category.name }}</mat-option>
         }
       </mat-select>
-      @if (form.controls['categories'].hasError('required')) {
+      @if (form.controls['categoryIds'].hasError('required')) {
         <mat-error>Kategorie ist <strong>erforderlich</strong></mat-error>
       }
     </mat-form-field>
