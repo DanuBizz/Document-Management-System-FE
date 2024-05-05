@@ -1,9 +1,9 @@
-import {Injectable} from '@angular/core';
-import {environment} from '../../../environments/environment';
-import {HttpClient} from '@angular/common/http';
-import {delay, map, Observable} from 'rxjs';
-import {UserResponseInterface} from '../../admin-view/type/user-response.interface';
-import {PaginationQueryParamsInterface} from '../type/pagination-query-params.interface';
+import { Injectable } from '@angular/core';
+import { environment } from '../../../environments/environment';
+import { HttpClient } from '@angular/common/http';
+import { delay, map, Observable } from 'rxjs';
+import { UserResponseInterface } from '../../admin-view/type/user-response.interface';
+import { PaginationQueryParamsInterface } from '../type/pagination-query-params.interface';
 
 @Injectable({
   providedIn: 'root',
