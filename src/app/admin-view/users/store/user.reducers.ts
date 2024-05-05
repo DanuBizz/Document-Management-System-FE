@@ -2,12 +2,17 @@ import { UserStateInterface } from '../../type/user-state.interface';
 import { createFeature, createReducer, on } from '@ngrx/store';
 import { userActions } from './user.actions';
 
-// Initial state for the categories feature
+// Initial state for the feature
 export const initialState: UserStateInterface = {
+  isSubmitting: false,
   isLoading: false,
   error: null,
   data: [],
   totalElements: '0',
+  queryParams: {
+    pageNumber: '0',
+    pageSize: '5',
+  },
 };
 
 export const userFeature = createFeature({
@@ -28,6 +33,37 @@ export const userFeature = createFeature({
       ...state,
       isLoading: false,
       error: action.error,
+    })),
+
+    on(userActions.getUsersWithQuery, (state, action) => ({
+      ...state,
+      isLoading: true,
+      queryParams: action.queryParams,
+    })),
+    on(userActions.getUsersWithQuerySuccess, (state, { users, totalElements }) => ({
+      ...state,
+      isLoading: false,
+      data: users,
+      totalElements: totalElements,
+    })),
+    on(userActions.getUsersWithQueryFailure, (state, action) => ({
+      ...state,
+      isLoading: false,
+      error: action.error,
+    })),
+
+    on(userActions.changeUserRole, state => ({
+      ...state,
+      isSubmitting: true,
+    })),
+    on(userActions.changeUserRoleSuccess, state => ({
+      ...state,
+      isSubmitting: false,
+    })),
+    on(userActions.changeUserRoleFailure, (state, action) => ({
+      ...state,
+      isSubmitting: false,
+      error: action.error,
     }))
 
     // Handling router navigated action
@@ -41,8 +77,10 @@ export const userFeature = createFeature({
 export const {
   name: userFeatureKey,
   reducer: userReducer,
-  selectIsLoading,
-  selectError,
+  selectIsSubmitting: selectUserIsSubmitting,
+  selectIsLoading: selectUserIsLoading,
+  selectError: selectUserError,
   selectData: selectUserData,
   selectTotalElements: selectTotalUserElements,
+  selectQueryParams,
 } = userFeature;

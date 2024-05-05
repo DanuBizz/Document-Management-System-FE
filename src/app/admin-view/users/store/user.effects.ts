@@ -1,6 +1,6 @@
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { inject } from '@angular/core';
-import { map, of, switchMap } from 'rxjs';
+import { map, mergeMap, of, switchMap, take } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 import { HttpErrorResponse } from '@angular/common/http';
 import { userActions } from './user.actions';
@@ -9,6 +9,7 @@ import { UserService } from '../../../shared/service/user.service';
 import { SnackbarService } from '../../../shared/service/snackbar.service';
 import { Store } from '@ngrx/store';
 import { selectError } from '../../categories/store/category.reducers';
+import { selectQueryParams } from './user.reducers';
 
 export const getAllUsersEffect = createEffect(
   // Injecting dependencies
@@ -34,17 +35,92 @@ export const getAllUsersEffect = createEffect(
   { functional: true }
 );
 
+export const getUsersWithQuery = createEffect(
+  // Injecting dependencies
+  (actions$ = inject(Actions), userService = inject(UserService)) => {
+    return actions$.pipe(
+      // Listening for actions of type
+      ofType(userActions.getUsersWithQuery),
+      switchMap(({ queryParams }) => {
+        // Calling the service method to fetch data
+        return userService.fetchUsersWitQuery({ queryParams }).pipe(
+          map(users =>
+            // Handling the response and dispatching action when successful
+            userActions.getUsersWithQuerySuccess({
+              users: users.users,
+              totalElements: users.totalElements,
+            })
+          ),
+          catchError((errorResponse: HttpErrorResponse) => {
+            // Handling errors and dispatching action when fetching fails
+            return of(userActions.getUsersWithQueryFailure(errorResponse.error));
+          })
+        );
+      })
+    );
+  },
+  { functional: true }
+);
+
+export const changeDocumentVisibilityEffect = createEffect(
+  // Injecting dependencies
+  (actions$ = inject(Actions), userService = inject(UserService)) => {
+    return actions$.pipe(
+      // Listening for actions of type
+      ofType(userActions.changeUserRole),
+      switchMap(({ id, isAdmin }) => {
+        // Calling the service method
+        return userService.updateUserRole(id, isAdmin).pipe(
+          map(({ message }) =>
+            // Handling the response and dispatching action when successful
+            userActions.changeUserRoleSuccess({ message })
+          ),
+          catchError((errorResponse: HttpErrorResponse) => {
+            // Handling errors and dispatching action when fetching fails
+            return of(userActions.changeUserRoleFailure(errorResponse.error));
+          })
+        );
+      })
+    );
+  },
+  { functional: true }
+);
+
+/**
+ * Effect for displaying a snackbar notification and dispatch new action.
+ * Upon receiving such a success-action, it displays a snackbar notification containing the success message
+ * using the provided SnackbarService. It then retrieves the current query parameters from the store
+ * and dispatches the 'get' action to fetch updated data.
+ */
+export const openSnackbarSuccessEffect = createEffect(
+  (actions$ = inject(Actions), snackbarService = inject(SnackbarService), store = inject(Store)) => {
+    return actions$.pipe(
+      ofType(userActions.changeUserRoleSuccess),
+      tap(({ message }) => {
+        snackbarService.openSnackBar(message);
+      }),
+      mergeMap(() => {
+        return store.select(selectQueryParams).pipe(
+          take(1),
+          map(queryParams => userActions.getUsersWithQuery({ queryParams }))
+        );
+      })
+    );
+  },
+  { functional: true, dispatch: true }
+);
+
 export const openSnackbarErrorEffect = createEffect(
   // Injecting dependencies
   (actions$ = inject(Actions), snackbarService = inject(SnackbarService), store = inject(Store)) => {
     return actions$.pipe(
-      // Listening for actions of type 'getAllCategoriesFailure'
-      ofType(userActions.getAllUsersFailure),
+      // Listening for actions of type
+      ofType(userActions.getAllUsersFailure, userActions.getUsersWithQueryFailure, userActions.changeUserRoleFailure),
       tap(() => {
         // Subscribing to selectError selector to get the error from the store
         store.select(selectError).subscribe(error => {
           // Opening a snackbar to display the error message
-          snackbarService.openSnackBar('Fehler beim laden der User. \nError: ' + JSON.stringify(error));
+          snackbarService.openSnackBar('Fehler bei Übermittlung der User. \nError: ' + JSON.stringify(error));
         });
       })
     );
