@@ -1,5 +1,5 @@
-import {Component, OnInit} from '@angular/core';
-import {AsyncPipe, DatePipe, NgIf} from '@angular/common';
+import { Component, OnInit } from '@angular/core';
+import { AsyncPipe, DatePipe, NgIf } from '@angular/common';
 import {
   MatCell,
   MatCellDef,
@@ -12,19 +12,20 @@ import {
   MatRowDef,
   MatTable,
 } from '@angular/material/table';
-import {MatPaginator, PageEvent} from '@angular/material/paginator';
-import {MatProgressBar} from '@angular/material/progress-bar';
-import {MatSort} from '@angular/material/sort';
-import {MatIcon} from '@angular/material/icon';
-import {Store} from '@ngrx/store';
-import {PaginationConfigService} from '../../../shared/service/pagination-config.service';
-import {PaginationQueryParamsInterface} from '../../../shared/type/pagination-query-params.interface';
-import {UserResponseInterface} from '../../type/user-response.interface';
-import {combineLatest} from 'rxjs';
-import {selectTotalUserElements, selectUserData, selectUserError, selectUserIsLoading} from '../store/user.reducers';
-import {userActions} from '../store/user.actions';
-import {MatSlideToggle} from '@angular/material/slide-toggle';
-import {FormsModule} from '@angular/forms';
+import { MatPaginator, PageEvent } from '@angular/material/paginator';
+import { MatProgressBar } from '@angular/material/progress-bar';
+import { MatSort } from '@angular/material/sort';
+import { MatIcon } from '@angular/material/icon';
+import { Store } from '@ngrx/store';
+import { PaginationConfigService } from '../../../shared/service/pagination-config.service';
+import { PaginationQueryParamsInterface } from '../../../shared/type/pagination-query-params.interface';
+import { UserResponseInterface } from '../../type/user-response.interface';
+import { combineLatest } from 'rxjs';
+import { selectTotalUserElements, selectUserData, selectUserError, selectUserIsLoading } from '../store/user.reducers';
+import { userActions } from '../store/user.actions';
+import { MatSlideToggle } from '@angular/material/slide-toggle';
+import { FormsModule } from '@angular/forms';
+import { selectCurrentUser } from '../../../auth/store/auth.reducers';
 
 @Component({
   selector: 'app-user-management',
@@ -68,6 +69,7 @@ export class UserManagementComponent implements OnInit {
     isLoading: this.store.select(selectUserIsLoading),
     error: this.store.select(selectUserError),
     totalElements: this.store.select(selectTotalUserElements),
+    currentUser: this.store.select(selectCurrentUser),
   });
 
   constructor(
