@@ -23,7 +23,7 @@ import { openCreateDocumentDialog } from '../create-document-dialog/document-dia
 import { PaginationQueryParamsInterface } from '../../../shared/type/pagination-query-params.interface';
 import { PaginationConfigService } from '../../../shared/service/pagination-config.service';
 import { categoryActions } from '../../categories/store/category.actions';
-import { DocumentRequestInterface } from '../../type/document-request.interface';
+
 import { DocumentResponseInterface } from '../../type/document-response.interface';
 import { DocumentVersionsResponseInterface } from '../../type/document-versions-response.interface';
 
