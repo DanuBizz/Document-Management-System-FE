@@ -168,14 +168,13 @@ export class DocumentManagementComponent implements OnInit {
     const newDocument: DocumentResponseInterface = {
       ...this.selection.selected.at(0)!,
     };
-    if (newDocument) {
-      // Open dialog to create new version with the selected document
-      openCreateDocumentDialog(this.dialog, newDocument)
-        .pipe(filter(val => !!val))
-        .subscribe(val => console.log('New document value:', val));
-    } else {
-      console.error('Document not found.');
-    }
+    // Open dialog to create new version with the selected document
+    openCreateDocumentDialog(this.dialog, newDocument)
+      .pipe(filter(val => !!val))
+      .subscribe(document => {
+        this.store.dispatch(documentActions.createDocumentVersion({ doc: document }));
+      });
+
     this.resetToggleIconAndSelection();
   }
 
