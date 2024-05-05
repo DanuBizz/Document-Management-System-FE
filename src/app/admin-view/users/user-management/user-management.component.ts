@@ -1,6 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { AsyncPipe, DatePipe, NgIf } from '@angular/common';
-import { FabButtonComponent } from '../../../shared/component/fab-button/fab-button.component';
+import {Component, OnInit} from '@angular/core';
+import {AsyncPipe, DatePipe, NgIf} from '@angular/common';
 import {
   MatCell,
   MatCellDef,
@@ -13,25 +12,25 @@ import {
   MatRowDef,
   MatTable,
 } from '@angular/material/table';
-import { MatPaginator, PageEvent } from '@angular/material/paginator';
-import { MatProgressBar } from '@angular/material/progress-bar';
-import { MatSort } from '@angular/material/sort';
-import { MatCheckbox } from '@angular/material/checkbox';
-import { MatIcon } from '@angular/material/icon';
-import { Store } from '@ngrx/store';
-import { PaginationConfigService } from '../../../shared/service/pagination-config.service';
-import { PaginationQueryParamsInterface } from '../../../shared/type/pagination-query-params.interface';
-import { UserResponseInterface } from '../../type/user-response.interface';
-import { combineLatest } from 'rxjs';
-import { selectTotalUserElements, selectUserData, selectUserError, selectUserIsLoading } from '../store/user.reducers';
-import { userActions } from '../store/user.actions';
+import {MatPaginator, PageEvent} from '@angular/material/paginator';
+import {MatProgressBar} from '@angular/material/progress-bar';
+import {MatSort} from '@angular/material/sort';
+import {MatIcon} from '@angular/material/icon';
+import {Store} from '@ngrx/store';
+import {PaginationConfigService} from '../../../shared/service/pagination-config.service';
+import {PaginationQueryParamsInterface} from '../../../shared/type/pagination-query-params.interface';
+import {UserResponseInterface} from '../../type/user-response.interface';
+import {combineLatest} from 'rxjs';
+import {selectTotalUserElements, selectUserData, selectUserError, selectUserIsLoading} from '../store/user.reducers';
+import {userActions} from '../store/user.actions';
+import {MatSlideToggle} from '@angular/material/slide-toggle';
+import {FormsModule} from '@angular/forms';
 
 @Component({
   selector: 'app-user-management',
   standalone: true,
   imports: [
     AsyncPipe,
-    FabButtonComponent,
     MatCell,
     MatCellDef,
     MatColumnDef,
@@ -46,9 +45,10 @@ import { userActions } from '../store/user.actions';
     MatTable,
     NgIf,
     DatePipe,
-    MatCheckbox,
-    MatIcon,
     MatHeaderCellDef,
+    MatSlideToggle,
+    FormsModule,
+    MatIcon,
   ],
   templateUrl: './user-management.component.html',
   styleUrl: './user-management.component.scss',
@@ -116,5 +116,10 @@ export class UserManagementComponent implements OnInit {
 
     // Dispatch an action to retrieve documents with the updated pagination query
     this.store.dispatch(userActions.getUsersWithQuery({ queryParams: request }));
+  }
+
+  changeUserRole(id: number, role: boolean) {
+    // Dispatch an action to change the currentState of isAdmin
+    this.store.dispatch(userActions.changeUserRole({ id: id, isAdmin: !role }));
   }
 }

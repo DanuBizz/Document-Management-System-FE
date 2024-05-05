@@ -21,6 +21,7 @@
           <ng-container matColumnDef="id" sticky>
             <th mat-header-cell *matHeaderCellDef>ID</th>
             <td mat-cell *matCellDef="let user">
+              <mat-icon class="table-icon-hint"> expand_more </mat-icon>
               {{ user.id }}
             </td>
           </ng-container>
@@ -35,9 +36,12 @@
 
           <!-- Column header for role -->
           <ng-container matColumnDef="role">
-            <th mat-header-cell *matHeaderCellDef>Rolle</th>
-            <td mat-cell *matCellDef="let user">
-              {{ user.isAdmin }}
+            <th mat-header-cell *matHeaderCellDef>Admin</th>
+            <td mat-cell *matCellDef="let user" (click)="$event.stopPropagation()">
+              <mat-slide-toggle
+                color="primary"
+                [ngModel]="user.isAdmin"
+                (click)="changeUserRole(user.id, user.isAdmin)"></mat-slide-toggle>
             </td>
           </ng-container>
 
