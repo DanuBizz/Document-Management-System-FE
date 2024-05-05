@@ -50,6 +50,20 @@ export const userFeature = createFeature({
       ...state,
       isLoading: false,
       error: action.error,
+    })),
+
+    on(userActions.changeUserRole, state => ({
+      ...state,
+      isSubmitting: true,
+    })),
+    on(userActions.changeUserRoleSuccess, state => ({
+      ...state,
+      isSubmitting: false,
+    })),
+    on(userActions.changeUserRoleFailure, (state, action) => ({
+      ...state,
+      isSubmitting: false,
+      error: action.error,
     }))
 
     // Handling router navigated action

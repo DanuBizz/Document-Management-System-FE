@@ -109,4 +109,39 @@ describe('UserReducers', () => {
 
     expect(state).toEqual(newState);
   });
+
+  it('should change user role', () => {
+    const action = userActions.changeUserRole({ id: 1, isAdmin: true });
+    const state = userReducer(initialState, action);
+    const newState = {
+      ...initialState,
+      isSubmitting: true,
+    };
+
+    expect(state).toEqual(newState);
+  });
+
+  it('should change user role success', () => {
+    const action = userActions.changeUserRoleSuccess({ message: 'test' });
+    const state = userReducer(initialState, action);
+    const newState = {
+      ...initialState,
+      isSubmitting: false,
+    };
+
+    expect(state).toEqual(newState);
+  });
+
+  it('should change user role failure', () => {
+    const error = { ['error500']: ['Server error'] };
+    const action = userActions.changeUserRoleFailure({ error: error });
+    const state = userReducer(initialState, action);
+    const newState = {
+      ...initialState,
+      isSubmitting: false,
+      error: error,
+    };
+
+    expect(state).toEqual(newState);
+  });
 });

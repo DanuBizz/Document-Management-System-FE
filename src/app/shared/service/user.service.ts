@@ -47,4 +47,18 @@ export class UserService {
         }))
       );
   }
+
+  /**
+   * Updates the role of a user based on their ID.
+   *
+   * @param id The ID of the user whose role needs to be updated.
+   * @param isAdmin A boolean value indicating whether the user should be granted admin rights or not.
+   *
+   * @returns An Observable with a message indicating the success of the operation.
+   */
+  updateUserRole(id: number, isAdmin: boolean) {
+    return this.http
+      .put<{ message: string }>(this.baseUrl + `/${id}`, { isAdmin: isAdmin })
+      .pipe(map(() => ({ message: 'Erfolgreich geändert' })));
+  }
 }

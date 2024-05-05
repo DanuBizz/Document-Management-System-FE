@@ -13,5 +13,9 @@ export const userActions = createActionGroup({
     'get users with query': props<{ queryParams: PaginationQueryParamsInterface }>(),
     'get users with query success': props<{ users: UserResponseInterface[]; totalElements: string }>(),
     'get users with query failure': props<{ error: BackendErrorsInterface }>(),
+
+    'change user role': props<{ id: number; isAdmin: boolean }>(),
+    'change user role success': props<{ message: string }>(),
+    'change user role failure': props<{ error: BackendErrorsInterface }>(),
   },
 });

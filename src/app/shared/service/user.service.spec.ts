@@ -61,4 +61,18 @@ describe('UserService', () => {
     expect(req.request.method).toBe('GET');
     req.flush({ content: dummyUsers, totalElements: dummyTotalElements });
   });
+
+  it('should update the isAdmin state of a user', () => {
+    const userId = 1;
+    const isAdmin = false;
+    const dummyResponse = { message: 'Erfolgreich geändert' };
+
+    service.updateUserRole(userId, isAdmin).subscribe(response => {
+      expect(response).toEqual(dummyResponse);
+    });
+
+    const req = httpMock.expectOne(baseUrl + `/${userId}`);
+    expect(req.request.method).toBe('PUT');
+    req.flush(dummyResponse);
+  });
 });
