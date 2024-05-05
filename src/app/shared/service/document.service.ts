@@ -53,13 +53,13 @@ export class DocumentService {
     const formData = new FormData();
     formData.append('file', newDocumentVersion.file);
     formData.append('name', newDocumentVersion.name);
-    formData.append('timestamp', newDocumentVersion.timestamp.toISOString());
+    formData.append('timestamp', newDocumentVersion.timestamp.toISOString().substring(0, 19));
     newDocumentVersion.categoryIds.forEach(id => {
       formData.append('categoryIds[]', id.toString());
     });
 
     return this.http
-      .post<{ message: string }>(this.baseUrl, newDocumentVersion)
+      .post<{ message: string }>(this.baseUrl, formData)
       .pipe(map(() => ({ message: 'Erfolgreich hochgeladen' })));
   }
 
