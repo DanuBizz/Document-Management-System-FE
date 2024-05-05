@@ -38,16 +38,43 @@ export const openSnackbarErrorEffect = createEffect(
   // Injecting dependencies
   (actions$ = inject(Actions), snackbarService = inject(SnackbarService), store = inject(Store)) => {
     return actions$.pipe(
-      // Listening for actions of type 'getAllCategoriesFailure'
-      ofType(userActions.getAllUsersFailure),
+      // Listening for actions of type
+      ofType(userActions.getAllUsersFailure, userActions.getUsersWithQueryFailure),
       tap(() => {
         // Subscribing to selectError selector to get the error from the store
         store.select(selectError).subscribe(error => {
           // Opening a snackbar to display the error message
-          snackbarService.openSnackBar('Fehler beim laden der User. \nError: ' + JSON.stringify(error));
+          snackbarService.openSnackBar('Fehler bei Übermittlung der User. \nError: ' + JSON.stringify(error));
         });
       })
     );
   },
   { functional: true, dispatch: false } // indicates not to dispatch any actions
+);
+
+export const getUsersWithQuery = createEffect(
+  // Injecting dependencies
+  (actions$ = inject(Actions), userService = inject(UserService)) => {
+    return actions$.pipe(
+      // Listening for actions of type
+      ofType(userActions.getUsersWithQuery),
+      switchMap(({ queryParams }) => {
+        // Calling the service method to fetch data
+        return userService.fetchUsersWitQuery({ queryParams }).pipe(
+          map(users =>
+            // Handling the response and dispatching action when successful
+            userActions.getUsersWithQuerySuccess({
+              users: users.users,
+              totalElements: users.totalElements,
+            })
+          ),
+          catchError((errorResponse: HttpErrorResponse) => {
+            // Handling errors and dispatching action when fetching fails
+            return of(userActions.getUsersWithQueryFailure(errorResponse.error));
+          })
+        );
+      })
+    );
+  },
+  { functional: true }
 );
