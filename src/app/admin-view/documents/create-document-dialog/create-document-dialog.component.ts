@@ -21,6 +21,7 @@ import { MatIcon } from '@angular/material/icon';
 import { DocCategoryResponseInterface } from '../../../shared/type/doc-category-response.interface';
 import { docCategoryActions } from '../../../shared/store/doc-category.actions';
 import { selectDocCategoryData } from '../../../shared/store/doc-category.reducers';
+import { DocumentRequestInterface } from '../../type/document-request.interface';
 
 @Component({
   selector: 'app-create-document-dialog',
@@ -105,7 +106,7 @@ export class CreateDocumentDialogComponent implements OnInit {
         this.isDisabled ? [] : [Validators.required, this.validateDocumentCategoryName.bind(this)],
       ],
       fileName: ['', Validators.required],
-      categories: ['', Validators.required],
+      categoryIds: ['', Validators.required],
     });
   }
 
@@ -129,24 +130,28 @@ export class CreateDocumentDialogComponent implements OnInit {
    * Otherwise, combines the form data with the document name and closes the dialog.
    */
   save() {
-    let data = {
-      ...this.form.value,
-      file: this.file,
-    };
+    const date = new Date();
 
     // If a document exists, close the dialog with the form value
     if (this.document !== null) {
-      this.dialogRef.close(data);
+      const newVersion: DocumentRequestInterface = {
+        file: this.file,
+        name: this.formName,
+        categoryIds: this.form.value.categoryIds,
+        timestamp: date,
+      };
+
+      this.dialogRef.close(newVersion);
+    } else {
+      // Otherwise, combine the form data with the document name and close the dialog
+      const newDocument: DocumentRequestInterface = {
+        file: this.file,
+        name: this.form.value.name,
+        categoryIds: this.form.value.categoryIds,
+        timestamp: date,
+      };
+      this.dialogRef.close(newDocument);
     }
-
-    // Otherwise, combine the form data with the document name and close the dialog
-    data = {
-      name: this.formName,
-      ...this.form.value,
-      file: this.file,
-    };
-
-    this.dialogRef.close(data);
   }
 
   /**

@@ -44,13 +44,22 @@ export class DocumentService {
 
   /**
    * Method to create a new document.
+   * Creates a form data to transfer a file into a POST request.
    * Upon successful creation, returns an observable containing a success message.
    * @param newDocumentVersion The data of the new category to be created.
    * @returns An observable containing a success message upon successful creation.
    */
   createDocVersion(newDocumentVersion: DocumentRequestInterface): Observable<{ message: string }> {
+    const formData = new FormData();
+    formData.append('file', newDocumentVersion.file);
+    formData.append('name', newDocumentVersion.name);
+    formData.append('timestamp', newDocumentVersion.timestamp.toISOString().substring(0, 19));
+    newDocumentVersion.categoryIds.forEach(id => {
+      formData.append('categoryIds[]', id.toString());
+    });
+
     return this.http
-      .post<{ message: string }>(this.baseUrl, newDocumentVersion)
+      .post<{ message: string }>(this.baseUrl, formData)
       .pipe(map(() => ({ message: 'Erfolgreich hochgeladen' })));
   }
 

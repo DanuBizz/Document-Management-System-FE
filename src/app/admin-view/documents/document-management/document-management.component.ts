@@ -23,7 +23,7 @@ import { openCreateDocumentDialog } from '../create-document-dialog/document-dia
 import { PaginationQueryParamsInterface } from '../../../shared/type/pagination-query-params.interface';
 import { PaginationConfigService } from '../../../shared/service/pagination-config.service';
 import { categoryActions } from '../../categories/store/category.actions';
-import { DocumentRequestInterface } from '../../type/document-request.interface';
+
 import { DocumentResponseInterface } from '../../type/document-response.interface';
 import { DocumentVersionsResponseInterface } from '../../type/document-versions-response.interface';
 
@@ -154,13 +154,8 @@ export class DocumentManagementComponent implements OnInit {
   createNewDocument() {
     openCreateDocumentDialog(this.dialog, null)
       .pipe(filter(val => !!val))
-      .subscribe(val => {
-        const date = Date.now();
-        const newDocumentVersion: DocumentRequestInterface = {
-          ...val,
-          date,
-        };
-        this.store.dispatch(documentActions.createDocumentVersion({ doc: newDocumentVersion }));
+      .subscribe(document => {
+        this.store.dispatch(documentActions.createDocumentVersion({ doc: document }));
       });
 
     this.resetToggleIconAndSelection();
@@ -174,14 +169,13 @@ export class DocumentManagementComponent implements OnInit {
     const newDocument: DocumentResponseInterface = {
       ...this.selection.selected.at(0)!,
     };
-    if (newDocument) {
-      // Open dialog to create new version with the selected document
-      openCreateDocumentDialog(this.dialog, newDocument)
-        .pipe(filter(val => !!val))
-        .subscribe(val => console.log('New document value:', val));
-    } else {
-      console.error('Document not found.');
-    }
+    // Open dialog to create new version with the selected document
+    openCreateDocumentDialog(this.dialog, newDocument)
+      .pipe(filter(val => !!val))
+      .subscribe(document => {
+        this.store.dispatch(documentActions.createDocumentVersion({ doc: document }));
+      });
+
     this.resetToggleIconAndSelection();
   }
 
