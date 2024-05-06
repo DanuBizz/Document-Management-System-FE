@@ -9,7 +9,7 @@ import { UserService } from '../../../shared/service/user.service';
 import { SnackbarService } from '../../../shared/service/snackbar.service';
 import { Store } from '@ngrx/store';
 import { selectError } from '../../categories/store/category.reducers';
-import { selectQueryParams } from './user.reducers';
+import { selectUserPagination } from './user.reducers';
 
 export const getAllUsersEffect = createEffect(
   // Injecting dependencies
@@ -41,9 +41,9 @@ export const getUsersWithQuery = createEffect(
     return actions$.pipe(
       // Listening for actions of type
       ofType(userActions.getUsersWithQuery),
-      switchMap(({ queryParams }) => {
-        // Calling the service method to fetch data
-        return userService.fetchUsersWitQuery({ queryParams }).pipe(
+      switchMap(({ pagination }) => {
+        // Calling the service method
+        return userService.fetchUsersWitQuery(pagination.pageNumber, pagination.pageSize, pagination.sort).pipe(
           map(users =>
             // Handling the response and dispatching action when successful
             userActions.getUsersWithQuerySuccess({
@@ -93,17 +93,11 @@ export const changeDocumentVisibilityEffect = createEffect(
  * and dispatches the 'get' action to fetch updated data.
  */
 export const openSnackbarSuccessEffect = createEffect(
-  (actions$ = inject(Actions), snackbarService = inject(SnackbarService), store = inject(Store)) => {
+  (actions$ = inject(Actions), snackbarService = inject(SnackbarService)) => {
     return actions$.pipe(
       ofType(userActions.changeUserRoleSuccess),
       tap(({ message }) => {
         snackbarService.openSnackBar(message);
-      }),
-      mergeMap(() => {
-        return store.select(selectQueryParams).pipe(
-          take(1),
-          map(queryParams => userActions.getUsersWithQuery({ queryParams }))
-        );
       })
     );
   },
@@ -126,4 +120,23 @@ export const openSnackbarErrorEffect = createEffect(
     );
   },
   { functional: true, dispatch: false } // indicates not to dispatch any actions
+);
+
+/**
+ * Effect for dispatching a new action to refresh the table data
+ * Upon receiving such an action, it dispatches the 'get' action to fetch updated data.
+ */
+export const refreshGetUserWithQuery = createEffect(
+  (actions$ = inject(Actions), store = inject(Store)) => {
+    return actions$.pipe(
+      ofType(userActions.changeUserRoleSuccess, userActions.changeUserRoleFailure),
+      mergeMap(() => {
+        return store.select(selectUserPagination).pipe(
+          take(1),
+          map(pagination => userActions.getUsersWithQuery({ pagination }))
+        );
+      })
+    );
+  },
+  { functional: true, dispatch: true }
 );

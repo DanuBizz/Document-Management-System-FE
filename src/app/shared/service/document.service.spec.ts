@@ -75,7 +75,7 @@ describe('DocumentService', () => {
     const newDocumentVersion: DocumentRequestInterface = {
       file: new File(['dummy content'], 'dummy-file.txt'),
       name: 'Dummy Document',
-      categories: [],
+      categoryIds: [1, 2],
       timestamp: new Date(),
     };
     const dummyResponse = { message: 'Erfolgreich hochgeladen' };

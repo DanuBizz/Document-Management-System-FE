@@ -84,7 +84,7 @@ export class CategoryManagementComponent implements OnInit {
   private loadInitialCategoriesPage() {
     const request: PaginationQueryParamsInterface = {
       pageNumber: this.paginationConfigService.getInitialPageIndex(),
-      pageSize: this.paginationConfigService.getPageSize(),
+      pageSize: this.paginationConfigService.getInitialPageSize(),
     };
 
     // Dispatch an action to retrieve categories with the updated pagination query

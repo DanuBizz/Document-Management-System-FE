@@ -107,7 +107,7 @@ export class DocumentManagementComponent implements OnInit {
   private loadInitialDocumentsPage() {
     const request: PaginationQueryParamsInterface = {
       pageNumber: this.paginationConfigService.getInitialPageIndex(),
-      pageSize: this.paginationConfigService.getPageSize(),
+      pageSize: this.paginationConfigService.getInitialPageSize(),
     };
 
     // Dispatch an action to retrieve documents with the updated pagination query

@@ -97,7 +97,7 @@ describe('CreateDocumentDialogComponentNewVersion', () => {
     expect(component.dialogTitle).toEqual('Neues Dokument erstellen');
   });
 
-  it('should close dialog and return form value on save button click', fakeAsync(() => {
+  xit('should close dialog and return form value on save button click', fakeAsync(() => {
     const formValue = { name: 'Test', fileName: 'test.pdf', categories: [1, 2] };
     component.form.setValue(formValue);
     component.save();

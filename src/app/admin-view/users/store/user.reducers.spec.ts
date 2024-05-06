@@ -1,7 +1,7 @@
 import { initialState, userReducer } from './user.reducers';
-import { PaginationQueryParamsInterface } from '../../../shared/type/pagination-query-params.interface';
 import { userActions } from './user.actions';
 import { UserResponseInterface } from '../../type/user-response.interface';
+import { NewPaginationQueryParamsInterface } from '../../../shared/type/new-pagination-query-params.interface';
 
 describe('UserReducers', () => {
   const users: UserResponseInterface[] = [
@@ -13,25 +13,16 @@ describe('UserReducers', () => {
     },
   ];
 
-  const requestParams: PaginationQueryParamsInterface = {
+  const pagination: NewPaginationQueryParamsInterface = {
     pageNumber: '0',
     pageSize: '5',
+    sort: '',
   };
 
   it('returns a default state', () => {
     const action = { type: 'UNKNOWN' };
     const state = userReducer(initialState, action);
-    const newState = {
-      isSubmitting: false,
-      isLoading: false,
-      error: null,
-      data: [],
-      totalElements: '0',
-      queryParams: {
-        pageNumber: '0',
-        pageSize: '5',
-      },
-    };
+    const newState = { ...initialState };
 
     expect(state).toEqual(newState);
   });
@@ -73,7 +64,7 @@ describe('UserReducers', () => {
   });
 
   it('should change the state for get users with query', () => {
-    const action = userActions.getUsersWithQuery({ queryParams: requestParams });
+    const action = userActions.getUsersWithQuery({ pagination: pagination });
     const state = userReducer(initialState, action);
     const newState = {
       ...initialState,
