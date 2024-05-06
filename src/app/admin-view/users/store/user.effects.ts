@@ -1,15 +1,15 @@
-import {Actions, createEffect, ofType} from '@ngrx/effects';
-import {inject} from '@angular/core';
-import {map, mergeMap, of, switchMap, take} from 'rxjs';
-import {catchError, tap} from 'rxjs/operators';
-import {HttpErrorResponse} from '@angular/common/http';
-import {userActions} from './user.actions';
-import {UserResponseInterface} from '../../type/user-response.interface';
-import {UserService} from '../../../shared/service/user.service';
-import {SnackbarService} from '../../../shared/service/snackbar.service';
-import {Store} from '@ngrx/store';
-import {selectError} from '../../categories/store/category.reducers';
-import {selectUserPagination} from './user.reducers';
+import { Actions, createEffect, ofType } from '@ngrx/effects';
+import { inject } from '@angular/core';
+import { map, mergeMap, of, switchMap, take } from 'rxjs';
+import { catchError, tap } from 'rxjs/operators';
+import { HttpErrorResponse } from '@angular/common/http';
+import { userActions } from './user.actions';
+import { UserResponseInterface } from '../../type/user-response.interface';
+import { UserService } from '../../../shared/service/user.service';
+import { SnackbarService } from '../../../shared/service/snackbar.service';
+import { Store } from '@ngrx/store';
+import { selectError } from '../../categories/store/category.reducers';
+import { selectUserPagination } from './user.reducers';
 
 export const getAllUsersEffect = createEffect(
   // Injecting dependencies

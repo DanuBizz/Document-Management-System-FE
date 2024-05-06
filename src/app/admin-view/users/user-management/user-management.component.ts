@@ -1,5 +1,5 @@
-import {Component, OnInit} from '@angular/core';
-import {AsyncPipe, DatePipe, NgIf} from '@angular/common';
+import { Component, OnInit } from '@angular/core';
+import { AsyncPipe, DatePipe, NgIf } from '@angular/common';
 import {
   MatCell,
   MatCellDef,
@@ -12,14 +12,14 @@ import {
   MatRowDef,
   MatTable,
 } from '@angular/material/table';
-import {MatPaginator, PageEvent} from '@angular/material/paginator';
-import {MatProgressBar} from '@angular/material/progress-bar';
-import {MatSortModule, Sort} from '@angular/material/sort';
-import {MatIcon} from '@angular/material/icon';
-import {Store} from '@ngrx/store';
-import {PaginationConfigService} from '../../../shared/service/pagination-config.service';
-import {UserResponseInterface} from '../../type/user-response.interface';
-import {combineLatest} from 'rxjs';
+import { MatPaginator, PageEvent } from '@angular/material/paginator';
+import { MatProgressBar } from '@angular/material/progress-bar';
+import { MatSortModule, Sort } from '@angular/material/sort';
+import { MatIcon } from '@angular/material/icon';
+import { Store } from '@ngrx/store';
+import { PaginationConfigService } from '../../../shared/service/pagination-config.service';
+import { UserResponseInterface } from '../../type/user-response.interface';
+import { combineLatest } from 'rxjs';
 import {
   selectTotalUserElements,
   selectUserData,
@@ -27,11 +27,11 @@ import {
   selectUserIsLoading,
   selectUserPagination,
 } from '../store/user.reducers';
-import {userActions} from '../store/user.actions';
-import {MatSlideToggle} from '@angular/material/slide-toggle';
-import {FormsModule} from '@angular/forms';
-import {selectCurrentUser} from '../../../auth/store/auth.reducers';
-import {NewPaginationQueryParamsInterface} from '../../../shared/type/new-pagination-query-params.interface';
+import { userActions } from '../store/user.actions';
+import { MatSlideToggle } from '@angular/material/slide-toggle';
+import { FormsModule } from '@angular/forms';
+import { selectCurrentUser } from '../../../auth/store/auth.reducers';
+import { NewPaginationQueryParamsInterface } from '../../../shared/type/new-pagination-query-params.interface';
 
 @Component({
   selector: 'app-user-management',

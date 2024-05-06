@@ -1,6 +1,5 @@
 import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
-import { PaginationQueryParamsInterface } from '../type/pagination-query-params.interface';
 import { environment } from '../../../environments/environment';
 import { UserService } from './user.service';
 import { UserResponseInterface } from '../../admin-view/type/user-response.interface';
@@ -47,17 +46,17 @@ describe('UserService', () => {
 
   it('should return users with pagination query from the api', () => {
     const dummyTotalElements = '2';
-    const dummyPaginationQuery: PaginationQueryParamsInterface = { pageNumber: '0', pageSize: '20' };
+    const pageNumber = '0';
+    const pageSize = '5';
+    const sort = '';
 
-    service.fetchUsersWitQuery({ queryParams: dummyPaginationQuery }).subscribe(response => {
+    service.fetchUsersWitQuery(pageNumber, pageSize, sort).subscribe(response => {
       expect(response.users.length).toBe(2);
       expect(response.users).toEqual(dummyUsers);
       expect(response.totalElements).toBe(dummyTotalElements);
     });
 
-    const req = httpMock.expectOne(
-      baseUrl + `?page=${dummyPaginationQuery.pageNumber}&size=${dummyPaginationQuery.pageSize}`
-    );
+    const req = httpMock.expectOne(baseUrl + `?page=${pageNumber}&size=${pageSize}&sort=${sort}`);
     expect(req.request.method).toBe('GET');
     req.flush({ content: dummyUsers, totalElements: dummyTotalElements });
   });

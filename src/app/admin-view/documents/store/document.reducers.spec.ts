@@ -84,13 +84,7 @@ describe('DocumentReducers', () => {
       file: new File([''], 'dummy-file.txt'),
       name: 'Document 1',
       timestamp: new Date(),
-      categories: [
-        {
-          id: 1,
-          name: 'teste',
-          userNames: ['test'],
-        },
-      ],
+      categoryIds: [1, 2],
     };
 
     const action = documentActions.createDocumentVersion({ doc: document });

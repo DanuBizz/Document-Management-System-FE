@@ -23,9 +23,10 @@ describe('UserManagementComponent', () => {
         },
       ],
       totalElements: '1',
-      queryParams: {
+      pagination: {
         pageNumber: '0',
         pageSize: '5',
+        sort: '',
       },
     },
   };
