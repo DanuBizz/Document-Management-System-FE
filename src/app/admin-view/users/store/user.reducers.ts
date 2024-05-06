@@ -1,6 +1,9 @@
-import { UserStateInterface } from '../../type/user-state.interface';
-import { createFeature, createReducer, on } from '@ngrx/store';
-import { userActions } from './user.actions';
+import {UserStateInterface} from '../../type/user-state.interface';
+import {createFeature, createReducer, on} from '@ngrx/store';
+import {userActions} from './user.actions';
+import {PaginationConfigService} from "../../../shared/service/pagination-config.service";
+
+const paginationConfigService = new PaginationConfigService();
 
 // Initial state for the feature
 export const initialState: UserStateInterface = {
@@ -9,9 +12,10 @@ export const initialState: UserStateInterface = {
   error: null,
   data: [],
   totalElements: '0',
-  queryParams: {
-    pageNumber: '0',
-    pageSize: '5',
+  pagination: {
+    pageNumber: paginationConfigService.getInitialPageIndex(),
+    pageSize: paginationConfigService.getInitialPageSize(),
+    sort: paginationConfigService.getInitialSort(),
   },
 };
 
@@ -38,7 +42,7 @@ export const userFeature = createFeature({
     on(userActions.getUsersWithQuery, (state, action) => ({
       ...state,
       isLoading: true,
-      queryParams: action.queryParams,
+      pagination: action.pagination,
     })),
     on(userActions.getUsersWithQuerySuccess, (state, { users, totalElements }) => ({
       ...state,
@@ -82,5 +86,5 @@ export const {
   selectError: selectUserError,
   selectData: selectUserData,
   selectTotalElements: selectTotalUserElements,
-  selectQueryParams,
+  selectPagination: selectUserPagination,
 } = userFeature;

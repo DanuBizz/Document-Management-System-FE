@@ -57,7 +57,7 @@
       <mat-paginator
         class="default-paginator-design"
         [length]="data.totalElements"
-        [pageSize]="paginationConfigService.getPageSize()"
+        [pageSize]="paginationConfigService.getInitialPageSize()"
         [pageSizeOptions]="paginationConfigService.getPageSizeOptions()"
         (page)="handlePageEvent($event)"
         [showFirstLastButtons]="true"

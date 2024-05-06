@@ -13,6 +13,8 @@ export class PaginationConfigService {
   // The pageSize represents the current value of the pageSizeOptions.
   private pageSize: number = this.pageSizeOptions[1];
 
+  private sort: string = '';
+
   getPageSizeOptions(): number[] {
     return this.pageSizeOptions;
   }
@@ -21,8 +23,12 @@ export class PaginationConfigService {
     return this.initialPageIndex;
   }
 
-  getPageSize(): string {
+  getInitialPageSize(): string {
     return this.pageSize.toString();
+  }
+
+  getInitialSort(): string {
+    return this.sort;
   }
 
   setPageSize(value: number): void {
