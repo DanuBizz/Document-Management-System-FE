@@ -6,7 +6,7 @@ import { MatFormFieldModule, MatLabel } from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
 import { MatOption, MatSelect } from '@angular/material/select';
 import { Store } from '@ngrx/store';
-import { selectUserData } from '../../users/store/user.reducers';
+import { selectUserAllData } from '../../users/store/user.reducers';
 import { Observable } from 'rxjs';
 import { UserResponseInterface } from '../../type/user-response.interface';
 import { userActions } from '../../users/store/user.actions';
@@ -40,7 +40,7 @@ export class CreateCategoryDialogComponent {
   form: FormGroup;
 
   // Observable for retrieving users from the store
-  users$: Observable<UserResponseInterface[]> = this.store.select(selectUserData);
+  users$: Observable<UserResponseInterface[]> = this.store.select(selectUserAllData);
 
   // List of current categories
   categories: CategoryResponseInterface[] = [];

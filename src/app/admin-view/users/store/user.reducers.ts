@@ -10,7 +10,8 @@ export const initialState: UserStateInterface = {
   isSubmitting: false,
   isLoading: false,
   error: null,
-  data: [],
+  allData: [],
+  tableData: [],
   totalElements: '0',
   pagination: {
     pageNumber: paginationConfigService.getInitialPageIndex(),
@@ -31,7 +32,7 @@ export const userFeature = createFeature({
     on(userActions.getAllUsersSuccess, (state, action) => ({
       ...state,
       isLoading: false,
-      data: action.user,
+      allData: action.user,
     })),
     on(userActions.getAllUsersFailure, (state, action) => ({
       ...state,
@@ -47,7 +48,7 @@ export const userFeature = createFeature({
     on(userActions.getUsersWithQuerySuccess, (state, { users, totalElements }) => ({
       ...state,
       isLoading: false,
-      data: users,
+      tableData: users,
       totalElements: totalElements,
     })),
     on(userActions.getUsersWithQueryFailure, (state, action) => ({
@@ -84,7 +85,8 @@ export const {
   selectIsSubmitting: selectUserIsSubmitting,
   selectIsLoading: selectUserIsLoading,
   selectError: selectUserError,
-  selectData: selectUserData,
+  selectTableData: selectUserTableData,
+  selectAllData: selectUserAllData,
   selectTotalElements: selectTotalUserElements,
   selectPagination: selectUserPagination,
 } = userFeature;
