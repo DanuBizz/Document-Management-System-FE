@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
-import { MatSortModule } from '@angular/material/sort';
+import { MatSortModule, Sort } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSelectModule } from '@angular/material/select';
@@ -15,14 +15,20 @@ import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { CategoryService } from '../../../shared/service/category.service';
 import { combineLatest, filter } from 'rxjs';
 import { Store } from '@ngrx/store';
-import { selectCategoryData, selectError, selectIsLoading, selectTotalElements } from '../store/category.reducers';
+import {
+  selectCategoryData,
+  selectCategoryError,
+  selectCategoryIsLoading,
+  selectCategoryPageSizeOptions,
+  selectCategoryPagination,
+  selectCategoryTotalElements,
+} from '../store/category.reducers';
 import { MatProgressBar } from '@angular/material/progress-bar';
 import { openCreateCategoryDialog } from '../create-category-dialog/category-dialog.config';
 import { MatDialog } from '@angular/material/dialog';
-import { PaginationConfigService } from '../../../shared/service/pagination-config.service';
-import { PaginationQueryParamsInterface } from '../../../shared/type/pagination-query-params.interface';
 import { categoryActions } from '../store/category.actions';
 import { CategoryRequestInterface } from '../../type/category-request.interface';
+import { NewPaginationQueryParamsInterface } from '../../../shared/type/new-pagination-query-params.interface';
 
 @Component({
   selector: 'app-category-management',
@@ -53,10 +59,15 @@ export class CategoryManagementComponent implements OnInit {
   // Observable combining necessary data from the store for the component
   data$ = combineLatest({
     category: this.store.select(selectCategoryData),
-    isLoading: this.store.select(selectIsLoading),
-    error: this.store.select(selectError),
-    totalElements: this.store.select(selectTotalElements),
+    isLoading: this.store.select(selectCategoryIsLoading),
+    error: this.store.select(selectCategoryError),
+    totalElements: this.store.select(selectCategoryTotalElements),
+    pageSizeOptions: this.store.select(selectCategoryPageSizeOptions),
+    pagination: this.store.select(selectCategoryPagination),
   });
+
+  // Pagination and sorting properties for the component ts file
+  pagination!: NewPaginationQueryParamsInterface;
 
   // Columns to display in the table
   displayedColumns: string[] = ['id', 'name', 'users'];
@@ -64,31 +75,22 @@ export class CategoryManagementComponent implements OnInit {
   /**
    * @param store - The Redux store instance injected via dependency injection.
    * @param dialog - The MatDialog service for opening dialogs.
-   * @param paginationConfigService contains the configuration values for the pagination
    */
   constructor(
     private store: Store,
-    private dialog: MatDialog,
-    public paginationConfigService: PaginationConfigService
+    private dialog: MatDialog
   ) {}
 
   ngOnInit(): void {
-    this.loadInitialCategoriesPage();
-  }
+    this.data$.subscribe(data => {
+      this.pagination = {
+        pageNumber: data.pagination.pageNumber,
+        pageSize: data.pagination.pageSize,
+        sort: data.pagination.sort,
+      };
+    });
 
-  /**
-   * Loads the initial categories page by constructing a pagination query interface
-   * using the initial page index and page size from the pagination configuration service,
-   * and dispatches an action to retrieve categories with query parameters.
-   */
-  private loadInitialCategoriesPage() {
-    const request: PaginationQueryParamsInterface = {
-      pageNumber: this.paginationConfigService.getInitialPageIndex(),
-      pageSize: this.paginationConfigService.getInitialPageSize(),
-    };
-
-    // Dispatch an action to retrieve categories with the updated pagination query
-    this.store.dispatch(categoryActions.getCategoriesWithQuery({ queryParams: request }));
+    this.dispatchGetCategoriesWithQueryAction();
   }
 
   /**
@@ -112,14 +114,38 @@ export class CategoryManagementComponent implements OnInit {
    * @param event - The PageEvent object containing information about the page event.
    */
   handlePageEvent(event: PageEvent) {
-    this.paginationConfigService.setPageSize(event.pageSize);
-
-    const request: PaginationQueryParamsInterface = {
+    this.pagination = {
+      ...this.pagination,
       pageNumber: event.pageIndex.toString(),
       pageSize: event.pageSize.toString(),
     };
 
-    // Dispatch an action to retrieve categories with the updated pagination query
-    this.store.dispatch(categoryActions.getCategoriesWithQuery({ queryParams: request }));
+    this.dispatchGetCategoriesWithQueryAction();
+  }
+
+  /**
+   * Dispatches an action to fetch categories data based on the current pagination and sorting options.
+   */
+  private dispatchGetCategoriesWithQueryAction() {
+    this.store.dispatch(categoryActions.getCategoriesWithQuery({ pagination: this.pagination }));
+  }
+
+  /**
+   * Changes the sorting order based on the specified sort state.
+   *
+   * @param sortState The current sort state.
+   */
+  changeSort(sortState: Sort) {
+    let sort = '';
+    if (sortState.direction !== '') {
+      sort = sortState.active + ',' + sortState.direction;
+    }
+
+    this.pagination = {
+      ...this.pagination,
+      sort: sort,
+    };
+
+    this.dispatchGetCategoriesWithQueryAction();
   }
 }

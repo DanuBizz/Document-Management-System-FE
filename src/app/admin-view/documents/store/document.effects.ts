@@ -6,8 +6,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { documentActions } from './document.actions';
 import { SnackbarService } from '../../../shared/service/snackbar.service';
 import { Store } from '@ngrx/store';
-import { selectError } from '../../categories/store/category.reducers';
-import { selectDocumentPagination } from './document.reducers';
+import { selectDocumentError, selectDocumentPagination } from './document.reducers';
 import { DocumentService } from '../../../shared/service/document.service';
 
 export const getDocumentsWithQuery = createEffect(
@@ -98,7 +97,7 @@ export const openSnackbarErrorEffect = createEffect(
       ),
       tap(() => {
         // Subscribing to selectError selector to get the error from the store
-        store.select(selectError).subscribe(error => {
+        store.select(selectDocumentError).subscribe(error => {
           // Opening a snackbar to display the error message
           snackbarService.openSnackBar('Fehler bei der Übermittlung.\nError: ' + JSON.stringify(error));
         });

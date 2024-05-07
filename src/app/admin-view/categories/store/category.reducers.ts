@@ -1,6 +1,10 @@
 import { CategoryStateInterface } from '../../type/category-state.interface';
 import { createFeature, createReducer, on } from '@ngrx/store';
 import { categoryActions } from './category.actions';
+import { PaginationConfigService } from '../../../shared/service/pagination-config.service';
+import { routerNavigatedAction } from '@ngrx/router-store';
+
+const paginationConfigService = new PaginationConfigService();
 
 // Initial state for the categories feature
 export const initialState: CategoryStateInterface = {
@@ -9,9 +13,11 @@ export const initialState: CategoryStateInterface = {
   error: null,
   data: [],
   totalElements: '0',
-  queryParams: {
-    pageNumber: '0',
-    pageSize: '5',
+  pageSizeOptions: paginationConfigService.getPageSizeOptions(),
+  pagination: {
+    pageNumber: paginationConfigService.getInitialPageIndex(),
+    pageSize: paginationConfigService.getInitialPageSize(),
+    sort: paginationConfigService.getInitialSort(),
   },
 };
 
@@ -38,7 +44,7 @@ export const categoriesFeature = createFeature({
     on(categoryActions.getCategoriesWithQuery, (state, action) => ({
       ...state,
       isLoading: true,
-      queryParams: action.queryParams,
+      pagination: action.pagination,
     })),
     on(categoryActions.getCategoriesWithQuerySuccess, (state, { categories, totalElements }) => ({
       ...state,
@@ -64,11 +70,13 @@ export const categoriesFeature = createFeature({
       ...state,
       isSubmitting: false,
       error: action.error,
-    }))
+    })),
     // Handling router navigated action
-    /*
-    on(routerNavigatedAction, () => (initialState))
-    */
+
+    on(routerNavigatedAction, state => ({
+      ...state,
+      data: [],
+    }))
   ),
 });
 
@@ -76,10 +84,11 @@ export const categoriesFeature = createFeature({
 export const {
   name: categoryFeatureKey,
   reducer: categoryReducer,
-  selectIsSubmitting,
-  selectIsLoading,
-  selectError,
+  selectIsSubmitting: selectCategoryIsSubmitting,
+  selectIsLoading: selectCategoryIsLoading,
+  selectError: selectCategoryError,
   selectData: selectCategoryData,
-  selectTotalElements,
-  selectQueryParams,
+  selectTotalElements: selectCategoryTotalElements,
+  selectPageSizeOptions: selectCategoryPageSizeOptions,
+  selectPagination: selectCategoryPagination,
 } = categoriesFeature;

@@ -8,7 +8,7 @@ import { CategoryResponseInterface } from '../../type/category-response.interfac
 import { HttpErrorResponse } from '@angular/common/http';
 import { SnackbarService } from '../../../shared/service/snackbar.service';
 import { Store } from '@ngrx/store';
-import { selectError, selectQueryParams } from './category.reducers';
+import { selectCategoryError, selectCategoryPagination } from './category.reducers';
 
 export const getAllCategoriesEffect = createEffect(
   // Injecting dependencies
@@ -40,9 +40,9 @@ export const getCategoryWithQueryEffect = createEffect(
     return actions$.pipe(
       // Listening for actions of type
       ofType(categoryActions.getCategoriesWithQuery),
-      switchMap(({ queryParams }) => {
+      switchMap(({ pagination }) => {
         // Calling the service method to fetch documents
-        return categoryService.fetchCategoriesWithQuery({ queryParams }).pipe(
+        return categoryService.fetchCategoriesWithQuery(pagination).pipe(
           map(categories =>
             // Handling the response and dispatching action when successful
             categoryActions.getCategoriesWithQuerySuccess({
@@ -59,24 +59,6 @@ export const getCategoryWithQueryEffect = createEffect(
     );
   },
   { functional: true }
-);
-
-export const openSnackbarErrorEffect = createEffect(
-  // Injecting dependencies
-  (actions$ = inject(Actions), snackbarService = inject(SnackbarService), store = inject(Store)) => {
-    return actions$.pipe(
-      // Listening for actions of type 'getAllCategoriesFailure'
-      ofType(categoryActions.getAllCategoriesFailure, categoryActions.getCategoriesWithQueryFailure),
-      tap(() => {
-        // Subscribing to selectError selector to get the error from the store
-        store.select(selectError).subscribe(error => {
-          // Opening a snackbar to display the error message
-          snackbarService.openSnackBar('Fehler beim laden der Kategorien. \nError: ' + JSON.stringify(error));
-        });
-      })
-    );
-  },
-  { functional: true, dispatch: false } // indicates not to dispatch any actions
 );
 
 /**
@@ -105,24 +87,51 @@ export const createCategoryEffect = createEffect(
   { functional: true }
 );
 
+export const openSnackbarErrorEffect = createEffect(
+  // Injecting dependencies
+  (actions$ = inject(Actions), snackbarService = inject(SnackbarService), store = inject(Store)) => {
+    return actions$.pipe(
+      // Listening for actions of type 'getAllCategoriesFailure'
+      ofType(categoryActions.getAllCategoriesFailure, categoryActions.getCategoriesWithQueryFailure),
+      tap(() => {
+        // Subscribing to selectError selector to get the error from the store
+        store.select(selectCategoryError).subscribe(error => {
+          // Opening a snackbar to display the error message
+          snackbarService.openSnackBar('Fehler beim laden der Kategorien. \nError: ' + JSON.stringify(error));
+        });
+      })
+    );
+  },
+  { functional: true, dispatch: false } // indicates not to dispatch any actions
+);
+
 /**
- * Effect for displaying a snackbar notification and dispatch get categories action.
- * This effect listens for actions of type 'categoryActions.createCategorySuccess'.
+ * Effect for displaying a snackbar notification.
  * Upon receiving such an action, it displays a snackbar notification containing the success message
- * using the provided SnackbarService. It then retrieves the current query parameters from the store
- * and dispatches the 'getCategoriesWithQuery' action to fetch updated category data.
  */
 export const openSnackbarSuccessEffect = createEffect(
-  (actions$ = inject(Actions), snackbarService = inject(SnackbarService), store = inject(Store)) => {
+  (actions$ = inject(Actions), snackbarService = inject(SnackbarService)) => {
     return actions$.pipe(
       ofType(categoryActions.createCategorySuccess),
       tap(({ message }) => {
         snackbarService.openSnackBar(message);
-      }),
+      })
+    );
+  },
+  { functional: true, dispatch: false }
+);
+
+/**
+ * dispatches the 'getCategoriesWithQuery' action to fetch updated category data.
+ */
+export const refreshGetCategoryWithQueryEffect = createEffect(
+  (actions$ = inject(Actions), store = inject(Store)) => {
+    return actions$.pipe(
+      ofType(categoryActions.createCategorySuccess),
       mergeMap(() => {
-        return store.select(selectQueryParams).pipe(
+        return store.select(selectCategoryPagination).pipe(
           take(1), // Hier wird nur ein einziges Mal abonniert, um die aktuellen Query-Parameter zu erhalten
-          map(queryParams => categoryActions.getCategoriesWithQuery({ queryParams }))
+          map(pagination => categoryActions.getCategoriesWithQuery({ pagination }))
         );
       })
     );
