@@ -1,10 +1,10 @@
 import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { CategoryService } from './category.service';
-import { PaginationQueryParamsInterface } from '../type/pagination-query-params.interface';
 import { CategoryResponseInterface } from '../../admin-view/type/category-response.interface';
 import { environment } from '../../../environments/environment';
 import { CategoryRequestInterface } from '../../admin-view/type/category-request.interface';
+import { PaginationQueryParamsInterface } from '../type/pagination-query-params.interface';
 
 describe('CategoryService', () => {
   let service: CategoryService;
@@ -15,6 +15,12 @@ describe('CategoryService', () => {
     { id: 1, name: 'Category 1', userNames: ['user1'] },
     { id: 2, name: 'Category 2', userNames: ['user1', 'user2'] },
   ];
+
+  const pagination: PaginationQueryParamsInterface = {
+    pageNumber: '0',
+    pageSize: '5',
+    sort: '',
+  };
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -48,16 +54,15 @@ describe('CategoryService', () => {
 
   it('should return categories with pagination query from the api', () => {
     const dummyTotalElements = '2';
-    const dummyPaginationQuery: PaginationQueryParamsInterface = { pageNumber: '0', pageSize: '20' };
 
-    service.fetchCategoriesWithQuery({ queryParams: dummyPaginationQuery }).subscribe(response => {
+    service.fetchCategoriesWithQuery(pagination).subscribe(response => {
       expect(response.categories.length).toBe(2);
       expect(response.categories).toEqual(dummyCategories);
       expect(response.totalElements).toBe(dummyTotalElements);
     });
 
     const req = httpMock.expectOne(
-      baseUrl + `?page=${dummyPaginationQuery.pageNumber}&size=${dummyPaginationQuery.pageSize}`
+      baseUrl + `?page=${pagination.pageNumber}&size=${pagination.pageSize}&sort=${pagination.sort}`
     );
     expect(req.request.method).toBe('GET');
     req.flush({ content: dummyCategories, totalElements: dummyTotalElements });

@@ -1,10 +1,10 @@
 import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { DocumentService } from './document.service';
-import { PaginationQueryParamsInterface } from '../type/pagination-query-params.interface';
 import { environment } from '../../../environments/environment';
 import { DocumentVersionsResponseInterface } from '../../admin-view/type/document-versions-response.interface';
 import { DocumentRequestInterface } from '../../admin-view/type/document-request.interface';
+import { PaginationQueryParamsInterface } from '../type/pagination-query-params.interface';
 
 describe('DocumentService', () => {
   let service: DocumentService;
@@ -54,9 +54,13 @@ describe('DocumentService', () => {
       },
     ];
     const dummyTotalElements = '2';
-    const dummyPaginationQuery: PaginationQueryParamsInterface = { pageNumber: '0', pageSize: '20' };
+    const pagination: PaginationQueryParamsInterface = {
+      pageNumber: '0',
+      pageSize: '5',
+      sort: '',
+    };
 
-    service.fetchDocumentsWithAssociatedVersionsWithQuery({ queryParams: dummyPaginationQuery }).subscribe(response => {
+    service.fetchDocumentsWithAssociatedVersionsWithQuery(pagination).subscribe(response => {
       expect(response.documents.length).toBe(2);
       expect(response.documents).toEqual(dummyDocuments);
       expect(response.totalElements).toBe(dummyTotalElements);
@@ -65,7 +69,7 @@ describe('DocumentService', () => {
     const req = httpMock.expectOne(
       baseUrl +
         '/latest-with-associated-versions' +
-        `?page=${dummyPaginationQuery.pageNumber}&size=${dummyPaginationQuery.pageSize}`
+        `?page=${pagination.pageNumber}&size=${pagination.pageSize}&sort=${pagination.sort}`
     );
     expect(req.request.method).toBe('GET');
     req.flush({ content: dummyDocuments, totalElements: dummyTotalElements });

@@ -2,9 +2,9 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { delay, map, Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
-import { PaginationQueryParamsInterface } from '../type/pagination-query-params.interface';
 import { DocumentRequestInterface } from '../../admin-view/type/document-request.interface';
 import { DocumentVersionsResponseInterface } from '../../admin-view/type/document-versions-response.interface';
+import { PaginationQueryParamsInterface } from '../type/pagination-query-params.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -17,19 +17,20 @@ export class DocumentService {
   /**
    * Retrieves documents and their associated versions from the server based on pagination parameters.
    *
-   * @param queryParams Pagination parameters including pageNumber and pageSize.
    * @returns Observable emitting documents array and total number of elements.
+   * @param pagination includes the page number, page size, and sort order.
    */
-  fetchDocumentsWithAssociatedVersionsWithQuery(queryParams: {
-    queryParams: PaginationQueryParamsInterface;
-  }): Observable<{ documents: DocumentVersionsResponseInterface[]; totalElements: string }> {
+  fetchDocumentsWithAssociatedVersionsWithQuery(
+    pagination: PaginationQueryParamsInterface
+  ): Observable<{ documents: DocumentVersionsResponseInterface[]; totalElements: string }> {
     return this.http
       .get<{ content: DocumentVersionsResponseInterface[]; totalElements: string }>(
         this.baseUrl + '/latest-with-associated-versions',
         {
           params: {
-            page: queryParams.queryParams.pageNumber,
-            size: queryParams.queryParams.pageSize,
+            page: pagination.pageNumber,
+            size: pagination.pageSize,
+            sort: pagination.sort,
           },
         }
       )

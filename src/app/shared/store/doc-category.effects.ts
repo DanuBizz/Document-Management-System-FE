@@ -5,10 +5,10 @@ import { catchError, tap } from 'rxjs/operators';
 import { HttpErrorResponse } from '@angular/common/http';
 import { SnackbarService } from '../service/snackbar.service';
 import { Store } from '@ngrx/store';
-import { selectError } from '../../admin-view/categories/store/category.reducers';
 import { docCategoryActions } from './doc-category.actions';
 import { DocumentCategoryService } from '../service/document-category.service';
 import { DocCategoryResponseInterface } from '../type/doc-category-response.interface';
+import { selectDocCategoryError } from './doc-category.reducers';
 
 export const getAllDocCategoryEffect = createEffect(
   // Injecting dependencies
@@ -42,7 +42,7 @@ export const openSnackbarErrorEffect = createEffect(
       ofType(docCategoryActions.getAllDocumentCategoriesFailure),
       tap(() => {
         // Subscribing to selectError selector to get the error from the store
-        store.select(selectError).subscribe(error => {
+        store.select(selectDocCategoryError).subscribe(error => {
           // Opening a snackbar to display the error message
           snackbarService.openSnackBar('Fehler beim laden der Document Kategorien. \nError: ' + JSON.stringify(error));
         });

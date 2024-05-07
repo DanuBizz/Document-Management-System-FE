@@ -8,8 +8,7 @@ import { UserResponseInterface } from '../../type/user-response.interface';
 import { UserService } from '../../../shared/service/user.service';
 import { SnackbarService } from '../../../shared/service/snackbar.service';
 import { Store } from '@ngrx/store';
-import { selectError } from '../../categories/store/category.reducers';
-import { selectUserPagination } from './user.reducers';
+import { selectUserError, selectUserPagination } from './user.reducers';
 
 export const getAllUsersEffect = createEffect(
   // Injecting dependencies
@@ -43,7 +42,7 @@ export const getUsersWithQuery = createEffect(
       ofType(userActions.getUsersWithQuery),
       switchMap(({ pagination }) => {
         // Calling the service method
-        return userService.fetchUsersWitQuery(pagination.pageNumber, pagination.pageSize, pagination.sort).pipe(
+        return userService.fetchUsersWitQuery(pagination).pipe(
           map(users =>
             // Handling the response and dispatching action when successful
             userActions.getUsersWithQuerySuccess({
@@ -101,7 +100,7 @@ export const openSnackbarSuccessEffect = createEffect(
       })
     );
   },
-  { functional: true, dispatch: true }
+  { functional: true, dispatch: false }
 );
 
 export const openSnackbarErrorEffect = createEffect(
@@ -112,7 +111,7 @@ export const openSnackbarErrorEffect = createEffect(
       ofType(userActions.getAllUsersFailure, userActions.getUsersWithQueryFailure, userActions.changeUserRoleFailure),
       tap(() => {
         // Subscribing to selectError selector to get the error from the store
-        store.select(selectError).subscribe(error => {
+        store.select(selectUserError).subscribe(error => {
           // Opening a snackbar to display the error message
           snackbarService.openSnackBar('Fehler bei Übermittlung der User. \nError: ' + JSON.stringify(error));
         });

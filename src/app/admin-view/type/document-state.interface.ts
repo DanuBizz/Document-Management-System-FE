@@ -1,6 +1,6 @@
 import { BackendErrorsInterface } from '../../shared/type/backend-erros.interface';
-import { PaginationQueryParamsInterface } from '../../shared/type/pagination-query-params.interface';
 import { DocumentVersionsResponseInterface } from './document-versions-response.interface';
+import { PaginationQueryParamsInterface } from '../../shared/type/pagination-query-params.interface';
 
 export interface DocumentStateInterface {
   isSubmitting: boolean;
@@ -8,5 +8,6 @@ export interface DocumentStateInterface {
   error: BackendErrorsInterface | null;
   data: DocumentVersionsResponseInterface[];
   totalElements: string;
-  queryParams: PaginationQueryParamsInterface;
+  pageSizeOptions: number[];
+  pagination: PaginationQueryParamsInterface;
 }

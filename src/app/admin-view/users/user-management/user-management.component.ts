@@ -31,7 +31,7 @@ import { userActions } from '../store/user.actions';
 import { MatSlideToggle } from '@angular/material/slide-toggle';
 import { FormsModule } from '@angular/forms';
 import { selectCurrentUser } from '../../../auth/store/auth.reducers';
-import { NewPaginationQueryParamsInterface } from '../../../shared/type/new-pagination-query-params.interface';
+import { PaginationQueryParamsInterface } from '../../../shared/type/pagination-query-params.interface';
 
 @Component({
   selector: 'app-user-management',
@@ -80,7 +80,7 @@ export class UserManagementComponent implements OnInit {
   });
 
   // Pagination and sorting properties for the component ts file
-  pagination!: NewPaginationQueryParamsInterface;
+  pagination!: PaginationQueryParamsInterface;
 
   constructor(
     private store: Store,
@@ -96,7 +96,7 @@ export class UserManagementComponent implements OnInit {
       };
     });
 
-    this.dispatchGetUsersAction();
+    this.dispatchGetUsersWithQueryAction();
   }
 
   /**
@@ -122,8 +122,7 @@ export class UserManagementComponent implements OnInit {
       pageNumber: event.pageIndex.toString(),
       pageSize: event.pageSize.toString(),
     };
-
-    this.store.dispatch(userActions.getUsersWithQuery({ pagination: this.pagination }));
+    this.dispatchGetUsersWithQueryAction();
   }
 
   /**
@@ -140,7 +139,7 @@ export class UserManagementComponent implements OnInit {
   /**
    * Dispatches an action to fetch user data based on the current pagination and sorting options.
    */
-  private dispatchGetUsersAction(): void {
+  private dispatchGetUsersWithQueryAction(): void {
     this.store.dispatch(userActions.getUsersWithQuery({ pagination: this.pagination }));
   }
 
@@ -160,6 +159,6 @@ export class UserManagementComponent implements OnInit {
       sort: sort,
     };
 
-    this.dispatchGetUsersAction();
+    this.dispatchGetUsersWithQueryAction();
   }
 }

@@ -16,9 +16,11 @@ describe('CategoryManagementComponent', () => {
       error: null,
       data: [{ id: 10, name: 'test', userNames: ['testuser1'] }],
       totalElements: '0',
-      queryParams: {
+      pageSizeOptions: ['5', '10', '25', '50'],
+      pagination: {
         pageNumber: '0',
         pageSize: '5',
+        sort: '',
       },
     },
   };

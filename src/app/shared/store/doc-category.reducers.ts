@@ -40,7 +40,7 @@ export const docCategoryFeature = createFeature({
 export const {
   name: docCategoryFeatureKey,
   reducer: docCategoryReducer,
-  selectIsLoading,
-  selectError,
+  selectIsLoading: selectDocCategoryIsLoading,
+  selectError: selectDocCategoryError,
   selectData: selectDocCategoryData,
 } = docCategoryFeature;

@@ -1,39 +1,33 @@
 import { documentReducer, initialState } from './document.reducers';
 import { documentActions } from './document.actions';
-import { PaginationQueryParamsInterface } from '../../../shared/type/pagination-query-params.interface';
 import { DocumentRequestInterface } from '../../type/document-request.interface';
 import { DocumentVersionsResponseInterface } from '../../type/document-versions-response.interface';
+import { PaginationQueryParamsInterface } from '../../../shared/type/pagination-query-params.interface';
 
 describe('DocumentReducers', () => {
-  const requestParams: PaginationQueryParamsInterface = {
+  const pagination: PaginationQueryParamsInterface = {
     pageNumber: '0',
     pageSize: '5',
+    sort: '',
   };
 
   it('returns a default state', () => {
     const action = { type: 'UNKNOWN' };
     const state = documentReducer(initialState, action);
     const newState = {
-      isSubmitting: false,
-      isLoading: false,
-      error: null,
-      data: [],
-      totalElements: '0',
-      queryParams: {
-        pageNumber: '0',
-        pageSize: '5',
-      },
+      ...initialState,
     };
 
     expect(state).toEqual(newState);
   });
 
   it('should change the state for get documents with query', () => {
-    const action = documentActions.getDocumentsWithQuery({ queryParams: requestParams });
+    const action = documentActions.getDocumentsWithQuery({ pagination });
     const state = documentReducer(initialState, action);
     const newState = {
       ...initialState,
       isLoading: true,
+      pagination: action.pagination,
     };
 
     expect(state).toEqual(newState);

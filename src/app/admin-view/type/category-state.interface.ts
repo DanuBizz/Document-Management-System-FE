@@ -8,5 +8,6 @@ export interface CategoryStateInterface {
   error: BackendErrorsInterface | null;
   data: CategoryResponseInterface[];
   totalElements: string;
-  queryParams: PaginationQueryParamsInterface;
+  pageSizeOptions: number[];
+  pagination: PaginationQueryParamsInterface;
 }
