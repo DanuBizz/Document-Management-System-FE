@@ -1,13 +1,13 @@
 import { createActionGroup, props } from '@ngrx/store';
 import { BackendErrorsInterface } from '../../../shared/type/backend-erros.interface';
-import { PaginationQueryParamsInterface } from '../../../shared/type/pagination-query-params.interface';
 import { DocumentRequestInterface } from '../../type/document-request.interface';
 import { DocumentVersionsResponseInterface } from '../../type/document-versions-response.interface';
+import { NewPaginationQueryParamsInterface } from '../../../shared/type/new-pagination-query-params.interface';
 
 export const documentActions = createActionGroup({
-  source: 'document',
+  source: 'document-admin',
   events: {
-    'get documents with query': props<{ queryParams: PaginationQueryParamsInterface }>(),
+    'get documents with query': props<{ pagination: NewPaginationQueryParamsInterface }>(),
     'get documents with query success': props<{
       documents: DocumentVersionsResponseInterface[];
       totalElements: string;

@@ -1,6 +1,9 @@
 import { DocumentStateInterface } from '../../type/document-state.interface';
 import { createFeature, createReducer, on } from '@ngrx/store';
 import { documentActions } from './document.actions';
+import { PaginationConfigService } from '../../../shared/service/pagination-config.service';
+
+const paginationConfigService = new PaginationConfigService();
 
 // Initial state for the documents feature
 export const initialState: DocumentStateInterface = {
@@ -9,21 +12,23 @@ export const initialState: DocumentStateInterface = {
   error: null,
   data: [],
   totalElements: '0',
-  queryParams: {
-    pageNumber: '0',
-    pageSize: '5',
+  pageSizeOptions: paginationConfigService.getPageSizeOptions(),
+  pagination: {
+    pageNumber: paginationConfigService.getInitialPageIndex(),
+    pageSize: paginationConfigService.getInitialPageSize(),
+    sort: paginationConfigService.getInitialSort(),
   },
 };
 
 export const documentFeature = createFeature({
-  name: 'document',
+  name: 'document-admin',
   // Reducer functions for the feature
   reducer: createReducer(
     initialState,
     on(documentActions.getDocumentsWithQuery, (state, action) => ({
       ...state,
       isLoading: true,
-      queryParams: action.queryParams,
+      pagination: action.pagination,
     })),
     on(documentActions.getDocumentsWithQuerySuccess, (state, { documents, totalElements }) => ({
       ...state,
@@ -74,10 +79,11 @@ export const documentFeature = createFeature({
 export const {
   name: documentFeatureKey,
   reducer: documentReducer,
-  selectIsSubmitting,
-  selectIsLoading,
-  selectError,
+  selectIsSubmitting: selectDocumentIsSubmitting,
+  selectIsLoading: selectDocumentIsLoading,
+  selectError: selectDocumentError,
   selectData: selectDocumentData,
-  selectTotalElements,
-  selectQueryParams,
+  selectTotalElements: selectDocumentTotalElements,
+  selectPageSizeOptions: selectDocumentPageSizeOptions,
+  selectPagination: selectDocumentPagination,
 } = documentFeature;

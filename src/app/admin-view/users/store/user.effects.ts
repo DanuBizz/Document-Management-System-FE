@@ -43,7 +43,7 @@ export const getUsersWithQuery = createEffect(
       ofType(userActions.getUsersWithQuery),
       switchMap(({ pagination }) => {
         // Calling the service method
-        return userService.fetchUsersWitQuery(pagination.pageNumber, pagination.pageSize, pagination.sort).pipe(
+        return userService.fetchUsersWitQuery(pagination).pipe(
           map(users =>
             // Handling the response and dispatching action when successful
             userActions.getUsersWithQuerySuccess({
@@ -101,7 +101,7 @@ export const openSnackbarSuccessEffect = createEffect(
       })
     );
   },
-  { functional: true, dispatch: true }
+  { functional: true, dispatch: false }
 );
 
 export const openSnackbarErrorEffect = createEffect(

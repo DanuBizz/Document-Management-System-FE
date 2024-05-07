@@ -3,29 +3,34 @@ import { CommonModule } from '@angular/common';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
-import { MatSortModule } from '@angular/material/sort';
+import { MatSortModule, Sort } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatButtonModule } from '@angular/material/button';
 import { combineLatest, filter } from 'rxjs';
 import { DocumentService } from '../../../shared/service/document.service';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
-import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { SelectionModel } from '@angular/cdk/collections';
 import { MatCheckbox } from '@angular/material/checkbox';
 import { FabButtonComponent } from '../../../shared/component/fab-button/fab-button.component';
 import { Store } from '@ngrx/store';
-import { selectDocumentData, selectError, selectIsLoading, selectTotalElements } from '../store/document.reducers';
+import {
+  selectDocumentData,
+  selectDocumentError,
+  selectDocumentIsLoading,
+  selectDocumentPageSizeOptions,
+  selectDocumentPagination,
+  selectDocumentTotalElements,
+} from '../store/document.reducers';
 import { documentActions } from '../store/document.actions';
 import { MatProgressBar } from '@angular/material/progress-bar';
 import { MatDialog } from '@angular/material/dialog';
 import { openCreateDocumentDialog } from '../create-document-dialog/document-dialog.config';
-import { PaginationQueryParamsInterface } from '../../../shared/type/pagination-query-params.interface';
-import { PaginationConfigService } from '../../../shared/service/pagination-config.service';
 import { categoryActions } from '../../categories/store/category.actions';
 
 import { DocumentResponseInterface } from '../../type/document-response.interface';
 import { DocumentVersionsResponseInterface } from '../../type/document-versions-response.interface';
+import { NewPaginationQueryParamsInterface } from '../../../shared/type/new-pagination-query-params.interface';
 
 @Component({
   selector: 'app-document-management',
@@ -40,7 +45,6 @@ import { DocumentVersionsResponseInterface } from '../../type/document-versions-
     MatButtonModule,
     MatTooltipModule,
     MatPaginator,
-    MatProgressSpinner,
     MatCheckbox,
     FabButtonComponent,
     MatProgressBar,
@@ -55,16 +59,21 @@ export class DocumentManagementComponent implements OnInit {
   // Observable combining necessary data from the store for the component
   data$ = combineLatest({
     documents: this.store.select(selectDocumentData),
-    isLoading: this.store.select(selectIsLoading),
-    error: this.store.select(selectError),
-    totalElements: this.store.select(selectTotalElements),
+    isLoading: this.store.select(selectDocumentIsLoading),
+    error: this.store.select(selectDocumentError),
+    totalElements: this.store.select(selectDocumentTotalElements),
+    pageSizeOptions: this.store.select(selectDocumentPageSizeOptions),
+    pagination: this.store.select(selectDocumentPagination),
   });
+
+  // Pagination and sorting properties for the component ts file
+  pagination!: NewPaginationQueryParamsInterface;
 
   // Currently expanded document
   expandedDocument: DocumentVersionsResponseInterface | null = null;
 
   // Columns to display in the document table
-  displayedColumns: string[] = ['select', 'id', 'name', 'version', 'categories'];
+  displayedColumns: string[] = ['select', 'id', 'documentName', 'timestamp', 'categories'];
 
   // Selection model for documents. Represents the current selected column document
   selection = new SelectionModel<DocumentVersionsResponseInterface>(false, []);
@@ -84,34 +93,25 @@ export class DocumentManagementComponent implements OnInit {
   /**
    * @param store - The Redux store instance injected via dependency injection.
    * @param dialog - The MatDialog service for opening dialogs.
-   * @param paginationConfigService contains the configuration values for the pagination
    */
   constructor(
     private store: Store,
-    private dialog: MatDialog,
-    public paginationConfigService: PaginationConfigService
+    private dialog: MatDialog
   ) {}
 
   ngOnInit(): void {
-    this.loadInitialDocumentsPage();
+    this.data$.subscribe(data => {
+      this.pagination = {
+        pageNumber: data.pagination.pageNumber,
+        pageSize: data.pagination.pageSize,
+        sort: data.pagination.sort,
+      };
+    });
+
+    this.dispatchGetDocumentsWithQueryAction();
 
     // Load all categories on initialization
     this.store.dispatch(categoryActions.getAllCategories());
-  }
-
-  /**
-   * Loads the initial documents page by constructing a pagination query interface
-   * using the initial page index and page size from the pagination configuration service,
-   * and dispatches an action to retrieve documents with query parameters.
-   */
-  private loadInitialDocumentsPage() {
-    const request: PaginationQueryParamsInterface = {
-      pageNumber: this.paginationConfigService.getInitialPageIndex(),
-      pageSize: this.paginationConfigService.getInitialPageSize(),
-    };
-
-    // Dispatch an action to retrieve documents with the updated pagination query
-    this.store.dispatch(documentActions.getDocumentsWithQuery({ queryParams: request }));
   }
 
   /**
@@ -185,16 +185,13 @@ export class DocumentManagementComponent implements OnInit {
    * @param event - The PageEvent object containing information about the page event.
    */
   handlePageEvent(event: PageEvent) {
-    this.paginationConfigService.setPageSize(event.pageSize);
-
-    const request: PaginationQueryParamsInterface = {
+    this.pagination = {
+      ...this.pagination,
       pageNumber: event.pageIndex.toString(),
       pageSize: event.pageSize.toString(),
     };
 
-    // Dispatch an action to retrieve documents with the updated pagination query
-    this.store.dispatch(documentActions.getDocumentsWithQuery({ queryParams: request }));
-    this.resetToggleIconAndSelection();
+    this.dispatchGetDocumentsWithQueryAction();
   }
 
   /**
@@ -231,5 +228,31 @@ export class DocumentManagementComponent implements OnInit {
   private resetToggleIconAndSelection() {
     this.selection = new SelectionModel<DocumentVersionsResponseInterface>(false, []);
     this.visibilityIcon = this.visibilityIconList[2];
+  }
+
+  /**
+   * Dispatches an action to fetch documents data based on the current pagination and sorting options.
+   */
+  private dispatchGetDocumentsWithQueryAction() {
+    this.store.dispatch(documentActions.getDocumentsWithQuery({ pagination: this.pagination }));
+  }
+
+  /**
+   * Changes the sorting order based on the specified sort state.
+   *
+   * @param sortState The current sort state.
+   */
+  changeSort(sortState: Sort) {
+    let sort = '';
+    if (sortState.direction !== '') {
+      sort = sortState.active + ',' + sortState.direction;
+    }
+
+    this.pagination = {
+      ...this.pagination,
+      sort: sort,
+    };
+
+    this.dispatchGetDocumentsWithQueryAction();
   }
 }

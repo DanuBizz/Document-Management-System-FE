@@ -7,7 +7,7 @@ import { documentActions } from './document.actions';
 import { SnackbarService } from '../../../shared/service/snackbar.service';
 import { Store } from '@ngrx/store';
 import { selectError } from '../../categories/store/category.reducers';
-import { selectQueryParams } from './document.reducers';
+import { selectDocumentPagination } from './document.reducers';
 import { DocumentService } from '../../../shared/service/document.service';
 
 export const getDocumentsWithQuery = createEffect(
@@ -16,9 +16,9 @@ export const getDocumentsWithQuery = createEffect(
     return actions$.pipe(
       // Listening for actions of type
       ofType(documentActions.getDocumentsWithQuery),
-      switchMap(({ queryParams }) => {
+      switchMap(({ pagination }) => {
         // Calling the service method to fetch documents
-        return documentService.fetchDocumentsWithAssociatedVersionsWithQuery({ queryParams }).pipe(
+        return documentService.fetchDocumentsWithAssociatedVersionsWithQuery(pagination).pipe(
           map(documents =>
             // Handling the response and dispatching action when successful
             documentActions.getDocumentsWithQuerySuccess({
@@ -35,29 +35,6 @@ export const getDocumentsWithQuery = createEffect(
     );
   },
   { functional: true }
-);
-
-// Effect to open a snackbar with error message when fetching documents fails
-export const openSnackbarErrorEffect = createEffect(
-  // Injecting dependencies
-  (actions$ = inject(Actions), snackbarService = inject(SnackbarService), store = inject(Store)) => {
-    return actions$.pipe(
-      // Listening for actions of type
-      ofType(
-        documentActions.getDocumentsWithQueryFailure,
-        documentActions.createDocumentVersionFailure,
-        documentActions.changeDocumentVisibilityFailure
-      ),
-      tap(() => {
-        // Subscribing to selectError selector to get the error from the store
-        store.select(selectError).subscribe(error => {
-          // Opening a snackbar to display the error message
-          snackbarService.openSnackBar('Fehler bei der Übermittlung.\nError: ' + JSON.stringify(error));
-        });
-      })
-    );
-  },
-  { functional: true, dispatch: false } // Indicates not to dispatch any actions
 );
 
 export const createDocumentVersionEffect = createEffect(
@@ -108,6 +85,29 @@ export const changeDocumentVisibilityEffect = createEffect(
   { functional: true }
 );
 
+// Effect to open a snackbar with error message when fetching documents fails
+export const openSnackbarErrorEffect = createEffect(
+  // Injecting dependencies
+  (actions$ = inject(Actions), snackbarService = inject(SnackbarService), store = inject(Store)) => {
+    return actions$.pipe(
+      // Listening for actions of type
+      ofType(
+        documentActions.getDocumentsWithQueryFailure,
+        documentActions.createDocumentVersionFailure,
+        documentActions.changeDocumentVisibilityFailure
+      ),
+      tap(() => {
+        // Subscribing to selectError selector to get the error from the store
+        store.select(selectError).subscribe(error => {
+          // Opening a snackbar to display the error message
+          snackbarService.openSnackBar('Fehler bei der Übermittlung.\nError: ' + JSON.stringify(error));
+        });
+      })
+    );
+  },
+  { functional: true, dispatch: false } // Indicates not to dispatch any actions
+);
+
 /**
  * Effect for displaying a snackbar notification and dispatch get documents action.
  * Upon receiving such a success-action, it displays a snackbar notification containing the success message
@@ -115,16 +115,29 @@ export const changeDocumentVisibilityEffect = createEffect(
  * and dispatches the 'get' action to fetch updated data.
  */
 export const openSnackbarSuccessEffect = createEffect(
-  (actions$ = inject(Actions), snackbarService = inject(SnackbarService), store = inject(Store)) => {
+  (actions$ = inject(Actions), snackbarService = inject(SnackbarService)) => {
     return actions$.pipe(
       ofType(documentActions.createDocumentVersionSuccess, documentActions.changeDocumentVisibilitySuccess),
       tap(({ message }) => {
         snackbarService.openSnackBar(message);
-      }),
+      })
+    );
+  },
+  { functional: true, dispatch: false }
+);
+
+/**
+ * Effect for dispatching a new action to refresh the table data
+ * Upon receiving such an action, it dispatches the 'get' action to fetch updated data.
+ */
+export const refreshGetDocumentWithQueryEffect = createEffect(
+  (actions$ = inject(Actions), store = inject(Store)) => {
+    return actions$.pipe(
+      ofType(documentActions.createDocumentVersionSuccess, documentActions.changeDocumentVisibilitySuccess),
       mergeMap(() => {
-        return store.select(selectQueryParams).pipe(
+        return store.select(selectDocumentPagination).pipe(
           take(1),
-          map(queryParams => documentActions.getDocumentsWithQuery({ queryParams }))
+          map(pagination => documentActions.getDocumentsWithQuery({ pagination }))
         );
       })
     );

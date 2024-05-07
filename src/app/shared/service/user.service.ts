@@ -3,6 +3,7 @@ import { environment } from '../../../environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { delay, map, Observable } from 'rxjs';
 import { UserResponseInterface } from '../../admin-view/type/user-response.interface';
+import { NewPaginationQueryParamsInterface } from '../type/new-pagination-query-params.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -26,21 +27,17 @@ export class UserService {
    * Retrieves users from the server based on pagination parameters.
    *
    * @returns Observable emitting users array and total number of elements.
-   * @param pageSize
-   * @param pageNumber
-   * @param sort
+   * @param pagination includes the page number, page size, and sort order.
    */
   fetchUsersWitQuery(
-    pageNumber: string,
-    pageSize: string,
-    sort: string
+    pagination: NewPaginationQueryParamsInterface
   ): Observable<{ users: UserResponseInterface[]; totalElements: string }> {
     return this.http
       .get<{ content: UserResponseInterface[]; totalElements: string }>(this.baseUrl, {
         params: {
-          page: pageNumber,
-          size: pageSize,
-          sort: sort,
+          page: pagination.pageNumber,
+          size: pagination.pageSize,
+          sort: pagination.sort,
         },
       })
       .pipe(
