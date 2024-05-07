@@ -6,8 +6,9 @@
   <!-- Dialog content with form -->
   <mat-dialog-content [formGroup]="form">
     <!-- Text input for category name -->
-    <mat-form-field appearance="outline">
-      <input matInput placeholder="Kategorie Name" formControlName="name" />
+    <mat-form-field appearance="outline" class="my-3">
+      <mat-label>Kategorie Name eingeben</mat-label>
+      <input matInput formControlName="name" />
       <!-- Error message for duplicate name -->
       @if (form.controls['name'].hasError('duplicateName')) {
         <mat-error>Dieser Kategoriename existiert bereits.</mat-error>

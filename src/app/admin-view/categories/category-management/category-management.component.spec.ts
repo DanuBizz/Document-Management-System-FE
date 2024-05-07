@@ -56,7 +56,7 @@ describe('CategoryManagementComponent', () => {
   it('should call createNewCategory() when FAB button is clicked', () => {
     spyOn(component, 'createNewCategory');
     const fabButton = fixture.debugElement.query(By.css('app-fab-button'));
-    fabButton.triggerEventHandler('click', null);
+    fabButton.triggerEventHandler('OnClick', null);
     expect(component.createNewCategory).toHaveBeenCalled();
   });
 

@@ -6,7 +6,8 @@ export interface CategoryStateInterface {
   isSubmitting: boolean;
   isLoading: boolean;
   error: BackendErrorsInterface | null;
-  data: CategoryResponseInterface[];
+  tableData: CategoryResponseInterface[];
+  allData: CategoryResponseInterface[];
   totalElements: string;
   pageSizeOptions: number[];
   pagination: PaginationQueryParamsInterface;

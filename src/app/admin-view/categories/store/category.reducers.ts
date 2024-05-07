@@ -2,7 +2,6 @@ import { CategoryStateInterface } from '../../type/category-state.interface';
 import { createFeature, createReducer, on } from '@ngrx/store';
 import { categoryActions } from './category.actions';
 import { PaginationConfigService } from '../../../shared/service/pagination-config.service';
-import { routerNavigatedAction } from '@ngrx/router-store';
 
 const paginationConfigService = new PaginationConfigService();
 
@@ -11,7 +10,8 @@ export const initialState: CategoryStateInterface = {
   isSubmitting: false,
   isLoading: false,
   error: null,
-  data: [],
+  tableData: [],
+  allData: [],
   totalElements: '0',
   pageSizeOptions: paginationConfigService.getPageSizeOptions(),
   pagination: {
@@ -33,7 +33,7 @@ export const categoriesFeature = createFeature({
     on(categoryActions.getAllCategoriesSuccess, (state, action) => ({
       ...state,
       isLoading: false,
-      data: action.category,
+      allData: action.category,
     })),
     on(categoryActions.getAllCategoriesFailure, (state, action) => ({
       ...state,
@@ -49,7 +49,7 @@ export const categoriesFeature = createFeature({
     on(categoryActions.getCategoriesWithQuerySuccess, (state, { categories, totalElements }) => ({
       ...state,
       isLoading: false,
-      data: categories,
+      tableData: categories,
       totalElements: totalElements,
     })),
     on(categoryActions.getCategoriesWithQueryFailure, (state, action) => ({
@@ -70,13 +70,14 @@ export const categoriesFeature = createFeature({
       ...state,
       isSubmitting: false,
       error: action.error,
-    })),
+    }))
     // Handling router navigated action
-
+    /*
     on(routerNavigatedAction, state => ({
       ...state,
       data: [],
     }))
+      */
   ),
 });
 
@@ -87,7 +88,8 @@ export const {
   selectIsSubmitting: selectCategoryIsSubmitting,
   selectIsLoading: selectCategoryIsLoading,
   selectError: selectCategoryError,
-  selectData: selectCategoryData,
+  selectTableData: selectCategoryTableData,
+  selectAllData: selectCategoryAllData,
   selectTotalElements: selectCategoryTotalElements,
   selectPageSizeOptions: selectCategoryPageSizeOptions,
   selectPagination: selectCategoryPagination,

@@ -22,7 +22,7 @@ import { MatButton } from '@angular/material/button';
 import { Observable } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { CommonModule } from '@angular/common';
-import { selectCategoryData } from '../../categories/store/category.reducers';
+import { selectCategoryAllData } from '../../categories/store/category.reducers';
 import { DocumentResponseInterface } from '../../type/document-response.interface';
 import { CategoryResponseInterface } from '../../type/category-response.interface';
 import { DocCategoryResponseInterface } from '../../../shared/type/doc-category-response.interface';
@@ -63,7 +63,7 @@ export class CreateDocumentDialogComponent implements OnInit {
   form!: FormGroup;
 
   // Observable for retrieving categories from the store
-  categories$: Observable<CategoryResponseInterface[]> = this.store.select(selectCategoryData);
+  categories$: Observable<CategoryResponseInterface[]> = this.store.select(selectCategoryAllData);
 
   // List of current document categories
   documentCategories: DocCategoryResponseInterface[] = [];

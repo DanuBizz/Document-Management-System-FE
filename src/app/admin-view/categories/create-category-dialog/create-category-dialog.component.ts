@@ -12,7 +12,7 @@ import { UserResponseInterface } from '../../type/user-response.interface';
 import { userActions } from '../../users/store/user.actions';
 import { CommonModule } from '@angular/common';
 import { CategoryResponseInterface } from '../../type/category-response.interface';
-import { selectCategoryData } from '../store/category.reducers';
+import { selectCategoryAllData } from '../store/category.reducers';
 import { categoryActions } from '../store/category.actions';
 
 @Component({
@@ -65,7 +65,7 @@ export class CreateCategoryDialogComponent {
     this.store.dispatch(userActions.getAllUsers());
     this.store.dispatch(categoryActions.getAllCategories());
 
-    this.store.select(selectCategoryData).subscribe(categories => {
+    this.store.select(selectCategoryAllData).subscribe(categories => {
       this.categories = categories;
     });
   }

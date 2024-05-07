@@ -16,7 +16,7 @@ import { CategoryService } from '../../../shared/service/category.service';
 import { combineLatest, filter } from 'rxjs';
 import { Store } from '@ngrx/store';
 import {
-  selectCategoryData,
+  selectCategoryTableData,
   selectCategoryError,
   selectCategoryIsLoading,
   selectCategoryPageSizeOptions,
@@ -58,7 +58,7 @@ export class CategoryManagementComponent implements OnInit {
 
   // Observable combining necessary data from the store for the component
   data$ = combineLatest({
-    category: this.store.select(selectCategoryData),
+    category: this.store.select(selectCategoryTableData),
     isLoading: this.store.select(selectCategoryIsLoading),
     error: this.store.select(selectCategoryError),
     totalElements: this.store.select(selectCategoryTotalElements),

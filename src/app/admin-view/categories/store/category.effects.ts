@@ -1,6 +1,6 @@
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { inject } from '@angular/core';
-import { map, mergeMap, of, switchMap, take } from 'rxjs';
+import { map, mergeMap, of, switchMap } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 import { CategoryService } from '../../../shared/service/category.service';
 import { categoryActions } from './category.actions';
@@ -122,16 +122,17 @@ export const openSnackbarSuccessEffect = createEffect(
 );
 
 /**
- * dispatches the 'getCategoriesWithQuery' action to fetch updated category data.
+ * dispatches the actions to fetch updated category data.
  */
-export const refreshGetCategoryWithQueryEffect = createEffect(
+export const refreshGetCategoriesEffect = createEffect(
   (actions$ = inject(Actions), store = inject(Store)) => {
     return actions$.pipe(
       ofType(categoryActions.createCategorySuccess),
       mergeMap(() => {
         return store.select(selectCategoryPagination).pipe(
-          take(1), // Hier wird nur ein einziges Mal abonniert, um die aktuellen Query-Parameter zu erhalten
-          map(pagination => categoryActions.getCategoriesWithQuery({ pagination }))
+          mergeMap(pagination => {
+            return [categoryActions.getCategoriesWithQuery({ pagination }), categoryActions.getAllCategories()];
+          })
         );
       })
     );
