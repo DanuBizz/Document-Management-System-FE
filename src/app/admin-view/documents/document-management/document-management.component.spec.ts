@@ -10,7 +10,7 @@ describe('DocumentManagementComponent', () => {
   let fixture: ComponentFixture<DocumentManagementComponent>;
   let store: MockStore;
   const initialState = {
-    document: {
+    'document-admin': {
       isSubmitting: false,
       isLoading: false,
       error: null,
@@ -28,9 +28,11 @@ describe('DocumentManagementComponent', () => {
         },
       ],
       totalElements: '0',
-      queryParams: {
+      pageSizeOptions: [3, 5, 10, 25],
+      pagination: {
         pageNumber: '0',
         pageSize: '5',
+        sort: '',
       },
     },
   };
@@ -114,8 +116,8 @@ describe('DocumentManagementComponent', () => {
   it('should render loading-bar', () => {
     store.setState({
       ...initialState,
-      document: {
-        ...initialState.document,
+      'document-admin': {
+        ...initialState['document-admin'],
         isLoading: true,
       },
     });
