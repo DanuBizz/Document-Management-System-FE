@@ -1,0 +1,17 @@
+.mobile-table {
+  display: none;
+}
+
+.collapsed-detail {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .mobile-table {
+    display: block;
+  }
+
+  .desktop-table {
+    display: none;
+  }
+}

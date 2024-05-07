@@ -15,7 +15,8 @@
 
     <!-- Table for category data -->
     <div class="mat-elevation-z10 mb-2">
-      <div class="scrolling-container">
+      <!-- Desktop Table Layout-->
+      <div class="desktop-table scrolling-container">
         <table
           mat-table
           class="default-table-design"
@@ -42,13 +43,63 @@
           <ng-container matColumnDef="users">
             <th mat-header-cell *matHeaderCellDef>Benutzer</th>
             <td mat-cell *matCellDef="let category">
-              {{ category.userNames }}
+              {{ sortAndJoinUserNames(category.userNames) }}
             </td>
           </ng-container>
 
           <!-- Row and column definitions -->
-          <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
-          <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+          <tr mat-header-row *matHeaderRowDef="displayedColumnsDesktop; sticky: true"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumnsDesktop"></tr>
+        </table>
+      </div>
+
+      <!-- Mobile Table Layout-->
+      <div class="mobile-table scrolling-container">
+        <table
+          mat-table
+          class="default-table-design"
+          [dataSource]="data.category"
+          matSort
+          (matSortChange)="changeSort($event)"
+          multiTemplateDataRows>
+          <!-- Column header for ID -->
+          <ng-container matColumnDef="id" sticky>
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>ID</th>
+            <td mat-cell *matCellDef="let category">
+              <mat-icon class="table-icon-hint" *ngIf="expandedCategory === null"> keyboard_arrow_down </mat-icon>
+              <mat-icon class="table-icon-hint" *ngIf="expandedCategory !== null"> keyboard_arrow_up </mat-icon>
+              {{ category.id }}
+            </td>
+          </ng-container>
+
+          <!-- Column header for Name -->
+          <ng-container matColumnDef="name">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
+            <td mat-cell *matCellDef="let category">
+              {{ category.name }}
+            </td>
+          </ng-container>
+
+          <!-- Expanded row column for user details -->
+          <ng-container matColumnDef="expandedDetail">
+            <td mat-cell *matCellDef="let category" colspan="2">
+              {{ sortAndJoinUserNames(category.userNames) }}
+            </td>
+          </ng-container>
+
+          <!-- Row and column definitions -->
+          <tr mat-header-row *matHeaderRowDef="displayedColumnsMobile; sticky: true"></tr>
+          <tr
+            mat-row
+            *matRowDef="let row; columns: displayedColumnsMobile"
+            (click)="onToggleExpandedCategoryRow(row)"></tr>
+          <!-- Row definition for expandedDetail -->
+          <tr
+            mat-row
+            *matRowDef="let row; columns: ['expandedDetail']"
+            [class.collapsed-detail]="row !== expandedCategory">
+            >
+          </tr>
         </table>
       </div>
 
