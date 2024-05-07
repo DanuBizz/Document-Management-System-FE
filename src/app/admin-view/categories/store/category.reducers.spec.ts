@@ -1,25 +1,21 @@
 import { categoryReducer, initialState } from './category.reducers';
 import { categoryActions } from './category.actions';
-import { PaginationQueryParamsInterface } from '../../../shared/type/pagination-query-params.interface';
 import { CategoryResponseInterface } from '../../type/category-response.interface';
 import { CategoryRequestInterface } from '../../type/category-request.interface';
+import { PaginationQueryParamsInterface } from '../../../shared/type/pagination-query-params.interface';
 
 describe('CategoryReducers', () => {
-  const requestParams: PaginationQueryParamsInterface = {
+  const pagination: PaginationQueryParamsInterface = {
     pageNumber: '0',
     pageSize: '5',
+    sort: '',
   };
 
   it('returns a default state', () => {
     const action = { type: 'UNKNOWN' };
     const state = categoryReducer(initialState, action);
     const newState = {
-      isSubmitting: false,
-      error: null,
-      isLoading: false,
-      data: [],
-      totalElements: '0',
-      queryParams: { pageNumber: '0', pageSize: '5' },
+      ...initialState,
     };
 
     expect(state).toEqual(newState);
@@ -75,12 +71,12 @@ describe('CategoryReducers', () => {
   });
 
   it('get category with query', () => {
-    const action = categoryActions.getCategoriesWithQuery({ queryParams: requestParams });
+    const action = categoryActions.getCategoriesWithQuery({ pagination });
     const state = categoryReducer(initialState, action);
     const newState = {
       ...initialState,
       isLoading: true,
-      queryParams: requestParams,
+      pagination: pagination,
     };
 
     expect(state).toEqual(newState);
