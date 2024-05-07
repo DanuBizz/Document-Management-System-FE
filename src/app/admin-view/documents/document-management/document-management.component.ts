@@ -30,7 +30,7 @@ import { categoryActions } from '../../categories/store/category.actions';
 
 import { DocumentResponseInterface } from '../../type/document-response.interface';
 import { DocumentVersionsResponseInterface } from '../../type/document-versions-response.interface';
-import { NewPaginationQueryParamsInterface } from '../../../shared/type/new-pagination-query-params.interface';
+import { PaginationQueryParamsInterface } from '../../../shared/type/pagination-query-params.interface';
 
 @Component({
   selector: 'app-document-management',
@@ -67,7 +67,7 @@ export class DocumentManagementComponent implements OnInit {
   });
 
   // Pagination and sorting properties for the component ts file
-  pagination!: NewPaginationQueryParamsInterface;
+  pagination!: PaginationQueryParamsInterface;
 
   // Currently expanded document
   expandedDocument: DocumentVersionsResponseInterface | null = null;

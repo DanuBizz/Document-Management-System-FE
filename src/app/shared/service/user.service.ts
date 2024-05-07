@@ -3,7 +3,7 @@ import { environment } from '../../../environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { delay, map, Observable } from 'rxjs';
 import { UserResponseInterface } from '../../admin-view/type/user-response.interface';
-import { NewPaginationQueryParamsInterface } from '../type/new-pagination-query-params.interface';
+import { PaginationQueryParamsInterface } from '../type/pagination-query-params.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -30,7 +30,7 @@ export class UserService {
    * @param pagination includes the page number, page size, and sort order.
    */
   fetchUsersWitQuery(
-    pagination: NewPaginationQueryParamsInterface
+    pagination: PaginationQueryParamsInterface
   ): Observable<{ users: UserResponseInterface[]; totalElements: string }> {
     return this.http
       .get<{ content: UserResponseInterface[]; totalElements: string }>(this.baseUrl, {

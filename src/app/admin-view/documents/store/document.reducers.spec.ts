@@ -2,10 +2,10 @@ import { documentReducer, initialState } from './document.reducers';
 import { documentActions } from './document.actions';
 import { DocumentRequestInterface } from '../../type/document-request.interface';
 import { DocumentVersionsResponseInterface } from '../../type/document-versions-response.interface';
-import { NewPaginationQueryParamsInterface } from '../../../shared/type/new-pagination-query-params.interface';
+import { PaginationQueryParamsInterface } from '../../../shared/type/pagination-query-params.interface';
 
 describe('DocumentReducers', () => {
-  const pagination: NewPaginationQueryParamsInterface = {
+  const pagination: PaginationQueryParamsInterface = {
     pageNumber: '0',
     pageSize: '5',
     sort: '',

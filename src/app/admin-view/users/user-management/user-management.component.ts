@@ -31,7 +31,7 @@ import { userActions } from '../store/user.actions';
 import { MatSlideToggle } from '@angular/material/slide-toggle';
 import { FormsModule } from '@angular/forms';
 import { selectCurrentUser } from '../../../auth/store/auth.reducers';
-import { NewPaginationQueryParamsInterface } from '../../../shared/type/new-pagination-query-params.interface';
+import { PaginationQueryParamsInterface } from '../../../shared/type/pagination-query-params.interface';
 
 @Component({
   selector: 'app-user-management',
@@ -80,7 +80,7 @@ export class UserManagementComponent implements OnInit {
   });
 
   // Pagination and sorting properties for the component ts file
-  pagination!: NewPaginationQueryParamsInterface;
+  pagination!: PaginationQueryParamsInterface;
 
   constructor(
     private store: Store,

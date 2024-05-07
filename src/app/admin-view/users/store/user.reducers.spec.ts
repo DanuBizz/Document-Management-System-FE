@@ -1,7 +1,7 @@
 import { initialState, userReducer } from './user.reducers';
 import { userActions } from './user.actions';
 import { UserResponseInterface } from '../../type/user-response.interface';
-import { NewPaginationQueryParamsInterface } from '../../../shared/type/new-pagination-query-params.interface';
+import { PaginationQueryParamsInterface } from '../../../shared/type/pagination-query-params.interface';
 
 describe('UserReducers', () => {
   const users: UserResponseInterface[] = [
@@ -13,7 +13,7 @@ describe('UserReducers', () => {
     },
   ];
 
-  const pagination: NewPaginationQueryParamsInterface = {
+  const pagination: PaginationQueryParamsInterface = {
     pageNumber: '0',
     pageSize: '5',
     sort: '',

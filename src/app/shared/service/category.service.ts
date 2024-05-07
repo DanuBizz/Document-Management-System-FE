@@ -4,7 +4,7 @@ import { delay, map, Observable } from 'rxjs';
 import { CategoryResponseInterface } from '../../admin-view/type/category-response.interface';
 import { environment } from '../../../environments/environment';
 import { CategoryRequestInterface } from '../../admin-view/type/category-request.interface';
-import { NewPaginationQueryParamsInterface } from '../type/new-pagination-query-params.interface';
+import { PaginationQueryParamsInterface } from '../type/pagination-query-params.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -31,7 +31,7 @@ export class CategoryService {
    * @param pagination includes the page number, page size, and sort order.
    */
   fetchCategoriesWithQuery(
-    pagination: NewPaginationQueryParamsInterface
+    pagination: PaginationQueryParamsInterface
   ): Observable<{ categories: CategoryResponseInterface[]; totalElements: string }> {
     return this.http
       .get<{ content: CategoryResponseInterface[]; totalElements: string }>(this.baseUrl, {

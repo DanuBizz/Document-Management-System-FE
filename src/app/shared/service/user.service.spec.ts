@@ -3,7 +3,7 @@ import { HttpClientTestingModule, HttpTestingController } from '@angular/common/
 import { environment } from '../../../environments/environment';
 import { UserService } from './user.service';
 import { UserResponseInterface } from '../../admin-view/type/user-response.interface';
-import { NewPaginationQueryParamsInterface } from '../type/new-pagination-query-params.interface';
+import { PaginationQueryParamsInterface } from '../type/pagination-query-params.interface';
 
 describe('UserService', () => {
   let service: UserService;
@@ -47,7 +47,7 @@ describe('UserService', () => {
 
   it('should return users with pagination query from the api', () => {
     const dummyTotalElements = '2';
-    const pagination: NewPaginationQueryParamsInterface = {
+    const pagination: PaginationQueryParamsInterface = {
       pageNumber: '0',
       pageSize: '5',
       sort: '',

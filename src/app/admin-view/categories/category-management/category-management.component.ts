@@ -28,7 +28,7 @@ import { openCreateCategoryDialog } from '../create-category-dialog/category-dia
 import { MatDialog } from '@angular/material/dialog';
 import { categoryActions } from '../store/category.actions';
 import { CategoryRequestInterface } from '../../type/category-request.interface';
-import { NewPaginationQueryParamsInterface } from '../../../shared/type/new-pagination-query-params.interface';
+import { PaginationQueryParamsInterface } from '../../../shared/type/pagination-query-params.interface';
 
 @Component({
   selector: 'app-category-management',
@@ -67,7 +67,7 @@ export class CategoryManagementComponent implements OnInit {
   });
 
   // Pagination and sorting properties for the component ts file
-  pagination!: NewPaginationQueryParamsInterface;
+  pagination!: PaginationQueryParamsInterface;
 
   // Columns to display in the table
   displayedColumns: string[] = ['id', 'name', 'users'];
