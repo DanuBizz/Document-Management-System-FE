@@ -14,7 +14,8 @@ describe('CategoryManagementComponent', () => {
       isSubmitting: false,
       isLoading: false,
       error: null,
-      data: [{ id: 10, name: 'test', userNames: ['testuser1'] }],
+      allData: [{ id: 10, name: 'test', userNames: ['testuser1'] }],
+      tableData: [{ id: 10, name: 'test', userNames: ['testuser1'] }],
       totalElements: '0',
       pageSizeOptions: ['5', '10', '25', '50'],
       pagination: {

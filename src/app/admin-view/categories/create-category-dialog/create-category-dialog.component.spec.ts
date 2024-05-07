@@ -13,14 +13,25 @@ describe('CreateCategoryDialogComponent', () => {
     categories: {
       isLoading: false,
       error: null,
-      data: [
+      allData: [
         {
           id: 1,
           name: 'test',
           userNames: ['user1', 'user2', 'user3'],
         },
       ],
-      queryParams: false,
+      tableData: [
+        {
+          id: 1,
+          name: 'test',
+          userNames: ['user1', 'user2', 'user3'],
+        },
+      ],
+      pagination: {
+        pageNumber: 1,
+        pageSize: 10,
+        total: 1,
+      },
     },
     user: {
       isLoading: false,
