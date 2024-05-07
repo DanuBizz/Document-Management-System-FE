@@ -146,31 +146,24 @@ export class DocumentManagementComponent implements OnInit {
     }
   }
 
-  /**
-   * Opens a dialog to create a new document.
-   * This method is prepared but not fully implemented.
-   *
-   */
   createNewDocument() {
-    openCreateDocumentDialog(this.dialog, null)
-      .pipe(filter(val => !!val))
-      .subscribe(document => {
-        this.store.dispatch(documentActions.createDocumentVersion({ doc: document }));
-      });
-
-    this.resetToggleIconAndSelection();
+    this.passValueForCreateDocumentDialog(null);
   }
 
-  /**
-   * Opens a dialog to create a new version of a document.
-   * This method is prepared but not fully implemented.
-   */
   createNewVersion() {
     const newDocument: DocumentResponseInterface = {
       ...this.selection.selected.at(0)!,
     };
-    // Open dialog to create new version with the selected document
-    openCreateDocumentDialog(this.dialog, newDocument)
+    this.passValueForCreateDocumentDialog(newDocument);
+  }
+
+  /**
+   * Opens a dialog to create a new document or a new version of an existing document.
+   * Depending on if document is null or not.
+   * After it resets the toggle icon and selection.
+   */
+  passValueForCreateDocumentDialog(document: DocumentResponseInterface | null) {
+    openCreateDocumentDialog(this.dialog, document)
       .pipe(filter(val => !!val))
       .subscribe(document => {
         this.store.dispatch(documentActions.createDocumentVersion({ doc: document }));
