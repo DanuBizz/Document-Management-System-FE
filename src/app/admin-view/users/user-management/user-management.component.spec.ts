@@ -14,7 +14,8 @@ describe('UserManagementComponent', () => {
       isSubmitting: false,
       isLoading: false,
       error: null,
-      data: [
+      allData: [],
+      tableData: [
         {
           id: 1,
           username: 'test user 1',
