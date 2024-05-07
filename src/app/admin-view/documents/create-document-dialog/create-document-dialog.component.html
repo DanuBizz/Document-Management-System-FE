@@ -33,9 +33,13 @@
         >
       }
       <!-- Open explorer button -->
-      <button mat-mini-fab color="primary" (click)="fileInput.click()" matSuffix class="upload-btn">
-        <mat-icon>upload</mat-icon>
-      </button>
+      <app-fab-button
+        icon="upload"
+        tooltip="Datei hochladen"
+        (OnClick)="fileInput.click()"
+        class="upload-btn"
+        matSuffix>
+      </app-fab-button>
     </mat-form-field>
 
     <!-- Open explorer function (hidden) -->

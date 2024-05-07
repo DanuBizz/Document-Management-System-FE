@@ -11,7 +11,7 @@
         icon="add"
         tooltip="Neues Dokument erstellen"
         [disabled]="selection.selected.length !== 0"
-        (click)="createNewDocument()"
+        (OnClick)="createNewDocument()"
         id="test-new-document-button">
       </app-fab-button>
 
@@ -20,7 +20,7 @@
         icon="library_add"
         tooltip="Neue Version erstellen"
         [disabled]="selection.selected.length === 0"
-        (click)="createNewVersion()"
+        (OnClick)="createNewVersion()"
         id="test-new-version-button">
       </app-fab-button>
 
@@ -37,7 +37,7 @@
         icon="{{ visibilityIcon }}"
         tooltip="{{ tooltipVisibilityButton }}"
         [disabled]="selection.selected.length === 0"
-        (click)="changeIsVisibleStatusForDocument()"
+        (OnClick)="changeIsVisibleStatusForDocument()"
         id="test-change-visibility-status">
       </app-fab-button>
     </div>

@@ -18,18 +18,18 @@ import {
 import { MatFormFieldModule, MatLabel, MatSuffix } from '@angular/material/form-field';
 import { MatOption, MatSelect } from '@angular/material/select';
 import { MatInput } from '@angular/material/input';
-import { MatButton, MatMiniFabButton } from '@angular/material/button';
+import { MatButton } from '@angular/material/button';
 import { Observable } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { CommonModule } from '@angular/common';
 import { selectCategoryData } from '../../categories/store/category.reducers';
 import { DocumentResponseInterface } from '../../type/document-response.interface';
 import { CategoryResponseInterface } from '../../type/category-response.interface';
-import { MatIcon } from '@angular/material/icon';
 import { DocCategoryResponseInterface } from '../../../shared/type/doc-category-response.interface';
 import { docCategoryActions } from '../../../shared/store/doc-category.actions';
 import { selectDocCategoryData } from '../../../shared/store/doc-category.reducers';
 import { DocumentRequestInterface } from '../../type/document-request.interface';
+import { FabButtonComponent } from '../../../shared/component/fab-button/fab-button.component';
 
 @Component({
   selector: 'app-create-document-dialog',
@@ -47,8 +47,7 @@ import { DocumentRequestInterface } from '../../type/document-request.interface'
     MatButton,
     MatLabel,
     MatSuffix,
-    MatIcon,
-    MatMiniFabButton,
+    FabButtonComponent,
   ],
   templateUrl: './create-document-dialog.component.html',
   styleUrl: './create-document-dialog.component.scss',
