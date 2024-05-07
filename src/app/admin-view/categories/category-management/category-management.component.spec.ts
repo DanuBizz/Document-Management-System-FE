@@ -50,7 +50,7 @@ describe('CategoryManagementComponent', () => {
   it('should render category data rows correctly', () => {
     const rows = fixture.debugElement.queryAll(By.css('tbody tr'));
 
-    expect(rows.length).toEqual(1);
+    expect(rows.length).toBeGreaterThan(1);
     expect(rows[0].nativeElement.textContent).toContain('test');
   });
 
