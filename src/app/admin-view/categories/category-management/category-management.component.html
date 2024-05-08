@@ -34,7 +34,7 @@
           </ng-container>
 
           <!-- Column header for ID -->
-          <ng-container matColumnDef="id" sticky>
+          <ng-container matColumnDef="id">
             <th mat-header-cell *matHeaderCellDef mat-sort-header>ID</th>
             <td mat-cell *matCellDef="let category">
               {{ category.id }}
@@ -102,7 +102,7 @@
 
           <!-- Expanded row column for user details -->
           <ng-container matColumnDef="expandedDetail">
-            <td mat-cell *matCellDef="let category" colspan="2">
+            <td mat-cell *matCellDef="let category" colspan="3">
               {{ sortAndJoinUserNames(category.userNames) }}
             </td>
           </ng-container>
