@@ -54,6 +54,8 @@ import { FabButtonComponent } from '../../../shared/component/fab-button/fab-but
 })
 export class CreateDocumentDialogComponent implements OnInit {
   dialogTitle = 'Neues Dokument erstellen';
+
+  // Form field name for the dialog, if document already exists
   formName: string = '';
 
   // Flag to disable form field name as true if document is passed and not null
@@ -65,7 +67,7 @@ export class CreateDocumentDialogComponent implements OnInit {
   // Observable for retrieving categories from the store
   categories$: Observable<CategoryResponseInterface[]> = this.store.select(selectCategoryAllData);
 
-  // List of current document categories
+  // List of current document categories to validate against duplicate names
   documentCategories: DocCategoryResponseInterface[] = [];
 
   // maximum file size in MB
@@ -182,8 +184,8 @@ export class CreateDocumentDialogComponent implements OnInit {
 
   /**
    * Saves the form data and closes the dialog.
-   * If a document exists, closes the dialog with the form value.
-   * Otherwise, combines the form data with the document name and closes the dialog.
+   * If a document exists, combines the form data with the document name and closes the dialog.
+   * Otherwise, it closes the dialog with the form data
    */
   save() {
     const date = new Date();

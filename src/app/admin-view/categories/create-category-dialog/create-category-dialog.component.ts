@@ -1,7 +1,13 @@
-import { Component } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButton } from '@angular/material/button';
-import { MatDialogActions, MatDialogContent, MatDialogRef, MatDialogTitle } from '@angular/material/dialog';
+import {
+  MAT_DIALOG_DATA,
+  MatDialogActions,
+  MatDialogContent,
+  MatDialogRef,
+  MatDialogTitle,
+} from '@angular/material/dialog';
 import { MatFormFieldModule, MatLabel } from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
 import { MatOption, MatSelect } from '@angular/material/select';
@@ -14,6 +20,7 @@ import { CommonModule } from '@angular/common';
 import { CategoryResponseInterface } from '../../type/category-response.interface';
 import { selectCategoryAllData } from '../store/category.reducers';
 import { categoryActions } from '../store/category.actions';
+import { CategoryRequestInterface } from '../../type/category-request.interface';
 
 @Component({
   selector: 'app-create-category-dialog',
@@ -36,32 +43,47 @@ import { categoryActions } from '../store/category.actions';
   styleUrl: './create-category-dialog.component.scss',
 })
 export class CreateCategoryDialogComponent {
+  dialogTitle = 'Neues Kategorie erstellen';
+
+  // Form field name and categoryIds for the dialog, if category already exists
+  formName: string = '';
+  formCategoryIds: number[] = [];
+
+  // Flag to disable form field name as true if document is passed and not null
+  isDisabled: boolean = false;
+
   // Form group for the dialog
-  form: FormGroup;
+  form!: FormGroup;
 
   // Observable for retrieving users from the store
   users$: Observable<UserResponseInterface[]> = this.store.select(selectUserAllData);
 
-  // List of current categories
+  // List of current categories to validate against duplicate names
   categories: CategoryResponseInterface[] = [];
 
   /**
    * @param fb - The FormBuilder service for creating form controls and groups.
+   * @param category The category data to pass to the dialog.
    * @param dialogRef - The MatDialogRef service for managing dialog reference.
    * @param store - The Redux store instance injected via dependency injection.
    */
   constructor(
     private fb: FormBuilder,
+    @Inject(MAT_DIALOG_DATA) private category: CategoryResponseInterface | null,
     private dialogRef: MatDialogRef<CreateCategoryDialogComponent>,
     private store: Store
   ) {
-    // Initialize form with form controls and validators
-    // the form name is required and must be unique.
-    this.form = this.fb.group({
-      name: ['', [Validators.required, this.validateCategoryName.bind(this)]],
-      userIds: ['', Validators.required],
-    });
+    // If category data exists, set formName and disable form fields
+    if (this.category !== null) {
+      this.formName = this.category.name;
+      this.formCategoryIds = this.category.userIds;
+      this.isDisabled = true;
+      this.dialogTitle = 'Kategorie bearbeiten';
+    }
 
+    this.initializeForm();
+
+    // dispatch actions to get all users and categories
     this.store.dispatch(userActions.getAllUsers());
     this.store.dispatch(categoryActions.getAllCategories());
 
@@ -70,6 +92,26 @@ export class CreateCategoryDialogComponent {
     });
   }
 
+  /**
+   * Initialize form with form controls and validators
+   * The form name is required and must be unique.
+   */
+  initializeForm() {
+    this.form = this.fb.group({
+      name: [
+        { value: this.formName, disabled: this.isDisabled },
+        this.isDisabled ? [] : [Validators.required, this.validateCategoryName.bind(this)],
+      ],
+      userIds: [this.formCategoryIds, Validators.required],
+    });
+  }
+
+  /**
+   * Checks if the entered category name already exists.
+   *
+   * @param control The FormControl object containing the value to be checked.
+   * @return An object that is `null` if the category name is unique, or an object with the key 'duplicateName' and the value 'true' if the category name already exists.
+   */
   validateCategoryName(control: FormControl): { [key: string]: boolean } | null {
     const existingCategory = this.categories.find(
       category => category.name.toLowerCase() === control.value.toLowerCase()
@@ -85,9 +127,18 @@ export class CreateCategoryDialogComponent {
   }
 
   /**
-   * Saves and returns the form data and closes the dialog.
+   * If a category exists, it returns the new user ids.
+   * Otherwise, saves the form data and closes the dialog.
    */
   save() {
-    this.dialogRef.close(this.form.value);
+    if (this.category !== null) {
+      const newUserIds: number[] = this.form.value.categoryId;
+      this.dialogRef.close(newUserIds);
+    } else {
+      const newCategory: CategoryRequestInterface = {
+        ...this.form.value,
+      };
+      this.dialogRef.close(newCategory);
+    }
   }
 }

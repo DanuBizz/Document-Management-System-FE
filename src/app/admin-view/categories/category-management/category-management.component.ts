@@ -111,10 +111,9 @@ export class CategoryManagementComponent implements OnInit {
 
   /**
    * Opens a dialog to create a new category.
-   * This method is prepared but not fully implemented.
    */
   createNewCategory() {
-    openCreateCategoryDialog(this.dialog)
+    openCreateCategoryDialog(this.dialog, null)
       .pipe(filter(val => !!val))
       .subscribe(val => {
         const newCategory: CategoryRequestInterface = {
@@ -122,6 +121,17 @@ export class CategoryManagementComponent implements OnInit {
         };
         this.store.dispatch(categoryActions.createCategory({ category: newCategory }));
       });
+  }
+
+  /**
+   * Opens a dialog to update an existing category.
+   */
+  editCategoryUsers(category: CategoryResponseInterface) {
+    openCreateCategoryDialog(this.dialog, category)
+        .pipe(filter(val => !!val))
+        .subscribe(val => {
+          // action
+        });
   }
 
   /**
@@ -166,14 +176,14 @@ export class CategoryManagementComponent implements OnInit {
   }
 
   /**
-   * Sorts an array of user names alphabetically and joins them into a single string.
+   * Sorts an array of category names alphabetically and joins them into a single string.
    *
-   * @param userNames An array of user names to be sorted and joined.
-   * @return A string containing the sorted user names joined by commas.
+   * @param userNames An array of category names to be sorted and joined.
+   * @return A string containing the sorted category names joined by commas.
    */
-  sortAndJoinUserNames(userNames: string[]): string {
-    const sortedUserNames = userNames.slice().sort();
-    return sortedUserNames.join(', ');
+  sortAndJoinCategoryNames(userNames: string[]): string {
+    const sortedCategoryNames = userNames.slice().sort();
+    return sortedCategoryNames.join(', ');
   }
 
   /**
@@ -187,8 +197,6 @@ export class CategoryManagementComponent implements OnInit {
       this.expandedCategory = category;
     }
   }
-
-  editCategoryUsers() {}
 
   checkIsLoadingIsSubmitting(): boolean {
     return this.isLoading || this.isSubmitting;

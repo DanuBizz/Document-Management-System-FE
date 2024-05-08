@@ -35,7 +35,7 @@
                 mat-icon-button
                 color="accent"
                 [disabled]="checkIsLoadingIsSubmitting()"
-                (click)="editCategoryUsers()">
+                (click)="editCategoryUsers(category)">
                 <mat-icon>edit</mat-icon>
               </button>
             </td>
@@ -61,7 +61,7 @@
           <ng-container matColumnDef="users">
             <th mat-header-cell *matHeaderCellDef>Benutzer</th>
             <td mat-cell *matCellDef="let category">
-              {{ sortAndJoinUserNames(category.userNames) }}
+              {{ sortAndJoinCategoryNames(category.userNames) }}
             </td>
           </ng-container>
 
@@ -88,7 +88,7 @@
                 mat-icon-button
                 color="accent"
                 [disabled]="checkIsLoadingIsSubmitting()"
-                (click)="editCategoryUsers()">
+                (click)="editCategoryUsers(category)">
                 <mat-icon>edit</mat-icon>
               </button>
             </td>
@@ -115,7 +115,7 @@
           <!-- Expanded row column for user details -->
           <ng-container matColumnDef="expandedDetail">
             <td mat-cell *matCellDef="let category" colspan="3">
-              {{ sortAndJoinUserNames(category.userNames) }}
+              {{ sortAndJoinCategoryNames(category.userNames) }}
             </td>
           </ng-container>
 
