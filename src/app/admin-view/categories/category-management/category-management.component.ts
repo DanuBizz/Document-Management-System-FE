@@ -16,11 +16,11 @@ import { CategoryService } from '../../../shared/service/category.service';
 import { combineLatest, filter } from 'rxjs';
 import { Store } from '@ngrx/store';
 import {
-  selectCategoryData,
   selectCategoryError,
   selectCategoryIsLoading,
   selectCategoryPageSizeOptions,
   selectCategoryPagination,
+  selectCategoryTableData,
   selectCategoryTotalElements,
 } from '../store/category.reducers';
 import { MatProgressBar } from '@angular/material/progress-bar';
@@ -29,6 +29,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { categoryActions } from '../store/category.actions';
 import { CategoryRequestInterface } from '../../type/category-request.interface';
 import { PaginationQueryParamsInterface } from '../../../shared/type/pagination-query-params.interface';
+import { CategoryResponseInterface } from '../../type/category-response.interface';
 
 @Component({
   selector: 'app-category-management',
@@ -58,7 +59,7 @@ export class CategoryManagementComponent implements OnInit {
 
   // Observable combining necessary data from the store for the component
   data$ = combineLatest({
-    category: this.store.select(selectCategoryData),
+    category: this.store.select(selectCategoryTableData),
     isLoading: this.store.select(selectCategoryIsLoading),
     error: this.store.select(selectCategoryError),
     totalElements: this.store.select(selectCategoryTotalElements),
@@ -70,7 +71,13 @@ export class CategoryManagementComponent implements OnInit {
   pagination!: PaginationQueryParamsInterface;
 
   // Columns to display in the table
-  displayedColumns: string[] = ['id', 'name', 'users'];
+  displayedColumnsDesktop: string[] = ['edit', 'id', 'name', 'users'];
+
+  // Columns to display in the table
+  displayedColumnsMobile: string[] = ['edit', 'id', 'name'];
+
+  // Currently expanded user
+  expandedCategory: CategoryResponseInterface | null = null;
 
   /**
    * @param store - The Redux store instance injected via dependency injection.
@@ -148,4 +155,29 @@ export class CategoryManagementComponent implements OnInit {
 
     this.dispatchGetCategoriesWithQueryAction();
   }
+
+  /**
+   * Sorts an array of user names alphabetically and joins them into a single string.
+   *
+   * @param userNames An array of user names to be sorted and joined.
+   * @return A string containing the sorted user names joined by commas.
+   */
+  sortAndJoinUserNames(userNames: string[]): string {
+    const sortedUserNames = userNames.slice().sort();
+    return sortedUserNames.join(', ');
+  }
+
+  /**
+   * Toggles the expansion of a user row to display the details.
+   * @param category The category for which to toggle the row expansion.
+   */
+  onToggleExpandedCategoryRow(category: CategoryResponseInterface) {
+    if (category == this.expandedCategory) {
+      this.expandedCategory = null;
+    } else {
+      this.expandedCategory = category;
+    }
+  }
+
+  editCategoryUsers() {}
 }

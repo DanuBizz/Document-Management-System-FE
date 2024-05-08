@@ -6,7 +6,8 @@ export interface UserStateInterface {
   isSubmitting: boolean;
   isLoading: boolean;
   error: BackendErrorsInterface | null;
-  data: UserResponseInterface[];
+  allData: UserResponseInterface[];
+  tableData: UserResponseInterface[];
   totalElements: string;
   pagination: PaginationQueryParamsInterface;
 }

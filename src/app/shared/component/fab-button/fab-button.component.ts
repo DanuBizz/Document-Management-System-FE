@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { MatTooltip } from '@angular/material/tooltip';
 import { MatIcon } from '@angular/material/icon';
 import { MatMiniFabButton } from '@angular/material/button';
@@ -14,4 +14,10 @@ export class FabButtonComponent {
   @Input() icon!: string;
   @Input() tooltip: string = '';
   @Input() disabled: boolean = false;
+
+  @Output() OnClick = new EventEmitter<string>();
+
+  emitEvent() {
+    this.OnClick.emit();
+  }
 }

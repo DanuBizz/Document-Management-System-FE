@@ -6,13 +6,13 @@ import { MatFormFieldModule, MatLabel } from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
 import { MatOption, MatSelect } from '@angular/material/select';
 import { Store } from '@ngrx/store';
-import { selectUserData } from '../../users/store/user.reducers';
+import { selectUserAllData } from '../../users/store/user.reducers';
 import { Observable } from 'rxjs';
 import { UserResponseInterface } from '../../type/user-response.interface';
 import { userActions } from '../../users/store/user.actions';
 import { CommonModule } from '@angular/common';
 import { CategoryResponseInterface } from '../../type/category-response.interface';
-import { selectCategoryData } from '../store/category.reducers';
+import { selectCategoryAllData } from '../store/category.reducers';
 import { categoryActions } from '../store/category.actions';
 
 @Component({
@@ -40,7 +40,7 @@ export class CreateCategoryDialogComponent {
   form: FormGroup;
 
   // Observable for retrieving users from the store
-  users$: Observable<UserResponseInterface[]> = this.store.select(selectUserData);
+  users$: Observable<UserResponseInterface[]> = this.store.select(selectUserAllData);
 
   // List of current categories
   categories: CategoryResponseInterface[] = [];
@@ -65,7 +65,7 @@ export class CreateCategoryDialogComponent {
     this.store.dispatch(userActions.getAllUsers());
     this.store.dispatch(categoryActions.getAllCategories());
 
-    this.store.select(selectCategoryData).subscribe(categories => {
+    this.store.select(selectCategoryAllData).subscribe(categories => {
       this.categories = categories;
     });
   }

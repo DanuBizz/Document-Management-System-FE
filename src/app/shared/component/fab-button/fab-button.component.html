@@ -5,6 +5,7 @@
   matTooltipPosition="above"
   [matTooltipShowDelay]="300"
   [disabled]="disabled"
+  (click)="emitEvent()"
   class="mx-2">
   <mat-icon>{{ icon }}</mat-icon>
 </button>

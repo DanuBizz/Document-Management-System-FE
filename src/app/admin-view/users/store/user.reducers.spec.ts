@@ -43,7 +43,7 @@ describe('UserReducers', () => {
     const state = userReducer(initialState, action);
     const newState = {
       ...initialState,
-      data: action.user,
+      allData: action.user,
     };
 
     expect(state).toEqual(newState);
@@ -81,7 +81,7 @@ describe('UserReducers', () => {
     const state = userReducer(initialState, action);
     const newState = {
       ...initialState,
-      data: users,
+      tableData: users,
       totalElements: totalElements,
     };
 

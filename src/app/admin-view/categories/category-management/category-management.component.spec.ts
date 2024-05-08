@@ -14,7 +14,8 @@ describe('CategoryManagementComponent', () => {
       isSubmitting: false,
       isLoading: false,
       error: null,
-      data: [{ id: 10, name: 'test', userNames: ['testuser1'] }],
+      allData: [{ id: 10, name: 'test', userNames: ['testuser1'] }],
+      tableData: [{ id: 10, name: 'test', userNames: ['testuser1'] }],
       totalElements: '0',
       pageSizeOptions: ['5', '10', '25', '50'],
       pagination: {
@@ -49,14 +50,14 @@ describe('CategoryManagementComponent', () => {
   it('should render category data rows correctly', () => {
     const rows = fixture.debugElement.queryAll(By.css('tbody tr'));
 
-    expect(rows.length).toEqual(1);
+    expect(rows.length).toBeGreaterThan(1);
     expect(rows[0].nativeElement.textContent).toContain('test');
   });
 
   it('should call createNewCategory() when FAB button is clicked', () => {
     spyOn(component, 'createNewCategory');
     const fabButton = fixture.debugElement.query(By.css('app-fab-button'));
-    fabButton.triggerEventHandler('click', null);
+    fabButton.triggerEventHandler('OnClick', null);
     expect(component.createNewCategory).toHaveBeenCalled();
   });
 

@@ -35,11 +35,11 @@
 }
 
 @mixin scrolling-container {
-  overflow-y: scroll;
+  overflow-y: auto;
   max-height: 50vh;
 
   @media (max-width: 576px) {
-    overflow-x: scroll;
+    overflow-x: auto;
   }
 }
 

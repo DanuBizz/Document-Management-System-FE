@@ -1,6 +1,6 @@
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { inject } from '@angular/core';
-import { map, mergeMap, of, switchMap, take } from 'rxjs';
+import { map, mergeMap, of, switchMap } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 import { HttpErrorResponse } from '@angular/common/http';
 import { userActions } from './user.actions';
@@ -61,7 +61,7 @@ export const getUsersWithQuery = createEffect(
   { functional: true }
 );
 
-export const changeDocumentVisibilityEffect = createEffect(
+export const changeUserRoleEffect = createEffect(
   // Injecting dependencies
   (actions$ = inject(Actions), userService = inject(UserService)) => {
     return actions$.pipe(
@@ -130,10 +130,9 @@ export const refreshGetUserWithQuery = createEffect(
     return actions$.pipe(
       ofType(userActions.changeUserRoleSuccess, userActions.changeUserRoleFailure),
       mergeMap(() => {
-        return store.select(selectUserPagination).pipe(
-          take(1),
-          map(pagination => userActions.getUsersWithQuery({ pagination }))
-        );
+        return store
+          .select(selectUserPagination)
+          .pipe(map(pagination => userActions.getUsersWithQuery({ pagination })));
       })
     );
   },

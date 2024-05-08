@@ -22,10 +22,10 @@ import { UserResponseInterface } from '../../type/user-response.interface';
 import { combineLatest } from 'rxjs';
 import {
   selectTotalUserElements,
-  selectUserData,
   selectUserError,
   selectUserIsLoading,
   selectUserPagination,
+  selectUserTableData,
 } from '../store/user.reducers';
 import { userActions } from '../store/user.actions';
 import { MatSlideToggle } from '@angular/material/slide-toggle';
@@ -71,7 +71,7 @@ export class UserManagementComponent implements OnInit {
 
   // Observable combining necessary data from the store for the component
   data$ = combineLatest({
-    users: this.store.select(selectUserData),
+    users: this.store.select(selectUserTableData),
     isLoading: this.store.select(selectUserIsLoading),
     error: this.store.select(selectUserError),
     totalElements: this.store.select(selectTotalUserElements),

@@ -11,7 +11,7 @@
         icon="add"
         tooltip="Neues Dokument erstellen"
         [disabled]="selection.selected.length !== 0"
-        (click)="createNewDocument()"
+        (OnClick)="createNewDocument()"
         id="test-new-document-button">
       </app-fab-button>
 
@@ -20,7 +20,7 @@
         icon="library_add"
         tooltip="Neue Version erstellen"
         [disabled]="selection.selected.length === 0"
-        (click)="createNewVersion()"
+        (OnClick)="createNewVersion()"
         id="test-new-version-button">
       </app-fab-button>
 
@@ -37,7 +37,7 @@
         icon="{{ visibilityIcon }}"
         tooltip="{{ tooltipVisibilityButton }}"
         [disabled]="selection.selected.length === 0"
-        (click)="changeIsVisibleStatusForDocument()"
+        (OnClick)="changeIsVisibleStatusForDocument()"
         id="test-change-visibility-status">
       </app-fab-button>
     </div>
@@ -56,7 +56,7 @@
           (matSortChange)="changeSort($event)"
           multiTemplateDataRows>
           <!-- Select column -->
-          <ng-container matColumnDef="select" sticky>
+          <ng-container matColumnDef="select">
             <th mat-header-cell *matHeaderCellDef>
               <mat-icon>add_task</mat-icon>
             </th>
@@ -68,14 +68,14 @@
           </ng-container>
 
           <!-- ID column -->
-          <ng-container matColumnDef="id" sticky>
+          <ng-container matColumnDef="id">
             <th mat-header-cell *matHeaderCellDef mat-sort-header>ID</th>
             <td mat-cell *matCellDef="let document">
+              @if (document.oldVersions.length > 0) {
+                <mat-icon class="table-icon-hint" *ngIf="expandedDocument === null"> keyboard_arrow_down </mat-icon>
+                <mat-icon class="table-icon-hint" *ngIf="expandedDocument !== null"> keyboard_arrow_up </mat-icon>
+              }
               {{ document.id }}
-
-              <mat-icon class="table-icon-hint" *ngIf="!document.isVisible">
-                {{ visibilityIconList[1] }}
-              </mat-icon>
             </td>
           </ng-container>
 
@@ -84,7 +84,9 @@
             <th mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
             <td mat-cell *matCellDef="let document">
               {{ document.documentName }}
-              <mat-icon class="table-icon-hint" *ngIf="document.oldVersions.length > 0"> expand_more </mat-icon>
+              <mat-icon class="table-icon-hint" *ngIf="!document.isVisible">
+                {{ visibilityIconList[1] }}
+              </mat-icon>
             </td>
           </ng-container>
 
@@ -100,7 +102,7 @@
           <ng-container matColumnDef="categories">
             <th mat-header-cell *matHeaderCellDef>Kategorien</th>
             <td mat-cell *matCellDef="let document">
-              {{ document.categoryNames }}
+              {{ sortAndJoinCategoryNames(document.categoryNames) }}
             </td>
           </ng-container>
 
@@ -109,7 +111,7 @@
             <td mat-cell *matCellDef="let document" colspan="5" class="px-0">
               <table mat-table class="inner-table" [dataSource]="getMatTableData(document.oldVersions)">
                 <!-- Select column inside expanded detail -->
-                <ng-container matColumnDef="select" sticky>
+                <ng-container matColumnDef="select">
                   <th mat-header-cell *matHeaderCellDef>
                     <mat-icon>add_task</mat-icon>
                   </th>
@@ -122,13 +124,10 @@
                 </ng-container>
 
                 <!-- ID column inside expanded detail -->
-                <ng-container matColumnDef="id" sticky>
+                <ng-container matColumnDef="id">
                   <th mat-header-cell *matHeaderCellDef>ID</th>
                   <td mat-cell *matCellDef="let document">
                     {{ document.id }}
-                    <mat-icon class="table-icon-hint" *ngIf="!document.isVisible">
-                      {{ visibilityIconList[1] }}
-                    </mat-icon>
                   </td>
                 </ng-container>
 
@@ -137,6 +136,9 @@
                   <th mat-header-cell *matHeaderCellDef>Name</th>
                   <td mat-cell *matCellDef="let document">
                     {{ document.documentName }}
+                    <mat-icon class="table-icon-hint" *ngIf="!document.isVisible">
+                      {{ visibilityIconList[1] }}
+                    </mat-icon>
                   </td>
                 </ng-container>
 

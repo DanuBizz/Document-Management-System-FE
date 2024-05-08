@@ -45,7 +45,7 @@ describe('CategoryReducers', () => {
     const state = categoryReducer(initialState, action);
     const newState = {
       ...initialState,
-      data: [
+      allData: [
         {
           id: 10,
           name: 'test',
@@ -99,7 +99,7 @@ describe('CategoryReducers', () => {
     const state = categoryReducer(initialState, action);
     const newState = {
       ...initialState,
-      data: categories,
+      tableData: categories,
       totalElements: totalElements,
     };
 
