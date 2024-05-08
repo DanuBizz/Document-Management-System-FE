@@ -18,6 +18,7 @@ import { Store } from '@ngrx/store';
 import {
   selectCategoryError,
   selectCategoryIsLoading,
+  selectCategoryIsSubmitting,
   selectCategoryPageSizeOptions,
   selectCategoryPagination,
   selectCategoryTableData,
@@ -65,10 +66,15 @@ export class CategoryManagementComponent implements OnInit {
     totalElements: this.store.select(selectCategoryTotalElements),
     pageSizeOptions: this.store.select(selectCategoryPageSizeOptions),
     pagination: this.store.select(selectCategoryPagination),
+    isSubmitting: this.store.select(selectCategoryIsSubmitting),
   });
 
   // Pagination and sorting properties for the component ts file
   pagination!: PaginationQueryParamsInterface;
+
+  // Booleans indicating whether data is currently being fetched or submitted to the database
+  isLoading: boolean = false;
+  isSubmitting: boolean = false;
 
   // Columns to display in the table
   displayedColumnsDesktop: string[] = ['edit', 'id', 'name', 'users'];
@@ -95,6 +101,9 @@ export class CategoryManagementComponent implements OnInit {
         pageSize: data.pagination.pageSize,
         sort: data.pagination.sort,
       };
+
+      this.isLoading = data.isLoading;
+      this.isSubmitting = data.isSubmitting;
     });
 
     this.dispatchGetCategoriesWithQueryAction();
@@ -180,4 +189,8 @@ export class CategoryManagementComponent implements OnInit {
   }
 
   editCategoryUsers() {}
+
+  checkIsLoadingIsSubmitting(): boolean {
+    return this.isLoading || this.isSubmitting;
+  }
 }

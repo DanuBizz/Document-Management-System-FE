@@ -192,4 +192,19 @@ mat-form-field {
 
 .mat-column-id {
   border-right: 1px solid black;
+  width: 50px !important;
+}
+
+.mobile-table {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .mobile-table {
+    display: block;
+  }
+
+  .desktop-table {
+    display: none;
+  }
 }

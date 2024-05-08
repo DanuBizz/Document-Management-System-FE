@@ -10,40 +10,37 @@
       <app-fab-button
         icon="add"
         tooltip="Neues Dokument erstellen"
-        [disabled]="selection.selected.length !== 0"
-        (OnClick)="createNewDocument()"
+        [disabled]="selection.selected.length !== 0 || checkIsLoadingIsSubmitting()"
+        (click)="createNewDocument()"
         id="test-new-document-button">
       </app-fab-button>
 
-      <!-- Button to create new version -->
       <app-fab-button
         icon="library_add"
         tooltip="Neue Version erstellen"
-        [disabled]="selection.selected.length === 0"
-        (OnClick)="createNewVersion()"
+        [disabled]="selection.selected.length === 0 || checkIsLoadingIsSubmitting()"
+        (click)="createNewVersion()"
         id="test-new-version-button">
       </app-fab-button>
 
-      <!-- Button to open in browser. Not implemented yet -->
       <app-fab-button
         icon="open_in_browser"
         tooltip="Im Browser öffnen"
-        [disabled]="selection.selected.length === 0"
+        [disabled]="selection.selected.length === 0 || checkIsLoadingIsSubmitting()"
         id="test-open-browser-button">
       </app-fab-button>
 
-      <!-- Toggle-Button to change status "isVisible" for documents-->
       <app-fab-button
-        icon="{{ visibilityIcon }}"
-        tooltip="{{ tooltipVisibilityButton }}"
-        [disabled]="selection.selected.length === 0"
-        (OnClick)="changeIsVisibleStatusForDocument()"
+        [icon]="visibilityIcon"
+        [tooltip]="tooltipVisibilityButton"
+        [disabled]="selection.selected.length === 0 || checkIsLoadingIsSubmitting()"
+        (click)="changeIsVisibleStatusForDocument()"
         id="test-change-visibility-status">
       </app-fab-button>
     </div>
 
     <!-- Progress bar: displayed while data is being fetched -->
-    <mat-progress-bar mode="indeterminate" *ngIf="data.isLoading" color="accent"></mat-progress-bar>
+    <mat-progress-bar mode="indeterminate" *ngIf="checkIsLoadingIsSubmitting()" color="accent"></mat-progress-bar>
 
     <!-- scrolling container for the table -->
     <div class="mat-elevation-z10 mb-2">
@@ -62,6 +59,7 @@
             </th>
             <td mat-cell *matCellDef="let document" (click)="$event.stopPropagation()">
               <mat-checkbox
+                [disabled]="checkIsLoadingIsSubmitting()"
                 (change)="onToggleSelectDocument(document)"
                 [checked]="selection.isSelected(document)"></mat-checkbox>
             </td>
@@ -117,6 +115,7 @@
                   </th>
                   <td mat-cell *matCellDef="let document" (click)="$event.stopPropagation()">
                     <mat-checkbox
+                      [disabled]="checkIsLoadingIsSubmitting()"
                       (change)="onToggleSelectDocument(document)"
                       [checked]="selection.isSelected(document)">
                     </mat-checkbox>

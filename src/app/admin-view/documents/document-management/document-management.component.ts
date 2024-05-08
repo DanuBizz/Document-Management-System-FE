@@ -18,6 +18,7 @@ import {
   selectDocumentData,
   selectDocumentError,
   selectDocumentIsLoading,
+  selectDocumentIsSubmitting,
   selectDocumentPageSizeOptions,
   selectDocumentPagination,
   selectDocumentTotalElements,
@@ -64,10 +65,15 @@ export class DocumentManagementComponent implements OnInit {
     totalElements: this.store.select(selectDocumentTotalElements),
     pageSizeOptions: this.store.select(selectDocumentPageSizeOptions),
     pagination: this.store.select(selectDocumentPagination),
+    isSubmitting: this.store.select(selectDocumentIsSubmitting),
   });
 
   // Pagination and sorting properties for the component ts file
   pagination!: PaginationQueryParamsInterface;
+
+  // Booleans indicating whether data is currently being fetched or submitted to the database
+  isSubmitting: boolean = false;
+  isLoading: boolean = false;
 
   // Currently expanded document
   expandedDocument: DocumentVersionsResponseInterface | null = null;
@@ -106,6 +112,8 @@ export class DocumentManagementComponent implements OnInit {
         pageSize: data.pagination.pageSize,
         sort: data.pagination.sort,
       };
+      this.isLoading = data.isLoading;
+      this.isSubmitting = data.isSubmitting;
     });
 
     this.dispatchGetDocumentsWithQueryAction();
@@ -258,5 +266,9 @@ export class DocumentManagementComponent implements OnInit {
   sortAndJoinCategoryNames(categoryNames: string[]): string {
     const sortedCategoryNames = categoryNames.slice().sort();
     return sortedCategoryNames.join(', ');
+  }
+
+  checkIsLoadingIsSubmitting(): boolean {
+    return this.isLoading || this.isSubmitting;
   }
 }

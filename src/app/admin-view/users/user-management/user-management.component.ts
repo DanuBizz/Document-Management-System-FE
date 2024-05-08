@@ -24,6 +24,7 @@ import {
   selectTotalUserElements,
   selectUserError,
   selectUserIsLoading,
+  selectUserIsSubmitting,
   selectUserPagination,
   selectUserTableData,
 } from '../store/user.reducers';
@@ -64,7 +65,8 @@ export class UserManagementComponent implements OnInit {
   title = 'User Management';
 
   // Columns to display in the table
-  displayedColumns: string[] = ['id', 'username', 'isAdmin'];
+  displayedMobileColumns: string[] = ['id', 'username', 'isAdmin'];
+  displayedDesktopColumns: string[] = ['id', 'username', 'email', 'isAdmin'];
 
   // Currently expanded user
   expandedUser: UserResponseInterface | null = null;
@@ -77,10 +79,15 @@ export class UserManagementComponent implements OnInit {
     totalElements: this.store.select(selectTotalUserElements),
     currentUser: this.store.select(selectCurrentUser),
     pagination: this.store.select(selectUserPagination),
+    isSubmitting: this.store.select(selectUserIsSubmitting),
   });
 
   // Pagination and sorting properties for the component ts file
   pagination!: PaginationQueryParamsInterface;
+
+  // Booleans indicating whether data is currently being fetched or submitted to the database
+  isLoading: boolean = false;
+  isSubmitting: boolean = false;
 
   constructor(
     private store: Store,
@@ -94,6 +101,9 @@ export class UserManagementComponent implements OnInit {
         pageSize: data.pagination.pageSize,
         sort: data.pagination.sort,
       };
+
+      this.isLoading = data.isLoading;
+      this.isSubmitting = data.isSubmitting;
     });
 
     this.dispatchGetUsersWithQueryAction();
@@ -160,5 +170,9 @@ export class UserManagementComponent implements OnInit {
     };
 
     this.dispatchGetUsersWithQueryAction();
+  }
+
+  checkIsLoadingIsSubmitting(): boolean {
+    return this.isLoading || this.isSubmitting;
   }
 }
