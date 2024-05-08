@@ -23,6 +23,16 @@
           [dataSource]="data.category"
           matSort
           (matSortChange)="changeSort($event)">
+          <!-- Column header for edit Category -->
+          <ng-container matColumnDef="edit">
+            <th mat-header-cell *matHeaderCellDef>Edit</th>
+            <td mat-cell *matCellDef="let category" (click)="$event.stopPropagation()">
+              <button mat-icon-button color="accent" [disabled]="data.isLoading" (click)="editCategoryUsers()">
+                <mat-icon>edit</mat-icon>
+              </button>
+            </td>
+          </ng-container>
+
           <!-- Column header for ID -->
           <ng-container matColumnDef="id" sticky>
             <th mat-header-cell *matHeaderCellDef mat-sort-header>ID</th>
@@ -62,8 +72,18 @@
           matSort
           (matSortChange)="changeSort($event)"
           multiTemplateDataRows>
+          <!-- Column header for edit category -->
+          <ng-container matColumnDef="edit">
+            <th mat-header-cell *matHeaderCellDef>Edit</th>
+            <td mat-cell *matCellDef="let category" (click)="$event.stopPropagation()">
+              <button mat-icon-button color="accent" [disabled]="data.isLoading" (click)="editCategoryUsers()">
+                <mat-icon>edit</mat-icon>
+              </button>
+            </td>
+          </ng-container>
+
           <!-- Column header for ID -->
-          <ng-container matColumnDef="id" sticky>
+          <ng-container matColumnDef="id">
             <th mat-header-cell *matHeaderCellDef mat-sort-header>ID</th>
             <td mat-cell *matCellDef="let category">
               <mat-icon class="table-icon-hint" *ngIf="expandedCategory === null"> keyboard_arrow_down </mat-icon>

@@ -71,10 +71,10 @@ export class CategoryManagementComponent implements OnInit {
   pagination!: PaginationQueryParamsInterface;
 
   // Columns to display in the table
-  displayedColumnsDesktop: string[] = ['id', 'name', 'users'];
+  displayedColumnsDesktop: string[] = ['edit', 'id', 'name', 'users'];
 
   // Columns to display in the table
-  displayedColumnsMobile: string[] = ['id', 'name'];
+  displayedColumnsMobile: string[] = ['edit', 'id', 'name'];
 
   // Currently expanded user
   expandedCategory: CategoryResponseInterface | null = null;
@@ -178,4 +178,6 @@ export class CategoryManagementComponent implements OnInit {
       this.expandedCategory = category;
     }
   }
+
+  editCategoryUsers() {}
 }
