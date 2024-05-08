@@ -128,10 +128,12 @@ export class CategoryManagementComponent implements OnInit {
    */
   editCategoryUsers(category: CategoryResponseInterface) {
     openCreateCategoryDialog(this.dialog, category)
-        .pipe(filter(val => !!val))
-        .subscribe(val => {
-          // action
-        });
+      .pipe(filter(val => !!val))
+      .subscribe(val => {
+        const id: number = category.id;
+        const userIds: number[] = val
+            this.store.dispatch(categoryActions.updateCategory({id, userIds}))
+      });
   }
 
   /**

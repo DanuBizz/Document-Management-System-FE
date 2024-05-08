@@ -26,6 +26,9 @@ export const categoriesFeature = createFeature({
   // Reducer functions for the feature
   reducer: createReducer(
     initialState,
+
+    // GET ALL
+
     on(categoryActions.getAllCategories, state => ({
       ...state,
       isLoading: true,
@@ -40,6 +43,8 @@ export const categoriesFeature = createFeature({
       isLoading: false,
       error: action.error,
     })),
+
+    // GET WITH QUERY
 
     on(categoryActions.getCategoriesWithQuery, (state, action) => ({
       ...state,
@@ -58,6 +63,8 @@ export const categoriesFeature = createFeature({
       error: action.error,
     })),
 
+    // CREATE CATEGORY
+
     on(categoryActions.createCategory, state => ({
       ...state,
       isSubmitting: true,
@@ -70,7 +77,24 @@ export const categoriesFeature = createFeature({
       ...state,
       isSubmitting: false,
       error: action.error,
+    })),
+
+    // UPDATE CATEGORY
+
+    on(categoryActions.updateCategory, state => ({
+      ...state,
+      isSubmitting: true,
+    })),
+    on(categoryActions.updateCategorySuccess, state => ({
+      ...state,
+      isSubmitting: false,
+    })),
+    on(categoryActions.updateCategoryFailure, (state, action) => ({
+      ...state,
+      isSubmitting: false,
+      error: action.error,
     }))
+
     // Handling router navigated action
     /*
     on(routerNavigatedAction, state => ({

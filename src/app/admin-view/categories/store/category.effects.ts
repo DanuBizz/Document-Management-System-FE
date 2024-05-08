@@ -87,12 +87,43 @@ export const createCategoryEffect = createEffect(
   { functional: true }
 );
 
+/**
+ * Effect for handling the update of an existing category.
+ * This effect listens for actions of type 'categoryActions.updateCategory'.
+ * using the provided CategoryService. If the update is successful,
+ * it dispatches the 'updateCategorySuccess' action with a success message,
+ * otherwise, it dispatches the 'updateCategoryFailure' action with the error details.
+ */
+export const updateCategoryEffect = createEffect(
+  (actions$ = inject(Actions), categoriesService = inject(CategoryService)) => {
+    return actions$.pipe(
+      ofType(categoryActions.updateCategory),
+      switchMap(({ id, userIds }) => {
+        return categoriesService.updateCategoryUsers(id, userIds).pipe(
+          map(({ message }) => {
+            return categoryActions.updateCategorySuccess({ message });
+          }),
+          catchError((errorResponse: HttpErrorResponse) => {
+            return of(categoryActions.updateCategoryFailure(errorResponse.error));
+          })
+        );
+      })
+    );
+  },
+  { functional: true }
+);
+
 export const openSnackbarErrorEffect = createEffect(
   // Injecting dependencies
   (actions$ = inject(Actions), snackbarService = inject(SnackbarService), store = inject(Store)) => {
     return actions$.pipe(
       // Listening for actions of type 'getAllCategoriesFailure'
-      ofType(categoryActions.getAllCategoriesFailure, categoryActions.getCategoriesWithQueryFailure),
+      ofType(
+        categoryActions.getAllCategoriesFailure,
+        categoryActions.getCategoriesWithQueryFailure,
+        categoryActions.createCategoryFailure,
+        categoryActions.updateCategoryFailure
+      ),
       tap(() => {
         // Subscribing to selectError selector to get the error from the store
         store.select(selectCategoryError).subscribe(error => {
@@ -112,7 +143,7 @@ export const openSnackbarErrorEffect = createEffect(
 export const openSnackbarSuccessEffect = createEffect(
   (actions$ = inject(Actions), snackbarService = inject(SnackbarService)) => {
     return actions$.pipe(
-      ofType(categoryActions.createCategorySuccess),
+      ofType(categoryActions.createCategorySuccess, categoryActions.updateCategorySuccess),
       tap(({ message }) => {
         snackbarService.openSnackBar(message);
       })
@@ -127,7 +158,7 @@ export const openSnackbarSuccessEffect = createEffect(
 export const refreshGetCategoriesEffect = createEffect(
   (actions$ = inject(Actions), store = inject(Store)) => {
     return actions$.pipe(
-      ofType(categoryActions.createCategorySuccess),
+      ofType(categoryActions.createCategorySuccess, categoryActions.updateCategorySuccess),
       mergeMap(() => {
         return store.select(selectCategoryPagination).pipe(
           mergeMap(pagination => {
