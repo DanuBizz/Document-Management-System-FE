@@ -248,4 +248,15 @@ export class DocumentManagementComponent implements OnInit {
 
     this.dispatchGetDocumentsWithQueryAction();
   }
+
+  /**
+   * Sorts an array of category names alphabetically and joins them into a single string.
+   *
+   * @param userNames An array of category names to be sorted and joined.
+   * @return A string containing the sorted category names joined by commas.
+   */
+  sortAndJoinCategoryNames(categoryNames: string[]): string {
+    const sortedCategoryNames = categoryNames.slice().sort();
+    return sortedCategoryNames.join(', ');
+  }
 }

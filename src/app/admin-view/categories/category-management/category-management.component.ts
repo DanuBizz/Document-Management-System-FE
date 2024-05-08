@@ -164,7 +164,7 @@ export class CategoryManagementComponent implements OnInit {
    */
   sortAndJoinUserNames(userNames: string[]): string {
     const sortedUserNames = userNames.slice().sort();
-    return sortedUserNames.join(' , ');
+    return sortedUserNames.join(', ');
   }
 
   /**

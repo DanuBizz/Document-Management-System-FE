@@ -18,8 +18,8 @@ export class UserService {
    * @returns An observable of an array of category response objects.
    */
   fetchAllUsers(): Observable<UserResponseInterface[]> {
-    const queryParamRetrieveAll: string = '?page=0&size=1000';
-    const fullUrl = this.baseUrl + queryParamRetrieveAll;
+    const queryParams: string = '?page=0&size=1000&sort=username,asc';
+    const fullUrl = this.baseUrl + queryParams;
     return this.http.get<{ content: UserResponseInterface[] }>(fullUrl).pipe(map(response => response.content));
   }
 
