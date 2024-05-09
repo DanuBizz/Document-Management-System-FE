@@ -32,6 +32,7 @@ import { categoryActions } from '../../categories/store/category.actions';
 import { DocumentResponseInterface } from '../../type/document-response.interface';
 import { DocumentVersionsResponseInterface } from '../../type/document-versions-response.interface';
 import { PaginationQueryParamsInterface } from '../../../shared/type/pagination-query-params.interface';
+import { MatDivider } from '@angular/material/divider';
 
 @Component({
   selector: 'app-document-management',
@@ -49,6 +50,7 @@ import { PaginationQueryParamsInterface } from '../../../shared/type/pagination-
     MatCheckbox,
     FabButtonComponent,
     MatProgressBar,
+    MatDivider,
   ],
   providers: [DocumentService],
   templateUrl: './document-management.component.html',
