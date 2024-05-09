@@ -12,8 +12,8 @@ describe('CategoryService', () => {
   const baseUrl = environment.apiUrl + '/categories';
 
   const dummyCategories: CategoryResponseInterface[] = [
-    { id: 1, name: 'Category 1', userNames: ['user1'] },
-    { id: 2, name: 'Category 2', userNames: ['user1', 'user2'] },
+    { id: 1, name: 'Category 1', userNames: ['user1'], userIds: [1] },
+    { id: 2, name: 'Category 2', userNames: ['user1', 'user2'], userIds: [1, 2] },
   ];
 
   const pagination: PaginationQueryParamsInterface = {

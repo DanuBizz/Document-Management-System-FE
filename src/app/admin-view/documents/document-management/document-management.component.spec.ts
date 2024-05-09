@@ -79,8 +79,8 @@ describe('DocumentManagementComponent', () => {
 
   it('should call createNewDocument() when FAB button is clicked', () => {
     spyOn(component, 'createNewDocument');
-    const fabButton = fixture.debugElement.query(By.css('app-fab-button'));
-    fabButton.triggerEventHandler('OnClick', null);
+    const fabButton = fixture.debugElement.query(By.css('#test-new-document-button'));
+    fabButton.triggerEventHandler('click', null);
     expect(component.createNewDocument).toHaveBeenCalled();
   });
 

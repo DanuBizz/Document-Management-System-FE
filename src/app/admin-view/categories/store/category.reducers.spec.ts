@@ -39,6 +39,7 @@ describe('CategoryReducers', () => {
           id: 10,
           name: 'test',
           userNames: ['user1', 'user2'],
+          userIds: [1],
         },
       ],
     });
@@ -50,6 +51,7 @@ describe('CategoryReducers', () => {
           id: 10,
           name: 'test',
           userNames: ['user1', 'user2'],
+          userIds: [1],
         },
       ],
     };
@@ -88,6 +90,7 @@ describe('CategoryReducers', () => {
         id: 10,
         name: 'test',
         userNames: ['user1', 'user2'],
+        userIds: [1],
       },
     ];
     const totalElements = '1';

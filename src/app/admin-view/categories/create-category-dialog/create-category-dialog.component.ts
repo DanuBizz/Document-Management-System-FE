@@ -43,7 +43,7 @@ import { CategoryRequestInterface } from '../../type/category-request.interface'
   styleUrl: './create-category-dialog.component.scss',
 })
 export class CreateCategoryDialogComponent {
-  dialogTitle = 'Neues Kategorie erstellen';
+  dialogTitle = 'Neue Kategorie erstellen';
 
   // Form field name and categoryIds for the dialog, if category already exists
   formName: string = '';
@@ -132,7 +132,7 @@ export class CreateCategoryDialogComponent {
    */
   save() {
     if (this.category !== null) {
-      const newUserIds: number[] = this.form.value.categoryId;
+      const newUserIds: number[] = this.form.value.userIds;
       this.dialogRef.close(newUserIds);
     } else {
       const newCategory: CategoryRequestInterface = {
