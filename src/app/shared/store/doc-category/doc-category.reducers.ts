@@ -1,4 +1,4 @@
-import { DocCategoryStateInterface } from '../type/doc-category-state.interface';
+import { DocCategoryStateInterface } from '../../type/doc-category-state.interface';
 import { createFeature, createReducer, on } from '@ngrx/store';
 import { docCategoryActions } from './doc-category.actions';
 

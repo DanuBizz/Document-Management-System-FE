@@ -13,4 +13,8 @@ export const routes: Routes = [
     path: 'login',
     loadChildren: () => import('./auth/auth.routes').then(m => m.LOGIN_ROUTES),
   },
+  {
+    path: 'web-view',
+    loadChildren: () => import('./web-view/web-view.routes').then(m => m.WEB_VIEW_ROUTES),
+  },
 ];

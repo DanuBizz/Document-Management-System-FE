@@ -1,6 +1,6 @@
 import { createActionGroup, emptyProps, props } from '@ngrx/store';
-import { DocCategoryResponseInterface } from '../type/doc-category-response.interface';
-import { BackendErrorsInterface } from '../type/backend-erros.interface';
+import { DocCategoryResponseInterface } from '../../type/doc-category-response.interface';
+import { BackendErrorsInterface } from '../../type/backend-erros.interface';
 
 export const docCategoryActions = createActionGroup({
   source: 'doc-category',
