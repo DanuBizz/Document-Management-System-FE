@@ -1,6 +1,7 @@
 import { createFeature, createReducer, on } from '@ngrx/store';
 import { fileActions } from './file.actions';
 import { FileStateInterface } from '../../type/file-state.interface';
+import { routerNavigatedAction } from '@ngrx/router-store';
 
 export const initialState: FileStateInterface = {
   data: [],
@@ -25,12 +26,8 @@ export const fileFeature = createFeature({
       ...state,
       isLoading: false,
       error: action.error,
-    }))
-
-    // Handling router navigated action
-    /*
-            on(routerNavigatedAction, () => (initialState))
-            */
+    })),
+    on(routerNavigatedAction, () => initialState)
   ),
 });
 

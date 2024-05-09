@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { FileService } from '../../../shared/service/file.service';
-import { selectFileData } from '../../../shared/store/file/file.reducers';
 import { Store } from '@ngrx/store';
 
 @Component({
