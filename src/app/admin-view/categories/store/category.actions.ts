@@ -18,5 +18,9 @@ export const categoryActions = createActionGroup({
     'create category': props<{ category: CategoryRequestInterface }>(),
     'create category success': props<{ message: string }>(),
     'create category failure': props<{ error: BackendErrorsInterface }>(),
+
+    'update category': props<{ id: number; userIds: number[] }>(),
+    'update category success': props<{ message: string }>(),
+    'update category failure': props<{ error: BackendErrorsInterface }>(),
   },
 });

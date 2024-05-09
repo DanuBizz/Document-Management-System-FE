@@ -1,4 +1,7 @@
-.mat-column-id,
 .mat-column-select {
-  width: 50px !important;
+  width: 70px !important;
+}
+.mdc-data-table__cell,
+.mdc-data-table__header-cell {
+  padding: 0 !important;
 }

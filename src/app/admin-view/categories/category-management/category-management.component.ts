@@ -18,6 +18,7 @@ import { Store } from '@ngrx/store';
 import {
   selectCategoryError,
   selectCategoryIsLoading,
+  selectCategoryIsSubmitting,
   selectCategoryPageSizeOptions,
   selectCategoryPagination,
   selectCategoryTableData,
@@ -65,10 +66,15 @@ export class CategoryManagementComponent implements OnInit {
     totalElements: this.store.select(selectCategoryTotalElements),
     pageSizeOptions: this.store.select(selectCategoryPageSizeOptions),
     pagination: this.store.select(selectCategoryPagination),
+    isSubmitting: this.store.select(selectCategoryIsSubmitting),
   });
 
   // Pagination and sorting properties for the component ts file
   pagination!: PaginationQueryParamsInterface;
+
+  // Booleans indicating whether data is currently being fetched or submitted to the database
+  isLoading: boolean = false;
+  isSubmitting: boolean = false;
 
   // Columns to display in the table
   displayedColumnsDesktop: string[] = ['edit', 'id', 'name', 'users'];
@@ -95,6 +101,9 @@ export class CategoryManagementComponent implements OnInit {
         pageSize: data.pagination.pageSize,
         sort: data.pagination.sort,
       };
+
+      this.isLoading = data.isLoading;
+      this.isSubmitting = data.isSubmitting;
     });
 
     this.dispatchGetCategoriesWithQueryAction();
@@ -102,16 +111,28 @@ export class CategoryManagementComponent implements OnInit {
 
   /**
    * Opens a dialog to create a new category.
-   * This method is prepared but not fully implemented.
    */
   createNewCategory() {
-    openCreateCategoryDialog(this.dialog)
+    openCreateCategoryDialog(this.dialog, null)
       .pipe(filter(val => !!val))
       .subscribe(val => {
         const newCategory: CategoryRequestInterface = {
           ...val,
         };
         this.store.dispatch(categoryActions.createCategory({ category: newCategory }));
+      });
+  }
+
+  /**
+   * Opens a dialog to update an existing category.
+   */
+  editCategoryUsers(category: CategoryResponseInterface) {
+    openCreateCategoryDialog(this.dialog, category)
+      .pipe(filter(val => !!val))
+      .subscribe(val => {
+        const id: number = category.id;
+        const userIds: number[] = val;
+        this.store.dispatch(categoryActions.updateCategory({ id, userIds }));
       });
   }
 
@@ -157,14 +178,14 @@ export class CategoryManagementComponent implements OnInit {
   }
 
   /**
-   * Sorts an array of user names alphabetically and joins them into a single string.
+   * Sorts an array of category names alphabetically and joins them into a single string.
    *
-   * @param userNames An array of user names to be sorted and joined.
-   * @return A string containing the sorted user names joined by commas.
+   * @param userNames An array of category names to be sorted and joined.
+   * @return A string containing the sorted category names joined by commas.
    */
-  sortAndJoinUserNames(userNames: string[]): string {
-    const sortedUserNames = userNames.slice().sort();
-    return sortedUserNames.join(', ');
+  sortAndJoinCategoryNames(userNames: string[]): string {
+    const sortedCategoryNames = userNames.slice().sort();
+    return sortedCategoryNames.join(', ');
   }
 
   /**
@@ -179,5 +200,7 @@ export class CategoryManagementComponent implements OnInit {
     }
   }
 
-  editCategoryUsers() {}
+  checkIsLoadingIsSubmitting(): boolean {
+    return this.isLoading || this.isSubmitting;
+  }
 }

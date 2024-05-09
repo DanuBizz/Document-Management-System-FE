@@ -1,22 +1,7 @@
-.mat-column-id,
 .mat-column-edit {
-  width: 60px !important;
+  width: 50px !important;
 }
 
 .mat-column-name {
   width: 350px !important;
-}
-
-.mobile-table {
-  display: none;
-}
-
-@media (max-width: 768px) {
-  .mobile-table {
-    display: block;
-  }
-
-  .desktop-table {
-    display: none;
-  }
 }

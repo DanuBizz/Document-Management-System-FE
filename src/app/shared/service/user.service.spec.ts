@@ -33,7 +33,7 @@ describe('UserService', () => {
   });
 
   it('should retrieve all users from the API', () => {
-    const queryParamRetrieveAll: string = '?page=0&size=1000';
+    const queryParamRetrieveAll: string = '?page=0&size=1000&sort=username,asc';
 
     service.fetchAllUsers().subscribe(users => {
       expect(users.length).toBe(2);
