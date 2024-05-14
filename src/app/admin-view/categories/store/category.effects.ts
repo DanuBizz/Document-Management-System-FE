@@ -128,7 +128,7 @@ export const openSnackbarErrorEffect = createEffect(
         // Subscribing to selectError selector to get the error from the store
         store.select(selectCategoryError).subscribe(error => {
           // Opening a snackbar to display the error message
-          snackbarService.openSnackBar('Fehler beim laden der Kategorien. \nError: ' + JSON.stringify(error));
+          snackbarService.openSnackBar('Fehler beim Übermitteln der Kategorien. \nError: ' + JSON.stringify(error));
         });
       })
     );

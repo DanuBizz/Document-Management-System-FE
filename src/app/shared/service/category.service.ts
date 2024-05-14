@@ -65,9 +65,11 @@ export class CategoryService {
    * Method to update the users of an existing category.
    * @returns An observable containing a success message upon successful creation.
    */
-  updateCategoryUsers(id: number, userIds: number[]) {
+  updateCategoryUsers(id: number, userIds: number[]): Observable<{ message: string }> {
+
+    console.log(userIds);
     return this.http
-      .put<{ message: string }>(this.baseUrl + `/${id}`, userIds)
+      .put<{ message: string }>(this.baseUrl + `/${id}`, {userIds: userIds})
       .pipe(map(() => ({ message: 'Erfolgreich geändert' })));
   }
 }
