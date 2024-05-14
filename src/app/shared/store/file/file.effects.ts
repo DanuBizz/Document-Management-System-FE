@@ -9,7 +9,6 @@ import { SnackbarService } from '../../service/snackbar.service';
 import { Store } from '@ngrx/store';
 import { selectFileError } from './file.reducers';
 import { Router } from '@angular/router';
-import { authActions } from '../../../auth/store/auth.actions';
 
 export const getFileEffect = createEffect(
   (actions$ = inject(Actions), fileService = inject(FileService)) => {
@@ -17,7 +16,7 @@ export const getFileEffect = createEffect(
       ofType(fileActions.getFile),
       switchMap(({ id }) => {
         return fileService.fetchFile(id).pipe(
-          map((file: File[]) => {
+          map((file: Blob) => {
             return fileActions.getFileSuccess({ file });
           }),
           catchError((errorResponse: HttpErrorResponse) => {

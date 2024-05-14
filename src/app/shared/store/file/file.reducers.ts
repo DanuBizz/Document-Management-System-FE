@@ -4,7 +4,7 @@ import { FileStateInterface } from '../../type/file-state.interface';
 import { routerNavigatedAction } from '@ngrx/router-store';
 
 export const initialState: FileStateInterface = {
-  data: [],
+  data: null,
   error: null,
   isLoading: false,
 };

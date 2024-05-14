@@ -5,7 +5,7 @@ export const fileActions = createActionGroup({
   source: 'file',
   events: {
     'get file': props<{ id: number }>(),
-    'get file success': props<{ file: File[] }>(),
+    'get file success': props<{ file: Blob }>(),
     'get file failure': props<{ error: BackendErrorsInterface }>(),
   },
 });

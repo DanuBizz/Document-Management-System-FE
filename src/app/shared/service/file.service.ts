@@ -8,18 +8,22 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
   providedIn: 'root',
 })
 export class FileService {
-  private baseUrl: string = environment.apiUrl + '/documents';
+  private baseUrl: string = environment.apiUrl + '/documentVersions';
 
   constructor(
     private http: HttpClient,
     private sanitizer: DomSanitizer
   ) {}
 
-  fetchFile(id: number): Observable<File[]> {
-    return this.http.get<File[]>(this.baseUrl + `/${id}`).pipe(map(response => response));
+  fetchFile(id: number): Observable<Blob> {
+    return this.http.get(this.baseUrl + `/${id}/file`, { responseType: 'blob' }).pipe(
+      map(response => {
+        return response as Blob;
+      })
+    );
   }
 
-  getFileUrl(file: File): SafeResourceUrl {
+  getFileUrl(file: Blob): SafeResourceUrl {
     const unsafeUrl = URL.createObjectURL(file);
     return this.sanitizer.bypassSecurityTrustResourceUrl(unsafeUrl);
   }
