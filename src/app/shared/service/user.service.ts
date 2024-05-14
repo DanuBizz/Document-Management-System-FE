@@ -59,7 +59,7 @@ export class UserService {
    */
   updateUserRole(id: number, isAdmin: boolean) {
     return this.http
-      .put<{ message: string }>(this.baseUrl + `/${id}`, { isAdmin: isAdmin })
+      .put<{ message: string }>(this.baseUrl + `/${id}/toggle-admin`, { isAdmin: isAdmin })
       .pipe(map(() => ({ message: 'Erfolgreich geändert' })));
   }
 }
