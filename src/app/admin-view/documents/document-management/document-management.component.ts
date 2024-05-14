@@ -33,6 +33,7 @@ import { DocumentResponseInterface } from '../../type/document-response.interfac
 import { DocumentVersionsResponseInterface } from '../../type/document-versions-response.interface';
 import { PaginationQueryParamsInterface } from '../../../shared/type/pagination-query-params.interface';
 import { MatDivider } from '@angular/material/divider';
+import { fileActions } from '../../../shared/store/file/file.actions';
 
 @Component({
   selector: 'app-document-management',
@@ -272,5 +273,9 @@ export class DocumentManagementComponent implements OnInit {
 
   checkIsLoadingIsSubmitting(): boolean {
     return this.isLoading || this.isSubmitting;
+  }
+
+  openDocumentInBrowser() {
+    this.store.dispatch(fileActions.getFile({ id: this.selection.selected.at(0)!.id }));
   }
 }

@@ -3,11 +3,11 @@ import { inject } from '@angular/core';
 import { map, of, switchMap } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 import { HttpErrorResponse } from '@angular/common/http';
-import { SnackbarService } from '../service/snackbar.service';
+import { SnackbarService } from '../../service/snackbar.service';
 import { Store } from '@ngrx/store';
 import { docCategoryActions } from './doc-category.actions';
-import { DocumentCategoryService } from '../service/document-category.service';
-import { DocCategoryResponseInterface } from '../type/doc-category-response.interface';
+import { DocumentCategoryService } from '../../service/document-category.service';
+import { DocCategoryResponseInterface } from '../../type/doc-category-response.interface';
 import { selectDocCategoryError } from './doc-category.reducers';
 
 export const getAllDocCategoryEffect = createEffect(

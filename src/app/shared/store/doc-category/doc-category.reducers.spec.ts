@@ -1,6 +1,6 @@
 import { docCategoryReducer, initialState } from './doc-category.reducers';
 import { docCategoryActions } from './doc-category.actions';
-import { DocCategoryResponseInterface } from '../type/doc-category-response.interface';
+import { DocCategoryResponseInterface } from '../../type/doc-category-response.interface';
 
 describe('DocCategoryReducers', () => {
   const docCategory: DocCategoryResponseInterface[] = [
