@@ -42,7 +42,7 @@ export const redirectAfterLoginEffect = createEffect(
     return actions$.pipe(
       ofType(authActions.loginSuccess),
       tap(() => {
-        router.navigateByUrl('/admin/document');
+        router.navigateByUrl('/user');
       })
     );
   },

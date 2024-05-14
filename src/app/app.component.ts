@@ -5,9 +5,9 @@ import { MatCardModule } from '@angular/material/card';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
-import {MatSidenavModule} from "@angular/material/sidenav";
-import {MatListItem, MatNavList} from "@angular/material/list";
-import {MatDivider} from "@angular/material/divider";
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatListItem, MatNavList } from '@angular/material/list';
+import { MatDivider } from '@angular/material/divider';
 
 @Component({
   selector: 'app-root',
