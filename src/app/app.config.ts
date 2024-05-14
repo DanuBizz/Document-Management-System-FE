@@ -6,7 +6,8 @@ import * as categoriesEffects from './admin-view/categories/store/category.effec
 import * as documentEffects from './admin-view/documents/store/document.effects';
 import * as authEffects from './auth/store/auth.effects';
 import * as userEffects from './admin-view/users/store/user.effects';
-import * as docCategoryEffects from './shared/store/doc-category.effects';
+import * as docCategoryEffects from './shared/store/doc-category/doc-category.effects';
+import * as fileEffects from './shared/store/file/file.effects';
 
 import { routes } from './app.routes';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
@@ -20,7 +21,8 @@ import { documentFeatureKey, documentReducer } from './admin-view/documents/stor
 import { authFeatureKey, authReducer } from './auth/store/auth.reducers';
 import { authInterceptor } from './shared/service/auth-interceptor.service';
 import { userFeatureKey, userReducer } from './admin-view/users/store/user.reducers';
-import { docCategoryFeatureKey, docCategoryReducer } from './shared/store/doc-category.reducers';
+import { docCategoryFeatureKey, docCategoryReducer } from './shared/store/doc-category/doc-category.reducers';
+import { fileFeatureKey, fileReducer } from './shared/store/file/file.reducers';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -38,8 +40,9 @@ export const appConfig: ApplicationConfig = {
     provideState(documentFeatureKey, documentReducer),
     provideState(userFeatureKey, userReducer),
     provideState(docCategoryFeatureKey, docCategoryReducer),
+    provideState(fileFeatureKey, fileReducer),
     // Provide effects
-    provideEffects([categoriesEffects, documentEffects, authEffects, userEffects, docCategoryEffects]),
+    provideEffects([categoriesEffects, documentEffects, authEffects, userEffects, docCategoryEffects, fileEffects]),
     // Provide router store
     provideRouterStore(),
     // Provide store devtools configuration

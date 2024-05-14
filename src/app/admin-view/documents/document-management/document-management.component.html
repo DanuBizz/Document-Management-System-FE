@@ -27,6 +27,7 @@
         icon="open_in_browser"
         tooltip="Im Browser öffnen"
         [disabled]="selection.selected.length === 0 || checkIsLoadingIsSubmitting()"
+        (click)="openDocumentInBrowser()"
         id="test-open-browser-button">
       </app-fab-button>
 

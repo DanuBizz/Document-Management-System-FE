@@ -26,8 +26,8 @@ import { selectCategoryAllData } from '../../categories/store/category.reducers'
 import { DocumentResponseInterface } from '../../type/document-response.interface';
 import { CategoryResponseInterface } from '../../type/category-response.interface';
 import { DocCategoryResponseInterface } from '../../../shared/type/doc-category-response.interface';
-import { docCategoryActions } from '../../../shared/store/doc-category.actions';
-import { selectDocCategoryData } from '../../../shared/store/doc-category.reducers';
+import { docCategoryActions } from '../../../shared/store/doc-category/doc-category.actions';
+import { selectDocCategoryData } from '../../../shared/store/doc-category/doc-category.reducers';
 import { DocumentRequestInterface } from '../../type/document-request.interface';
 import { FabButtonComponent } from '../../../shared/component/fab-button/fab-button.component';
 
