@@ -17,4 +17,8 @@ export const routes: Routes = [
     path: 'web-view',
     loadChildren: () => import('./web-view/web-view.routes').then(m => m.WEB_VIEW_ROUTES),
   },
+  {
+    path: 'user',
+    loadChildren: () => import('./user-view/user.routes').then(r => r.USER_ROUTES),
+  },
 ];
