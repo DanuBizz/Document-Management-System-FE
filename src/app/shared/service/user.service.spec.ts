@@ -75,7 +75,7 @@ describe('UserService', () => {
       expect(response).toEqual(dummyResponse);
     });
 
-    const req = httpMock.expectOne(baseUrl + `/${userId}`);
+    const req = httpMock.expectOne(baseUrl + `/${userId}/toggle-admin`);
     expect(req.request.method).toBe('PUT');
     req.flush(dummyResponse);
   });
