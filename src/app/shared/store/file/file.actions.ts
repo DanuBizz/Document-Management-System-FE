@@ -1,6 +1,6 @@
-import {createActionGroup, props} from '@ngrx/store';
-import {BackendErrorsInterface} from '../../type/backend-erros.interface';
-import {SafeResourceUrl} from '@angular/platform-browser';
+import { createActionGroup, props } from '@ngrx/store';
+import { BackendErrorsInterface } from '../../type/backend-erros.interface';
+import { SafeResourceUrl } from '@angular/platform-browser';
 
 export const fileActions = createActionGroup({
   source: 'file',

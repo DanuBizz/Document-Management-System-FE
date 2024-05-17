@@ -296,9 +296,7 @@ export class DocumentManagementComponent implements OnInit {
   openDialogSubscription() {
     this.store
       .select(selectFileData)
-      .pipe(
-        first(fileUrl => fileUrl !== null)
-      )
+      .pipe(first(fileUrl => fileUrl !== null))
       .subscribe(() => {
         openDisplayDocumentDialog(this.dialog);
       });
