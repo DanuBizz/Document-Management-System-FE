@@ -1,48 +1,49 @@
 <!-- Container to utilize data once data$ has been fetched -->
 <ng-container *ngIf="data$ | async as data">
   <div class="container-fluid">
-    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="form-control form-sign-in">
-      <!-- Title -->
-      <h1>{{ title }}</h1>
+    <mat-card>
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="form-sign-in">
+        <!-- Title -->
+        <h1>{{ title }}</h1>
 
-      <!-- Displays backend error messages if available -->
-      <app-backend-error-messages
-        *ngIf="data.backendErrors"
-        [backendErrors]="data.backendErrors"></app-backend-error-messages>
+        <!-- Displays backend error messages if available -->
+        <app-backend-error-messages *ngIf="data.backendErrors" [backendErrors]="data.backendErrors">
+        </app-backend-error-messages>
 
-      <!-- Text input for user email -->
-      <div class="form-group">
-        <mat-form-field appearance="outline" hideRequiredMarker="true">
-          <mat-label>Email</mat-label>
-          <input matInput type="email" formControlName="email" />
-          <mat-icon matSuffix class="large-icon">email</mat-icon>
-          @if (loginForm.controls['email'].hasError('required')) {
-            <mat-error>Email ist <strong>erforderlich</strong></mat-error>
-          }
-        </mat-form-field>
-      </div>
+        <!-- Text input for user email -->
+        <div class="form-group">
+          <mat-form-field appearance="outline" hideRequiredMarker="true">
+            <mat-label>Email</mat-label>
+            <input matInput type="email" formControlName="email" />
+            <mat-icon matSuffix class="large-icon">email</mat-icon>
+            @if (loginForm.controls['email'].hasError('required')) {
+              <mat-error>Email ist <strong>erforderlich</strong></mat-error>
+            }
+          </mat-form-field>
+        </div>
 
-      <!-- Text input for user password -->
-      <div class="form-group">
-        <mat-form-field appearance="outline" hideRequiredMarker="true">
-          <mat-label>Passwort</mat-label>
-          <input matInput type="password" formControlName="password" />
-          <mat-icon matSuffix class="large-icon">key</mat-icon>
-          @if (loginForm.controls['password'].hasError('required')) {
-            <mat-error>Passwort ist <strong>erforderlich</strong></mat-error>
-          }
-        </mat-form-field>
-      </div>
+        <!-- Text input for user password -->
+        <div class="form-group">
+          <mat-form-field appearance="outline" hideRequiredMarker="true">
+            <mat-label>Passwort</mat-label>
+            <input matInput type="password" formControlName="password" />
+            <mat-icon matSuffix class="large-icon">key</mat-icon>
+            @if (loginForm.controls['password'].hasError('required')) {
+              <mat-error>Passwort ist <strong>erforderlich</strong></mat-error>
+            }
+          </mat-form-field>
+        </div>
 
-      <!-- Checkbox to remain signed in  -->
-      <div class="form-group">
-        <mat-checkbox color="primary">Angemeldet bleiben</mat-checkbox>
-      </div>
+        <!-- Checkbox to remain signed in  -->
+        <div class="form-group">
+          <mat-checkbox color="primary">Angemeldet bleiben</mat-checkbox>
+        </div>
 
-      <!-- Login-Button  -->
-      <button mat-raised-button color="primary" class="sign-in-button" type="submit" [disabled]="!loginForm.valid">
-        Login
-      </button>
-    </form>
+        <!-- Login-Button  -->
+        <button mat-raised-button color="primary" class="sign-in-button" type="submit" [disabled]="!loginForm.valid">
+          Login
+        </button>
+      </form>
+    </mat-card>
   </div>
 </ng-container>
