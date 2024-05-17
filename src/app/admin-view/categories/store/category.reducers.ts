@@ -24,76 +24,112 @@ export const initialState: CategoryStateInterface = {
 export const categoriesFeature = createFeature({
   name: 'categories',
   // Reducer functions for the feature
-  reducer: createReducer(
+  reducer: createReducer<CategoryStateInterface>(
     initialState,
 
     // GET ALL
 
-    on(categoryActions.getAllCategories, state => ({
-      ...state,
-      isLoading: true,
-    })),
-    on(categoryActions.getAllCategoriesSuccess, (state, action) => ({
-      ...state,
-      isLoading: false,
-      allData: action.category,
-    })),
-    on(categoryActions.getAllCategoriesFailure, (state, action) => ({
-      ...state,
-      isLoading: false,
-      error: action.error,
-    })),
+    on(
+      categoryActions.getAllCategories,
+      (state): CategoryStateInterface => ({
+        ...state,
+        isLoading: true,
+      })
+    ),
+    on(
+      categoryActions.getAllCategoriesSuccess,
+      (state, action): CategoryStateInterface => ({
+        ...state,
+        isLoading: false,
+        allData: action.category,
+      })
+    ),
+    on(
+      categoryActions.getAllCategoriesFailure,
+      (state, action): CategoryStateInterface => ({
+        ...state,
+        isLoading: false,
+        error: action.error,
+      })
+    ),
 
     // GET WITH QUERY
 
-    on(categoryActions.getCategoriesWithQuery, (state, action) => ({
-      ...state,
-      isLoading: true,
-      pagination: action.pagination,
-    })),
-    on(categoryActions.getCategoriesWithQuerySuccess, (state, { categories, totalElements }) => ({
-      ...state,
-      isLoading: false,
-      tableData: categories,
-      totalElements: totalElements,
-    })),
-    on(categoryActions.getCategoriesWithQueryFailure, (state, action) => ({
-      ...state,
-      isLoading: false,
-      error: action.error,
-    })),
+    on(
+      categoryActions.getCategoriesWithQuery,
+      (state, action): CategoryStateInterface => ({
+        ...state,
+        isLoading: true,
+        pagination: action.pagination,
+      })
+    ),
+    on(
+      categoryActions.getCategoriesWithQuerySuccess,
+      (state, { categories, totalElements }): CategoryStateInterface => ({
+        ...state,
+        isLoading: false,
+        tableData: categories,
+        totalElements: totalElements,
+      })
+    ),
+    on(
+      categoryActions.getCategoriesWithQueryFailure,
+      (state, action): CategoryStateInterface => ({
+        ...state,
+        isLoading: false,
+        error: action.error,
+      })
+    ),
 
     // CREATE CATEGORY
 
-    on(categoryActions.createCategory, state => ({
-      ...state,
-      isSubmitting: true,
-    })),
-    on(categoryActions.createCategorySuccess, state => ({
-      ...state,
-      isSubmitting: false,
-    })),
-    on(categoryActions.createCategoryFailure, (state, action) => ({
-      ...state,
-      isSubmitting: false,
-      error: action.error,
-    })),
+    on(
+      categoryActions.createCategory,
+      (state): CategoryStateInterface => ({
+        ...state,
+        isSubmitting: true,
+      })
+    ),
+    on(
+      categoryActions.createCategorySuccess,
+      (state): CategoryStateInterface => ({
+        ...state,
+        isSubmitting: false,
+      })
+    ),
+    on(
+      categoryActions.createCategoryFailure,
+      (state, action): CategoryStateInterface => ({
+        ...state,
+        isSubmitting: false,
+        error: action.error,
+      })
+    ),
 
     // UPDATE CATEGORY
 
-    on(categoryActions.updateCategory, state => ({
-      ...state,
-      isSubmitting: true,
-    })),
-    on(categoryActions.updateCategorySuccess, state => ({
-      ...state,
-      isSubmitting: false,
-    })),
-    on(categoryActions.updateCategoryFailure, (state, action) => ({
-      ...state,
-      isSubmitting: false,
-      error: action.error,
-    }))
+    on(
+      categoryActions.updateCategory,
+      (state): CategoryStateInterface => ({
+        ...state,
+        isSubmitting: true,
+      })
+    ),
+    on(
+      categoryActions.updateCategorySuccess,
+      (state): CategoryStateInterface => ({
+        ...state,
+        isSubmitting: false,
+      })
+    ),
+    on(
+      categoryActions.updateCategoryFailure,
+      (state, action): CategoryStateInterface => ({
+        ...state,
+        isSubmitting: false,
+        error: action.error,
+      })
+    )
 
     // Handling router navigated action
     /*

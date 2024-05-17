@@ -6,7 +6,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSortModule, Sort } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatButtonModule } from '@angular/material/button';
-import { combineLatest, filter } from 'rxjs';
+import { combineLatest, filter, first } from 'rxjs';
 import { DocumentService } from '../../../shared/service/document.service';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
@@ -34,6 +34,8 @@ import { DocumentVersionsResponseInterface } from '../../type/document-versions-
 import { PaginationQueryParamsInterface } from '../../../shared/type/pagination-query-params.interface';
 import { MatDivider } from '@angular/material/divider';
 import { fileActions } from '../../../shared/store/file/file.actions';
+import { openDisplayDocumentDialog } from '../../../shared/component/display-document-dialog/display-document-dialog.config';
+import { selectFileData } from '../../../shared/store/file/file.reducers';
 
 @Component({
   selector: 'app-document-management',
@@ -263,8 +265,8 @@ export class DocumentManagementComponent implements OnInit {
   /**
    * Sorts an array of category names alphabetically and joins them into a single string.
    *
-   * @param userNames An array of category names to be sorted and joined.
    * @return A string containing the sorted category names joined by commas.
+   * @param categoryNames
    */
   sortAndJoinCategoryNames(categoryNames: string[]): string {
     const sortedCategoryNames = categoryNames.slice().sort();
@@ -275,7 +277,28 @@ export class DocumentManagementComponent implements OnInit {
     return this.isLoading || this.isSubmitting;
   }
 
+  /**
+   * Get the ID of the selected item
+   * Dispatch an action to get the file with the given ID
+   * Subscribe to open the dialog
+   */
   openDocumentInBrowser() {
-    this.store.dispatch(fileActions.getFile({ id: this.selection.selected.at(0)!.id }));
+    const id = this.selection.selected.at(0)!.id;
+    this.store.dispatch(fileActions.getFile({ id }));
+
+    this.openDialogSubscription();
+  }
+
+  /**
+   * Subscribes to the file data selector and opens the display document dialog
+   * once the file data is available.
+   */
+  openDialogSubscription() {
+    this.store
+      .select(selectFileData)
+      .pipe(first(fileUrl => fileUrl !== null))
+      .subscribe(() => {
+        openDisplayDocumentDialog(this.dialog);
+      });
   }
 }

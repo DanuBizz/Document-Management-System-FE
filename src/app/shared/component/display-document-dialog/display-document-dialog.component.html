@@ -1,0 +1,15 @@
+<div class="dialog-container">
+  <!-- Dialog content -->
+  <div class="dialog-content">
+    <ng-container *ngIf="data$ | async as data">
+      @if (!data.isLoading && data.fileUrl !== null) {
+        <iframe [src]="data.fileUrl" class="iframe-content"></iframe>
+      }
+    </ng-container>
+  </div>
+
+  <!-- Dialog actions -->
+  <div class="dialog-actions">
+    <button mat-raised-button color="accent" (click)="close()">Schließen</button>
+  </div>
+</div>

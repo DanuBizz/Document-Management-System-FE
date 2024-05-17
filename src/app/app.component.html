@@ -1,67 +1,120 @@
-<div class="d-flex flex-column vh-100">
-  <!-- Toolbar for desktop navigation -->
-  <mat-toolbar color="accent" class="desktop-nav">
-    <div class="toolbar-tools">
-      <!-- Link to the 'admin/document' route -->
-      <a class="menu-item toolbar-button" mat-button routerLink="admin/document" routerLinkActive="menu-item-active">
-        <span class="icon-with-text"><mat-icon>article</mat-icon></span>
-        <span class="button-description">Dokumente</span>
+<mat-sidenav-container fullscreen>
+  <mat-sidenav #sidenav>
+    <mat-nav-list (click)="sidenav.close()">
+      <a mat-list-item routerLink="/">
+        <mat-icon>contact_support</mat-icon>
+        <span> Kontakt</span>
       </a>
 
-      <!-- Link to the 'admin/category' route -->
-      <a class="menu-item toolbar-button" mat-button routerLink="admin/category" routerLinkActive="menu-item-active">
-        <span class="icon-with-text"><mat-icon>category</mat-icon></span>
-        <span class="button-description">Kategorie</span>
+      <mat-divider></mat-divider>
+
+      <a mat-list-item routerLink="">
+        <mat-icon>info</mat-icon>
+        <span> Impressum</span>
       </a>
 
-      <!-- Link to the 'admin/user' route -->
-      <a class="menu-item toolbar-button" mat-button routerLink="admin/user" routerLinkActive="menu-item-active">
-        <span class="icon-with-text"><mat-icon>group</mat-icon></span>
-        <span class="button-description">Benutzer</span>
+      <mat-divider></mat-divider>
+
+      <a mat-list-item routerLink="">
+        <mat-icon>drag_indicator</mat-icon>
+        <span> Datenschutz</span>
       </a>
+
+      <mat-divider></mat-divider>
 
       <!-- Link to the 'login' route -->
-      <a class="menu-item toolbar-button" mat-button routerLink="login" routerLinkActive="menu-item-active">
-        <span class="icon-with-text"><mat-icon>login</mat-icon></span>
-        <span class="button-description">Login</span>
-      </a>
-    </div>
-  </mat-toolbar>
-
-  <!-- Container for dynamic content, fills remaining vertical space -->
-  <div class="flex-grow-1">
-    <router-outlet></router-outlet>
-  </div>
-
-  <!-- Footer card for desktop -->
-  <mat-card class="footer desktop-footer">
-    <mat-card-footer>
-      © 2024 Kulturbetriebe Burgenland | Nutzungsbedingungen | Impressum | Datenschutz
-    </mat-card-footer>
-  </mat-card>
-
-  <!-- Toolbar for mobile navigation -->
-  <mat-toolbar color="accent" class="mobile-nav">
-    <div class="mobile-toolbar-tools">
-      <!-- Link to the '/admin/document' route -->
-      <a class="menu-item" mat-button routerLink="/admin/document" routerLinkActive="menu-item-active">
-        <mat-icon>article</mat-icon>
-      </a>
-
-      <!-- Link to the '/admin/category' route -->
-      <a class="menu-item" mat-button routerLink="/admin/category" routerLinkActive="menu-item-active">
-        <mat-icon>category</mat-icon>
-      </a>
-
-      <!-- Link to the 'admin/user' route -->
-      <a class="menu-item toolbar-button" mat-button routerLink="admin/user" routerLinkActive="menu-item-active">
-        <span class="icon-with-text"><mat-icon>group</mat-icon></span>
-      </a>
-
-      <!-- Link to the '/login' route -->
-      <a class="menu-item" mat-button routerLink="/login" routerLinkActive="menu-item-active">
+      <a mat-list-item routerLink="login">
         <mat-icon>login</mat-icon>
+        <span> Login</span>
       </a>
+
+      <mat-divider></mat-divider>
+
+      <!-- Link to the 'login' route -->
+      <a mat-list-item routerLink="user">
+        <mat-icon>library_books</mat-icon>
+        <span> User</span>
+      </a>
+
+      <mat-divider></mat-divider>
+    </mat-nav-list>
+  </mat-sidenav>
+
+  <!-- Toolbar for desktop navigation -->
+  <div class="d-flex flex-column vh-100">
+    <!-- Toolbar for desktop navigation -->
+    <mat-toolbar color="accent" class="desktop-nav">
+      <button class="menu-item toolbar-button" mat-button (click)="sidenav.open()">
+        <span class="icon-with-text"><mat-icon>menu</mat-icon></span>
+        <span class="button-description">Menu</span>
+      </button>
+
+      <div class="toolbar-tools">
+        <!-- Link to the 'admin/document' route -->
+        <a class="menu-item toolbar-button" mat-button routerLink="admin/document" routerLinkActive="menu-item-active">
+          <span class="icon-with-text"><mat-icon>article</mat-icon></span>
+          <span class="button-description">Dokumente</span>
+        </a>
+
+        <!-- Link to the 'admin/category' route -->
+        <a class="menu-item toolbar-button" mat-button routerLink="admin/category" routerLinkActive="menu-item-active">
+          <span class="icon-with-text"><mat-icon>category</mat-icon></span>
+          <span class="button-description">Kategorie</span>
+        </a>
+
+        <!-- Link to the 'admin/user' route -->
+        <a class="menu-item toolbar-button" mat-button routerLink="admin/user" routerLinkActive="menu-item-active">
+          <span class="icon-with-text"><mat-icon>group</mat-icon></span>
+          <span class="button-description">Benutzer</span>
+        </a>
+
+        <!-- Link to the 'login' route -->
+        <a class="menu-item toolbar-button" mat-button routerLink="login" routerLinkActive="menu-item-active">
+          <span class="icon-with-text"><mat-icon>login</mat-icon></span>
+          <span class="button-description">Login</span>
+        </a>
+      </div>
+    </mat-toolbar>
+
+    <!-- Container for dynamic content, fills remaining vertical space -->
+    <div class="flex-grow-1">
+      <router-outlet></router-outlet>
     </div>
-  </mat-toolbar>
-</div>
+
+    <!-- Footer card for desktop -->
+    <mat-card class="footer desktop-footer">
+      <mat-card-footer>
+        © 2024 Kulturbetriebe Burgenland | Nutzungsbedingungen | Impressum | Datenschutz
+      </mat-card-footer>
+    </mat-card>
+
+    <!-- Toolbar for mobile navigation -->
+    <mat-toolbar color="accent" class="mobile-nav">
+      <div class="mobile-toolbar-tools">
+        <button class="menu-item" mat-button (click)="sidenav.open()">
+          <mat-icon>menu</mat-icon>
+        </button>
+
+        <!-- Link to the '/admin/document' route -->
+        <a class="menu-item" mat-button routerLink="/admin/document" routerLinkActive="menu-item-active">
+          <mat-icon>article</mat-icon>
+        </a>
+
+        <!-- Link to the '/admin/category' route -->
+        <a class="menu-item" mat-button routerLink="/admin/category" routerLinkActive="menu-item-active">
+          <mat-icon>category</mat-icon>
+        </a>
+
+        <!-- Link to the 'admin/user' route -->
+        <a class="menu-item" mat-button routerLink="admin/user" routerLinkActive="menu-item-active">
+          <span class="icon-with-text"><mat-icon>group</mat-icon></span>
+        </a>
+
+        <!-- Link to the '/login' route -->
+        <a class="menu-item" mat-button routerLink="/login" routerLinkActive="menu-item-active">
+          <mat-icon>login</mat-icon>
+        </a>
+      </div>
+    </mat-toolbar>
+  </div>
+</mat-sidenav-container>

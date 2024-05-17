@@ -12,22 +12,31 @@ export const initialState: DocCategoryStateInterface = {
 export const docCategoryFeature = createFeature({
   name: 'doc-category',
   // Reducer functions for the feature
-  reducer: createReducer(
+  reducer: createReducer<DocCategoryStateInterface>(
     initialState,
-    on(docCategoryActions.getAllDocumentCategories, state => ({
-      ...state,
-      isLoading: true,
-    })),
-    on(docCategoryActions.getAllDocumentCategoriesSuccess, (state, action) => ({
-      ...state,
-      isLoading: false,
-      data: action.docCategory,
-    })),
-    on(docCategoryActions.getAllDocumentCategoriesFailure, (state, action) => ({
-      ...state,
-      isLoading: false,
-      error: action.error,
-    }))
+    on(
+      docCategoryActions.getAllDocumentCategories,
+      (state): DocCategoryStateInterface => ({
+        ...state,
+        isLoading: true,
+      })
+    ),
+    on(
+      docCategoryActions.getAllDocumentCategoriesSuccess,
+      (state, action): DocCategoryStateInterface => ({
+        ...state,
+        isLoading: false,
+        data: action.docCategory,
+      })
+    ),
+    on(
+      docCategoryActions.getAllDocumentCategoriesFailure,
+      (state, action): DocCategoryStateInterface => ({
+        ...state,
+        isLoading: false,
+        error: action.error,
+      })
+    )
 
     // Handling router navigated action
     /*
