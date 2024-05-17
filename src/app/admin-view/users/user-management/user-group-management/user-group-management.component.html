@@ -1,0 +1,134 @@
+<ng-container *ngIf="data$ | async as data">
+  <div class="container">
+    <!-- Title -->
+    <h1 class="text-center mobile-title">{{ title }}</h1>
+    <br />
+    <!-- Progress bar: displayed while data is being fetched -->
+    <mat-progress-bar mode="indeterminate" *ngIf="checkIsLoadingIsSubmitting()" color="accent"></mat-progress-bar>
+
+    <!-- Table for user data (mobile view)-->
+    <div class="mat-elevation-z10 mb-2">
+      <div class="scrolling-container mobile-table">
+        <table
+          mat-table
+          class="default-table-design"
+          [dataSource]="data.users"
+          matSort
+          (matSortChange)="changeSort($event)"
+          multiTemplateDataRows>
+          <!-- Column header for ID -->
+          <ng-container matColumnDef="id">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>ID</th>
+            <td mat-cell *matCellDef="let user">
+              <mat-icon class="table-icon-hint" *ngIf="expandedUser === null"> keyboard_arrow_down</mat-icon>
+              <mat-icon class="table-icon-hint" *ngIf="expandedUser !== null"> keyboard_arrow_up</mat-icon>
+              {{ user.id }}
+            </td>
+          </ng-container>
+
+          <!-- Column header for Name -->
+          <ng-container matColumnDef="username">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
+            <td mat-cell *matCellDef="let user">
+              {{ user.username }}
+            </td>
+          </ng-container>
+
+          <!-- Column header for role -->
+          <ng-container matColumnDef="isAdmin">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Admin</th>
+            <td mat-cell *matCellDef="let user" (click)="$event.stopPropagation()">
+              <mat-slide-toggle
+                color="primary"
+                [disabled]="data.currentUser?.username === user.username || checkIsLoadingIsSubmitting()"
+                [ngModel]="user.isAdmin"
+                (click)="toggleUserIsAdmin(user.id, user.isAdmin)"></mat-slide-toggle>
+            </td>
+          </ng-container>
+
+          <!-- Expanded row column for user details -->
+          <ng-container matColumnDef="expandedDetail">
+            <td mat-cell *matCellDef="let user" colspan="3" class="px-0"><strong>Email: </strong>{{ user.email }}</td>
+          </ng-container>
+
+          <!-- Header row definition -->
+          <tr mat-header-row *matHeaderRowDef="displayedMobileColumns; sticky: true"></tr>
+
+          <!-- Row definition -->
+          <tr mat-row *matRowDef="let row; columns: displayedMobileColumns" (click)="onToggleExpandedUserRow(row)"></tr>
+
+          <!-- Row definition for expandedDetail -->
+          <tr
+            mat-row
+            *matRowDef="let row; columns: ['expandedDetail']"
+            [class.collapsed-detail]="row !== expandedUser"></tr>
+        </table>
+      </div>
+
+      <!-- Table for user data (desktop-view)-->
+      <div class="scrolling-container desktop-table">
+        <table
+          mat-table
+          class="default-table-design"
+          [dataSource]="data.users"
+          matSort
+          (matSortChange)="changeSort($event)"
+          multiTemplateDataRows>
+          <!-- Column header for ID -->
+          <ng-container matColumnDef="id">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>ID</th>
+            <td mat-cell *matCellDef="let user">
+              {{ user.id }}
+            </td>
+          </ng-container>
+
+          <!-- Column header for Name -->
+          <ng-container matColumnDef="username">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
+            <td mat-cell *matCellDef="let user">
+              {{ user.username }}
+            </td>
+          </ng-container>
+
+          <!-- Column header for Email -->
+          <ng-container matColumnDef="email">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Email</th>
+            <td mat-cell *matCellDef="let user">
+              {{ user.email }}
+            </td>
+          </ng-container>
+
+          <!-- Column header for role -->
+          <ng-container matColumnDef="isAdmin">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Admin</th>
+            <td mat-cell *matCellDef="let user" (click)="$event.stopPropagation()">
+              <mat-slide-toggle
+                color="primary"
+                [disabled]="data.currentUser?.username === user.username || checkIsLoadingIsSubmitting()"
+                [ngModel]="user.isAdmin"
+                (click)="toggleUserIsAdmin(user.id, user.isAdmin)"></mat-slide-toggle>
+            </td>
+          </ng-container>
+
+          <!-- Header row definition -->
+          <tr mat-header-row *matHeaderRowDef="displayedDesktopColumns; sticky: true"></tr>
+
+          <!-- Row definition -->
+          <tr mat-row *matRowDef="let row; columns: displayedDesktopColumns"></tr>
+        </table>
+      </div>
+
+      <!-- Paginator -->
+      <mat-paginator
+        class="default-paginator-design"
+        [length]="data.totalElements"
+        [pageSize]="pagination.pageSize"
+        [pageSizeOptions]="paginationConfigService.getPageSizeOptions()"
+        [pageIndex]="pagination.pageNumber"
+        (page)="handlePageEvent($event)"
+        [showFirstLastButtons]="true"
+        aria-label="Select page of users">
+      </mat-paginator>
+    </div>
+  </div>
+</ng-container>
