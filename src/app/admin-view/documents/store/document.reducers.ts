@@ -23,52 +23,79 @@ export const initialState: DocumentStateInterface = {
 export const documentFeature = createFeature({
   name: 'document-admin',
   // Reducer functions for the feature
-  reducer: createReducer(
+  reducer: createReducer<DocumentStateInterface>(
     initialState,
-    on(documentActions.getDocumentsWithQuery, (state, action) => ({
-      ...state,
-      isLoading: true,
-      pagination: action.pagination,
-    })),
-    on(documentActions.getDocumentsWithQuerySuccess, (state, { documents, totalElements }) => ({
-      ...state,
-      isLoading: false,
-      data: documents,
-      totalElements: totalElements,
-    })),
-    on(documentActions.getDocumentsWithQueryFailure, (state, action) => ({
-      ...state,
-      isLoading: false,
-      error: action.error,
-    })),
+    on(
+      documentActions.getDocumentsWithQuery,
+      (state, action): DocumentStateInterface => ({
+        ...state,
+        isLoading: true,
+        pagination: action.pagination,
+      })
+    ),
+    on(
+      documentActions.getDocumentsWithQuerySuccess,
+      (state, { documents, totalElements }): DocumentStateInterface => ({
+        ...state,
+        isLoading: false,
+        data: documents,
+        totalElements: totalElements,
+      })
+    ),
+    on(
+      documentActions.getDocumentsWithQueryFailure,
+      (state, action): DocumentStateInterface => ({
+        ...state,
+        isLoading: false,
+        error: action.error,
+      })
+    ),
 
-    on(documentActions.createDocumentVersion, state => ({
-      ...state,
-      isSubmitting: true,
-    })),
-    on(documentActions.createDocumentVersionSuccess, state => ({
-      ...state,
-      isSubmitting: false,
-    })),
-    on(documentActions.createDocumentVersionFailure, (state, action) => ({
-      ...state,
-      isSubmitting: false,
-      error: action.error,
-    })),
+    on(
+      documentActions.createDocumentVersion,
+      (state): DocumentStateInterface => ({
+        ...state,
+        isSubmitting: true,
+      })
+    ),
+    on(
+      documentActions.createDocumentVersionSuccess,
+      (state): DocumentStateInterface => ({
+        ...state,
+        isSubmitting: false,
+      })
+    ),
+    on(
+      documentActions.createDocumentVersionFailure,
+      (state, action): DocumentStateInterface => ({
+        ...state,
+        isSubmitting: false,
+        error: action.error,
+      })
+    ),
 
-    on(documentActions.changeDocumentVisibility, state => ({
-      ...state,
-      isSubmitting: true,
-    })),
-    on(documentActions.changeDocumentVisibilitySuccess, state => ({
-      ...state,
-      isSubmitting: false,
-    })),
-    on(documentActions.changeDocumentVisibilityFailure, (state, action) => ({
-      ...state,
-      isSubmitting: false,
-      error: action.error,
-    }))
+    on(
+      documentActions.changeDocumentVisibility,
+      (state): DocumentStateInterface => ({
+        ...state,
+        isSubmitting: true,
+      })
+    ),
+    on(
+      documentActions.changeDocumentVisibilitySuccess,
+      (state): DocumentStateInterface => ({
+        ...state,
+        isSubmitting: false,
+      })
+    ),
+    on(
+      documentActions.changeDocumentVisibilityFailure,
+      (state, action): DocumentStateInterface => ({
+        ...state,
+        isSubmitting: false,
+        error: action.error,
+      })
+    )
     /*
     on(routerNavigatedAction, () => (initialState))
     */

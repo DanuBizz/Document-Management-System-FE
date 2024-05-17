@@ -12,45 +12,66 @@ export const initialState: AuthStateInterface = {
 
 export const authFeature = createFeature({
   name: 'auth',
-  reducer: createReducer(
+  reducer: createReducer<AuthStateInterface>(
     initialState,
-    on(authActions.login, state => ({
-      ...state,
-      isSubmitting: true,
-      validationErrors: null,
-    })),
+    on(
+      authActions.login,
+      (state): AuthStateInterface => ({
+        ...state,
+        isSubmitting: true,
+        validationErrors: null,
+      })
+    ),
 
-    on(authActions.loginSuccess, (state, action) => ({
-      ...state,
-      isSubmitting: false,
-      currentUser: action.currentUser,
-    })),
-    on(authActions.loginFailure, (state, action) => ({
-      ...state,
-      isSubmitting: false,
-      validationErrors: action.errors,
-    })),
+    on(
+      authActions.loginSuccess,
+      (state, action): AuthStateInterface => ({
+        ...state,
+        isSubmitting: false,
+        currentUser: action.currentUser,
+      })
+    ),
+    on(
+      authActions.loginFailure,
+      (state, action): AuthStateInterface => ({
+        ...state,
+        isSubmitting: false,
+        validationErrors: action.errors,
+      })
+    ),
 
-    on(authActions.getCurrentUser, state => ({
-      ...state,
-      isLoading: true,
-    })),
+    on(
+      authActions.getCurrentUser,
+      (state): AuthStateInterface => ({
+        ...state,
+        isLoading: true,
+      })
+    ),
 
-    on(authActions.getCurrentUserSuccess, (state, action) => ({
-      ...state,
-      isLoading: false,
-      currentUser: action.currentUser,
-    })),
-    on(authActions.getCurrentUserFailure, state => ({
-      ...state,
-      isLoading: false,
-      currentUser: null,
-    })),
+    on(
+      authActions.getCurrentUserSuccess,
+      (state, action): AuthStateInterface => ({
+        ...state,
+        isLoading: false,
+        currentUser: action.currentUser,
+      })
+    ),
+    on(
+      authActions.getCurrentUserFailure,
+      (state): AuthStateInterface => ({
+        ...state,
+        isLoading: false,
+        currentUser: null,
+      })
+    ),
 
-    on(routerNavigationAction, state => ({
-      ...state,
-      validationErrors: null,
-    }))
+    on(
+      routerNavigationAction,
+      (state): AuthStateInterface => ({
+        ...state,
+        validationErrors: null,
+      })
+    )
   ),
 });
 

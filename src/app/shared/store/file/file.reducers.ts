@@ -10,22 +10,31 @@ export const initialState: FileStateInterface = {
 
 export const fileFeature = createFeature({
   name: 'file',
-  reducer: createReducer(
+  reducer: createReducer<FileStateInterface>(
     initialState,
-    on(fileActions.getFile, state => ({
-      ...state,
-      isLoading: true,
-    })),
-    on(fileActions.getFileSuccess, (state, action) => ({
-      ...state,
-      data: action.fileUrl,
-      isLoading: false,
-    })),
-    on(fileActions.getFileFailure, (state, action) => ({
-      ...state,
-      isLoading: false,
-      error: action.error,
-    }))
+    on(
+      fileActions.getFile,
+      (state): FileStateInterface => ({
+        ...state,
+        isLoading: true,
+      })
+    ),
+    on(
+      fileActions.getFileSuccess,
+      (state, action): FileStateInterface => ({
+        ...state,
+        data: action.fileUrl,
+        isLoading: false,
+      })
+    ),
+    on(
+      fileActions.getFileFailure,
+      (state, action): FileStateInterface => ({
+        ...state,
+        isLoading: false,
+        error: action.error,
+      })
+    )
     /*
     on(routerNavigatedAction, () => initialState)
     */

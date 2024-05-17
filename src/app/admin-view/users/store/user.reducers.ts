@@ -23,53 +23,80 @@ export const initialState: UserStateInterface = {
 export const userFeature = createFeature({
   name: 'user',
   // Reducer functions for the feature
-  reducer: createReducer(
+  reducer: createReducer<UserStateInterface>(
     initialState,
-    on(userActions.getAllUsers, state => ({
-      ...state,
-      isLoading: true,
-    })),
-    on(userActions.getAllUsersSuccess, (state, action) => ({
-      ...state,
-      isLoading: false,
-      allData: action.user,
-    })),
-    on(userActions.getAllUsersFailure, (state, action) => ({
-      ...state,
-      isLoading: false,
-      error: action.error,
-    })),
+    on(
+      userActions.getAllUsers,
+      (state): UserStateInterface => ({
+        ...state,
+        isLoading: true,
+      })
+    ),
+    on(
+      userActions.getAllUsersSuccess,
+      (state, action): UserStateInterface => ({
+        ...state,
+        isLoading: false,
+        allData: action.user,
+      })
+    ),
+    on(
+      userActions.getAllUsersFailure,
+      (state, action): UserStateInterface => ({
+        ...state,
+        isLoading: false,
+        error: action.error,
+      })
+    ),
 
-    on(userActions.getUsersWithQuery, (state, action) => ({
-      ...state,
-      isLoading: true,
-      pagination: action.pagination,
-    })),
-    on(userActions.getUsersWithQuerySuccess, (state, { users, totalElements }) => ({
-      ...state,
-      isLoading: false,
-      tableData: users,
-      totalElements: totalElements,
-    })),
-    on(userActions.getUsersWithQueryFailure, (state, action) => ({
-      ...state,
-      isLoading: false,
-      error: action.error,
-    })),
+    on(
+      userActions.getUsersWithQuery,
+      (state, action): UserStateInterface => ({
+        ...state,
+        isLoading: true,
+        pagination: action.pagination,
+      })
+    ),
+    on(
+      userActions.getUsersWithQuerySuccess,
+      (state, { users, totalElements }): UserStateInterface => ({
+        ...state,
+        isLoading: false,
+        tableData: users,
+        totalElements: totalElements,
+      })
+    ),
+    on(
+      userActions.getUsersWithQueryFailure,
+      (state, action): UserStateInterface => ({
+        ...state,
+        isLoading: false,
+        error: action.error,
+      })
+    ),
 
-    on(userActions.changeUserRole, state => ({
-      ...state,
-      isSubmitting: true,
-    })),
-    on(userActions.changeUserRoleSuccess, state => ({
-      ...state,
-      isSubmitting: false,
-    })),
-    on(userActions.changeUserRoleFailure, (state, action) => ({
-      ...state,
-      isSubmitting: false,
-      error: action.error,
-    }))
+    on(
+      userActions.changeUserRole,
+      (state): UserStateInterface => ({
+        ...state,
+        isSubmitting: true,
+      })
+    ),
+    on(
+      userActions.changeUserRoleSuccess,
+      (state): UserStateInterface => ({
+        ...state,
+        isSubmitting: false,
+      })
+    ),
+    on(
+      userActions.changeUserRoleFailure,
+      (state, action): UserStateInterface => ({
+        ...state,
+        isSubmitting: false,
+        error: action.error,
+      })
+    )
 
     // Handling router navigated action
     /*
