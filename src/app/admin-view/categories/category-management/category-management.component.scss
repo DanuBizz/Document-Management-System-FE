@@ -5,3 +5,8 @@
 .mat-column-name {
   width: 350px !important;
 }
+
+.mdc-data-table__cell,
+.mdc-data-table__header-cell {
+  padding: 0 6px 0 6px !important;
+}

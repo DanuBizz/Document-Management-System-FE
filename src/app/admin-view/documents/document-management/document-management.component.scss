@@ -1,7 +1,12 @@
 .mat-column-select {
   width: 70px !important;
 }
+
+.mdc-data-table__row {
+  border-bottom: 1px solid #e0e0e0 !important;
+}
+
 .mdc-data-table__cell,
 .mdc-data-table__header-cell {
-  padding: 0 !important;
+  padding: 0 6px 0 6px !important;
 }
