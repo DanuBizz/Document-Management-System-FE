@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { AsyncPipe, DatePipe, NgIf } from '@angular/common';
 import {
   MatCell,
@@ -91,7 +91,8 @@ export class UserRoleManagementComponent implements OnInit {
 
   constructor(
     private store: Store,
-    public paginationConfigService: PaginationConfigService
+    public paginationConfigService: PaginationConfigService,
+    private changeDetectorRef: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
@@ -104,6 +105,7 @@ export class UserRoleManagementComponent implements OnInit {
 
       this.isLoading = data.isLoading;
       this.isSubmitting = data.isSubmitting;
+      this.changeDetectorRef.detectChanges();
     });
 
     this.dispatchGetUsersWithQueryAction();
