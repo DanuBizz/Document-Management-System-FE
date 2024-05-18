@@ -62,7 +62,7 @@ import { PaginationQueryParamsInterface } from '../../../../shared/type/paginati
   styleUrl: './user-role-management.component.scss',
 })
 export class UserRoleManagementComponent implements OnInit {
-  title = 'User Rollen Veraltung';
+  title = 'Benutzer Rollenverwaltung';
 
   // Columns to display in the table
   displayedMobileColumns: string[] = ['id', 'username', 'isAdmin'];

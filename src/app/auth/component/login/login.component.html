@@ -26,11 +26,13 @@
         <div class="form-group">
           <mat-form-field appearance="outline" hideRequiredMarker="true">
             <mat-label>Passwort</mat-label>
-            <input matInput type="password" formControlName="password" />
-            <mat-icon matSuffix class="large-icon">key</mat-icon>
-            @if (loginForm.controls['password'].hasError('required')) {
-              <mat-error>Passwort ist <strong>erforderlich</strong></mat-error>
-            }
+            <input matInput [type]="passwordFieldType" formControlName="password" />
+            <button mat-icon-button matSuffix (click)="togglePasswordVisibility()" type="button">
+              <mat-icon>{{ passwordFieldType === 'password' ? 'visibility' : 'visibility_off' }}</mat-icon>
+            </button>
+            <mat-error *ngIf="loginForm.controls['password'].hasError('required')">
+              Passwort ist <strong>erforderlich</strong>
+            </mat-error>
           </mat-form-field>
         </div>
 

@@ -62,7 +62,7 @@ import { FormsModule } from '@angular/forms';
   styleUrl: './user-group-management.component.scss',
 })
 export class UserGroupManagementComponent implements OnInit {
-  title = 'User Gruppen Veraltung';
+  title = 'Benutzer Gruppenverwaltung';
 
   // Columns to display in the table
   displayedMobileColumns: string[] = ['id', 'username', 'isAdmin'];

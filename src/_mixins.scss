@@ -1,7 +1,7 @@
 @mixin table-design {
   .default-table-design {
     tr.mat-mdc-row:hover {
-      background-color: map-get($mat-accent, 50) !important;
+      background-color: map-get($mat-accent, 400) !important;
       cursor: pointer;
     }
 

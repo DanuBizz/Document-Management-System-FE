@@ -5,7 +5,6 @@ import { UserGroupManagementComponent } from './user-group-management/user-group
 import { UserRoleManagementComponent } from './user-role-management/user-role-management.component';
 import { MatIcon } from '@angular/material/icon';
 import { MatTooltip } from '@angular/material/tooltip';
-import { MatMiniFabButton } from '@angular/material/button';
 
 @Component({
   selector: 'app-user-management',
@@ -19,7 +18,6 @@ import { MatMiniFabButton } from '@angular/material/button';
     MatIcon,
     MatTabLabel,
     MatTooltip,
-    MatMiniFabButton,
   ],
   templateUrl: './user-management.component.html',
   styleUrl: './user-management.component.scss',
