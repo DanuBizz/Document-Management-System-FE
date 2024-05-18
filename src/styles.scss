@@ -152,7 +152,7 @@ body {
 }
 
 .inner-table {
-  background-color: map-get($mat-accent, 300) !important;
+  background-color: map-get($mat-accent, 900) !important;
 }
 
 .mdc-text-field {
@@ -192,7 +192,7 @@ mat-form-field {
 
 .mat-column-id {
   border-right: 1px solid black;
-  width: 70px !important;
+  width: 70px;
 }
 
 .mobile-table {
@@ -213,4 +213,9 @@ mat-form-field {
   .container-fluid {
     width: 90% !important;
   }
+}
+
+.mat-badge.mat-badge {
+  display: inline-block;
+  margin-bottom: 6px;
 }

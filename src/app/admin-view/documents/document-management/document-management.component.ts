@@ -36,6 +36,7 @@ import { MatDivider } from '@angular/material/divider';
 import { fileActions } from '../../../shared/store/file/file.actions';
 import { openDisplayDocumentDialog } from '../../../shared/component/display-document-dialog/display-document-dialog.config';
 import { selectFileData } from '../../../shared/store/file/file.reducers';
+import { MatBadge } from '@angular/material/badge';
 
 @Component({
   selector: 'app-document-management',
@@ -54,6 +55,7 @@ import { selectFileData } from '../../../shared/store/file/file.reducers';
     FabButtonComponent,
     MatProgressBar,
     MatDivider,
+    MatBadge,
   ],
   providers: [DocumentService],
   templateUrl: './document-management.component.html',
@@ -100,6 +102,9 @@ export class DocumentManagementComponent implements OnInit {
 
   // tooltip for toggle visibility
   tooltipVisibilityButton = '';
+
+  // Maximum number of users to display in the list
+  maxUsersVisibleDesktop = 4;
 
   /**
    * @param store - The Redux store instance injected via dependency injection.
@@ -267,10 +272,16 @@ export class DocumentManagementComponent implements OnInit {
    *
    * @return A string containing the sorted category names joined by commas.
    * @param categoryNames
+   * @param trunc truncate the list if too long
+   * @param maxUsersVisible length to truncate if list is too long
    */
-  sortAndJoinCategoryNames(categoryNames: string[]): string {
-    const sortedCategoryNames = categoryNames.slice().sort();
-    return sortedCategoryNames.join(', ');
+  sortAndJoinCategoryNames(categoryNames: string[], trunc: boolean, maxUsersVisible: number): string {
+    const sortedNames = categoryNames.slice().sort().join(', ');
+    if (trunc) {
+      const truncatedSortedNames = categoryNames.slice().sort().slice(0, maxUsersVisible).join(', ');
+      return truncatedSortedNames + '...';
+    }
+    return sortedNames;
   }
 
   checkIsLoadingIsSubmitting(): boolean {
