@@ -3,10 +3,11 @@
   <h2 mat-dialog-title>{{ dialogTitle }}</h2>
 
   <!-- Dialog content with form -->
-  <mat-dialog-content [formGroup]="form" class="">
+  <mat-dialog-content [formGroup]="form">
     <!-- Text input for document name -->
-    <mat-form-field appearance="outline">
-      <input matInput placeholder="Dokumenten Name" formControlName="name" />
+    <mat-form-field appearance="outline" hideRequiredMarker="true" class="my-3">
+      <mat-label>Dokumenten Name</mat-label>
+      <input matInput formControlName="name" />
       @if (form.controls['name'].hasError('required')) {
         <mat-error>Name ist <strong>erforderlich</strong></mat-error>
       }
@@ -17,8 +18,8 @@
 
     <!-- Select file input -->
     <mat-form-field appearance="outline" hideRequiredMarker="true" class="mb-4">
-      <!-- Display file name -->
-      <input matInput placeholder="Datei auswählen" formControlName="file" [value]="form.value.file?.name" readonly />
+      <mat-label>Datei auswählen</mat-label>
+      <input matInput formControlName="file" [value]="form.value.file?.name" readonly />
       @if (form.controls['file'].hasError('required')) {
         <mat-error>Datei ist <strong>erforderlich</strong></mat-error>
       }

@@ -6,7 +6,7 @@
   <!-- Dialog content with form -->
   <mat-dialog-content [formGroup]="form">
     <!-- Text input for category name -->
-    <mat-form-field appearance="outline" class="my-3">
+    <mat-form-field appearance="outline" hideRequiredMarker="true" class="my-3">
       <mat-label>Kategorie Name eingeben</mat-label>
       <input matInput formControlName="name" />
       <!-- Error message for duplicate name -->
@@ -19,7 +19,7 @@
     </mat-form-field>
 
     <!-- Select field for adding users -->
-    <mat-form-field appearance="outline" class="select-field">
+    <mat-form-field appearance="outline" hideRequiredMarker="true" class="select-field">
       <mat-label>Benutzer hinzufügen</mat-label>
       <mat-select formControlName="userIds" multiple>
         @for (user of users$ | async; track user) {
