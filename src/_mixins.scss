@@ -36,10 +36,27 @@
 
 @mixin scrolling-container {
   overflow-y: auto;
-  max-height: 50vh;
+  overflow-x: auto;
+  max-height: 65vh;
 
-  @media (max-width: 576px) {
-    overflow-x: auto;
+  @media (max-height: 1000px) {
+    max-height: 60vh;
+  }
+
+  @media (max-height: 850px) {
+    max-height: 55vh;
+  }
+
+  @media (max-height: 750px) {
+    max-height: 50vh;
+  }
+
+  @media (max-height: 750px) and (max-width: 992px) {
+    max-height: 55vh;
+  }
+
+  @media (max-height: 650px) and (min-width: 992px) {
+    max-height: 40vh;
   }
 }
 

@@ -208,3 +208,9 @@ mat-form-field {
     display: none;
   }
 }
+
+@media (min-width: 1444px) {
+  .container-fluid {
+    width: 90% !important;
+  }
+}

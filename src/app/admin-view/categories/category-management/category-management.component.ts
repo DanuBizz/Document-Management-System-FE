@@ -31,6 +31,7 @@ import { categoryActions } from '../store/category.actions';
 import { CategoryRequestInterface } from '../../type/category-request.interface';
 import { PaginationQueryParamsInterface } from '../../../shared/type/pagination-query-params.interface';
 import { CategoryResponseInterface } from '../../type/category-response.interface';
+import { MatBadge } from '@angular/material/badge';
 
 @Component({
   selector: 'app-category-management',
@@ -50,6 +51,7 @@ import { CategoryResponseInterface } from '../../type/category-response.interfac
     MatCheckbox,
     MatPaginator,
     MatProgressBar,
+    MatBadge,
   ],
   providers: [CategoryService],
   templateUrl: './category-management.component.html',
@@ -84,6 +86,10 @@ export class CategoryManagementComponent implements OnInit {
 
   // Currently expanded user
   expandedCategory: CategoryResponseInterface | null = null;
+
+  // Maximum number of users to display in the list
+  maxUsersVisibleDesktop = 9;
+  maxUsersVisibleMobile = 5;
 
   /**
    * @param store - The Redux store instance injected via dependency injection.
@@ -181,11 +187,17 @@ export class CategoryManagementComponent implements OnInit {
    * Sorts an array of category names alphabetically and joins them into a single string.
    *
    * @param userNames An array of category names to be sorted and joined.
+   * @param trunc A boolean indicating whether the string should be truncated, when the list is too long.
+   * @param maxUsersVisible truncate the list up to this number of users.
    * @return A string containing the sorted category names joined by commas.
    */
-  sortAndJoinCategoryNames(userNames: string[]): string {
-    const sortedCategoryNames = userNames.slice().sort();
-    return sortedCategoryNames.join(', ');
+  sortAndJoinCategoryNames(userNames: string[], trunc: boolean, maxUsersVisible: number): string {
+    const sortedNames = userNames.slice().sort().join(', ');
+    if (trunc) {
+      const truncatedSortedNames = userNames.slice().sort().slice(0, maxUsersVisible).join(', ');
+      return truncatedSortedNames + '...';
+    }
+    return sortedNames;
   }
 
   /**
