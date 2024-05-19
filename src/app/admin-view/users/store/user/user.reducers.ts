@@ -1,7 +1,7 @@
-import { UserStateInterface } from '../../type/user-state.interface';
+import { UserStateInterface } from '../../../type/user-state.interface';
 import { createFeature, createReducer, on } from '@ngrx/store';
 import { userActions } from './user.actions';
-import { PaginationConfigService } from '../../../shared/service/pagination-config.service';
+import { PaginationConfigService } from '../../../../shared/service/pagination-config.service';
 
 const paginationConfigService = new PaginationConfigService();
 

@@ -27,8 +27,8 @@ import {
   selectUserIsSubmitting,
   selectUserPagination,
   selectUserTableData,
-} from '../../store/user.reducers';
-import { userActions } from '../../store/user.actions';
+} from '../../store/user/user.reducers';
+import { userActions } from '../../store/user/user.actions';
 import { MatSlideToggle } from '@angular/material/slide-toggle';
 import { FormsModule } from '@angular/forms';
 import { selectCurrentUser } from '../../../../auth/store/auth.reducers';

@@ -26,12 +26,12 @@ import {
   selectUserIsSubmitting,
   selectUserPagination,
   selectUserTableData,
-} from '../../store/user.reducers';
+} from '../../store/user/user.reducers';
 import { selectCurrentUser } from '../../../../auth/store/auth.reducers';
 import { PaginationQueryParamsInterface } from '../../../../shared/type/pagination-query-params.interface';
 import { Store } from '@ngrx/store';
 import { PaginationConfigService } from '../../../../shared/service/pagination-config.service';
-import { userActions } from '../../store/user.actions';
+import { userActions } from '../../store/user/user.actions';
 import { FormsModule } from '@angular/forms';
 
 @Component({
@@ -65,8 +65,7 @@ export class UserGroupManagementComponent implements OnInit {
   title = 'Benutzer Gruppenverwaltung';
 
   // Columns to display in the table
-  displayedMobileColumns: string[] = ['id', 'username', 'isAdmin'];
-  displayedDesktopColumns: string[] = ['id', 'username', 'email', 'isAdmin'];
+  displayedDesktopColumns: string[] = ['id', 'group', 'users'];
 
   // Currently expanded user
   expandedUser: UserResponseInterface | null = null;

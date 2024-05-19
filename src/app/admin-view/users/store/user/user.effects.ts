@@ -4,9 +4,9 @@ import { map, mergeMap, of, switchMap } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 import { HttpErrorResponse } from '@angular/common/http';
 import { userActions } from './user.actions';
-import { UserResponseInterface } from '../../type/user-response.interface';
-import { UserService } from '../../../shared/service/user.service';
-import { SnackbarService } from '../../../shared/service/snackbar.service';
+import { UserResponseInterface } from '../../../type/user-response.interface';
+import { UserService } from '../../../../shared/service/user.service';
+import { SnackbarService } from '../../../../shared/service/snackbar.service';
 import { Store } from '@ngrx/store';
 import { selectUserError, selectUserPagination } from './user.reducers';
 
