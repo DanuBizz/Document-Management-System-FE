@@ -74,7 +74,7 @@ export class CreateDocumentDialogComponent implements OnInit {
   maxMB = 2;
 
   // allowed file types
-  allowedTypes = ['pdf', 'jpg'];
+  allowedTypes = ['pdf'];
 
   /**
    * @param fb - The FormBuilder service for creating form controls and groups.

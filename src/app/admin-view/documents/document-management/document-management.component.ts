@@ -104,7 +104,7 @@ export class DocumentManagementComponent implements OnInit {
   tooltipVisibilityButton = '';
 
   // Maximum number of users to display in the list
-  maxUsersVisibleDesktop = 4;
+  maxVisibleCategories = 4;
 
   /**
    * @param store - The Redux store instance injected via dependency injection.
