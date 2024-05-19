@@ -13,7 +13,7 @@ import { MatInput } from '@angular/material/input';
 import { MatOption, MatSelect } from '@angular/material/select';
 import { Store } from '@ngrx/store';
 import { selectUserAllData } from '../../users/store/user/user.reducers';
-import { Observable } from 'rxjs';
+import { first, Observable } from 'rxjs';
 import { UserResponseInterface } from '../../type/user-response.interface';
 import { userActions } from '../../users/store/user/user.actions';
 import { CommonModule } from '@angular/common';
@@ -87,9 +87,12 @@ export class CreateCategoryDialogComponent {
     this.store.dispatch(userActions.getAllUsers());
     this.store.dispatch(categoryActions.getAllCategories());
 
-    this.store.select(selectCategoryAllData).subscribe(categories => {
-      this.categories = categories;
-    });
+    this.store
+      .select(selectCategoryAllData)
+      .pipe(first())
+      .subscribe(categories => {
+        this.categories = categories;
+      });
   }
 
   /**

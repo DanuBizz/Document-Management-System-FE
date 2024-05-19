@@ -19,7 +19,7 @@ import { MatFormFieldModule, MatLabel, MatSuffix } from '@angular/material/form-
 import { MatOption, MatSelect } from '@angular/material/select';
 import { MatInput } from '@angular/material/input';
 import { MatButton } from '@angular/material/button';
-import { Observable } from 'rxjs';
+import { first, Observable } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { CommonModule } from '@angular/common';
 import { selectCategoryAllData } from '../../categories/store/category.reducers';
@@ -101,9 +101,12 @@ export class CreateDocumentDialogComponent implements OnInit {
 
     this.store.dispatch(docCategoryActions.getAllDocumentCategories());
 
-    this.store.select(selectDocCategoryData).subscribe(docCategories => {
-      this.documentCategories = docCategories;
-    });
+    this.store
+      .select(selectDocCategoryData)
+      .pipe(first())
+      .subscribe(docCategories => {
+        this.documentCategories = docCategories;
+      });
   }
 
   /**
