@@ -1,7 +1,6 @@
 export interface CurrentUserInterface {
+  id: number;
   email: string;
-  token: string;
   username: string;
-  bio: string | null;
-  image: string | null;
+  isAdmin: boolean;
 }

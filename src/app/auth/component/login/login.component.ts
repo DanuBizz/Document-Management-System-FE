@@ -56,8 +56,8 @@ export class LoginComponent {
   ) {
     // Initialize loginForm with default values and validators
     this.loginForm = this.fb.group({
-      email: ['karl.franz.bertl.sayajin@kamehameha.at', [Validators.required]],
-      password: ['karl.franz.bertl.sayajin123456789', [Validators.required]],
+      username: ['Admin', [Validators.required]],
+      password: ['password', [Validators.required]],
     });
   }
 

@@ -8,6 +8,7 @@ import { catchError, tap } from 'rxjs/operators';
 import { HttpErrorResponse } from '@angular/common/http';
 import { PersistenceService } from '../service/persistence.service';
 import { Router } from '@angular/router';
+import { AuthResponseInterface } from '../type/auth-response.interface';
 
 /**
  * Effect that handles the login action. It sends a login request to the AuthService,
@@ -15,14 +16,15 @@ import { Router } from '@angular/router';
  * loginSuccess action. If login fails, it dispatches loginFailure action.
  */
 export const loginEffect = createEffect(
-  (actions$ = inject(Actions), authService = inject(AuthService), persistanceService = inject(PersistenceService)) => {
+  (actions$ = inject(Actions), authService = inject(AuthService), persistenceService = inject(PersistenceService)) => {
     return actions$.pipe(
       ofType(authActions.login),
       switchMap(({ request }) => {
+        persistenceService.set('accessToken', btoa((request.user.username + ':' + request.user.password)));
         return authService.login(request).pipe(
-          map((currentUser: CurrentUserInterface) => {
-            persistanceService.set('accessToken', currentUser.token);
-            return authActions.loginSuccess({ currentUser });
+          map((response: CurrentUserInterface) => {
+            getCurrentUserEffect();
+            return authActions.loginSuccess({ currentUser: response });
           }),
           catchError((errorResponse: HttpErrorResponse) => {
             return of(authActions.loginFailure({ errors: errorResponse.error.errors }));
@@ -41,8 +43,12 @@ export const redirectAfterLoginEffect = createEffect(
   (actions$ = inject(Actions), router = inject(Router)) => {
     return actions$.pipe(
       ofType(authActions.loginSuccess),
-      tap(() => {
-        router.navigateByUrl('/admin/document');
+      tap(({ currentUser }) => {
+        if (currentUser.isAdmin) {
+          router.navigateByUrl('/admin/document');
+        } else {
+          router.navigateByUrl('/user/document');
+        }
       })
     );
   },

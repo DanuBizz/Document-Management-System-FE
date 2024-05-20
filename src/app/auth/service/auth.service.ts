@@ -11,6 +11,7 @@ import { LoginRequestInterface } from '../type/login-request.interface';
 //AuthService provides authentication-related functionalities.
 export class AuthService {
   testApiUrl = 'https://api.realworld.io/api';
+  authUrl = 'http://localhost:8080'
 
   /**
    * @param http HttpClient instance for making HTTP requests
@@ -23,9 +24,9 @@ export class AuthService {
    * @returns Observable of CurrentUserInterface
    */
   login(data: LoginRequestInterface): Observable<CurrentUserInterface> {
-    const url = this.testApiUrl + '/users/login';
+    const url = this.authUrl;
 
-    return this.http.post<AuthResponseInterface>(url, data).pipe(map(response => response.user));
+    return this.http.post<CurrentUserInterface>(url, data).pipe(map(response => response));
   }
 
   /**
@@ -33,7 +34,7 @@ export class AuthService {
    * @returns Observable of AuthResponseInterface
    */
   getCurrentUser(): Observable<CurrentUserInterface> {
-    const url = this.testApiUrl + '/user';
+    const url = this.authUrl + `/users`;
 
     return this.http.get<AuthResponseInterface>(url).pipe(map(response => response.user));
   }
