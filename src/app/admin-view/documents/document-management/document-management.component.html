@@ -113,8 +113,8 @@
 
           <!-- Expanded row column for older document versions -->
           <ng-container matColumnDef="expandedDetail">
-            <td mat-cell *matCellDef="let document" colspan="5" class="inner-table remove-padding">
-              <table mat-table class="inner-table" [dataSource]="getMatTableData(document.oldVersions)">
+            <td mat-cell *matCellDef="let document" colspan="5" class="expandable-row remove-padding">
+              <table mat-table class="expandable-row" [dataSource]="getMatTableData(document.oldVersions)">
                 <!-- Select column inside expanded detail -->
                 <ng-container matColumnDef="select">
                   <th mat-header-cell *matHeaderCellDef>

@@ -53,8 +53,8 @@
 
           <!-- Expanded row column for older document versions -->
           <ng-container matColumnDef="expandedDetail">
-            <td mat-cell *matCellDef="let document" colspan="3" class="inner-table remove-padding">
-              <table mat-table class="inner-table" [dataSource]="getMatTableData(document.oldVersions)">
+            <td mat-cell *matCellDef="let document" colspan="3" class="expandable-row remove-padding">
+              <table mat-table class="expandable-row" [dataSource]="getMatTableData(document.oldVersions)">
                 <!-- ID column -->
                 <ng-container matColumnDef="arrow">
                   <th mat-header-cell *matHeaderCellDef></th>
