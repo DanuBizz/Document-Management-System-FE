@@ -55,6 +55,12 @@
   background-position: center;
 }
 
+.center-flex {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
 .icon-with-text {
   display: flex;
   flex-direction: column;

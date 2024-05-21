@@ -1,39 +1,51 @@
 <mat-sidenav-container fullscreen>
   <mat-sidenav #sidenav>
     <mat-nav-list (click)="sidenav.close()">
-      <a mat-list-item routerLink="/">
-        <mat-icon>contact_support</mat-icon>
-        <span> Kontakt</span>
-      </a>
-
-      <mat-divider></mat-divider>
-
-      <a mat-list-item routerLink="">
-        <mat-icon>info</mat-icon>
-        <span> Impressum</span>
-      </a>
-
-      <mat-divider></mat-divider>
-
-      <a mat-list-item routerLink="">
-        <mat-icon>drag_indicator</mat-icon>
-        <span> Datenschutz</span>
-      </a>
-
-      <mat-divider></mat-divider>
 
       <!-- Link to the 'login' route -->
       <a mat-list-item routerLink="login">
-        <mat-icon>login</mat-icon>
-        <span> Login</span>
+        <div class="d-inline-flex">
+          <mat-icon>login</mat-icon>
+          <span class="mx-1">Login</span>
+        </div>
       </a>
 
       <mat-divider></mat-divider>
 
+      <a mat-list-item routerLink="/">
+        <div class="d-inline-flex">
+          <mat-icon class="mx-1">alternate_email</mat-icon>
+          <span>Kontakt</span>
+        </div>
+      </a>
+
+      <mat-divider></mat-divider>
+
+      <a mat-list-item routerLink="">
+        <div class="d-inline-flex">
+        <mat-icon>account_balance</mat-icon>
+        <span class="mx-1"> Impressum</span>
+        </div>
+      </a>
+
+      <mat-divider></mat-divider>
+
+      <a mat-list-item routerLink="">
+        <div class="d-inline-flex">
+        <mat-icon>security</mat-icon>
+        <span class="mx-1"> Datenschutz</span>
+        </div>
+      </a>
+
+      <mat-divider></mat-divider>
+
+
       <!-- Link to the 'login' route -->
       <a mat-list-item routerLink="user">
+        <div class="d-inline-flex">
         <mat-icon>library_books</mat-icon>
-        <span> User</span>
+        <span class="mx-1"> User</span>
+        </div>
       </a>
 
       <mat-divider></mat-divider>
