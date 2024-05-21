@@ -30,9 +30,13 @@ import {
 } from '../../store/user/user.reducers';
 import { userActions } from '../../store/user/user.actions';
 import { MatSlideToggle } from '@angular/material/slide-toggle';
-import { FormsModule } from '@angular/forms';
+import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { selectCurrentUser } from '../../../../auth/store/auth.reducers';
 import { PaginationQueryParamsInterface } from '../../../../shared/type/pagination-query-params.interface';
+import { MatError, MatFormField, MatLabel, MatSuffix } from '@angular/material/form-field';
+import { MatInput } from '@angular/material/input';
+import { FabButtonComponent } from '../../../../shared/component/fab-button/fab-button.component';
+import { MatOption, MatSelect } from '@angular/material/select';
 
 @Component({
   selector: 'app-user-role-management',
@@ -57,16 +61,25 @@ import { PaginationQueryParamsInterface } from '../../../../shared/type/paginati
     MatSlideToggle,
     FormsModule,
     MatIcon,
+    MatError,
+    MatFormField,
+    MatInput,
+    MatLabel,
+    MatSuffix,
+    ReactiveFormsModule,
+    FabButtonComponent,
+    MatSelect,
+    MatOption,
   ],
-  templateUrl: './user-role-management.component.html',
-  styleUrl: './user-role-management.component.scss',
+  templateUrl: './user-management.component.html',
+  styleUrl: './user-management.component.scss',
 })
-export class UserRoleManagementComponent implements OnInit {
-  title = 'Benutzer Rollenverwaltung';
+export class UserManagementComponent implements OnInit {
+  title = 'Benutzer Management';
 
   // Columns to display in the table
   displayedMobileColumns: string[] = ['id', 'username', 'isAdmin'];
-  displayedDesktopColumns: string[] = ['id', 'username', 'email', 'isAdmin'];
+  displayedDesktopColumns: string[] = ['id', 'username', 'email', 'isAdmin', 'groups'];
 
   // Currently expanded user
   expandedUser: UserResponseInterface | null = null;
@@ -88,6 +101,12 @@ export class UserRoleManagementComponent implements OnInit {
   // Booleans indicating whether data is currently being fetched or submitted to the database
   isLoading: boolean = false;
   isSubmitting: boolean = false;
+
+  // Search control for the search input field
+  searchControl: FormControl = new FormControl('');
+
+  userGroupsControl: FormControl = new FormControl('');
+  groups: string[] = ['Extra cheese', 'Mushroom', 'Onion', 'Pepperoni', 'Sausage', 'Tomato'];
 
   constructor(
     private store: Store,
@@ -176,5 +195,18 @@ export class UserRoleManagementComponent implements OnInit {
 
   checkIsLoadingIsSubmitting(): boolean {
     return this.isLoading || this.isSubmitting;
+  }
+
+  searchUsers() {
+    const searchQuery = this.searchControl.value;
+    console.log('Suchanfrage:', searchQuery);
+
+    // dispatch action to fetch users with search-query
+  }
+
+  changeUserGroups() {
+    // wenn control value gleich ist wie user.gruppen, dann nichts machen
+
+    console.log(this.userGroupsControl.value);
   }
 }

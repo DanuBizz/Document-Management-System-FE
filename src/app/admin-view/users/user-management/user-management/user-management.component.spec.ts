@@ -1,13 +1,13 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { UserRoleManagementComponent } from './user-role-management.component';
+import { UserManagementComponent } from './user-management.component';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { By } from '@angular/platform-browser';
 
 describe('UserManagementComponent', () => {
-  let component: UserRoleManagementComponent;
-  let fixture: ComponentFixture<UserRoleManagementComponent>;
+  let component: UserManagementComponent;
+  let fixture: ComponentFixture<UserManagementComponent>;
   let store: MockStore;
   const initialState = {
     user: {
@@ -34,11 +34,11 @@ describe('UserManagementComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [UserRoleManagementComponent],
+      imports: [UserManagementComponent],
       providers: [provideMockStore({ initialState }), provideAnimationsAsync()],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(UserRoleManagementComponent);
+    fixture = TestBed.createComponent(UserManagementComponent);
     component = fixture.componentInstance;
     store = TestBed.inject(MockStore);
     fixture.detectChanges();

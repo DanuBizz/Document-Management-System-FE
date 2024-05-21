@@ -1,17 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { UserGroupManagementComponent } from './user-group-management.component';
+import { GroupManagementComponent } from './group-management.component';
 
 describe('UserGroupManagementComponent', () => {
-  let component: UserGroupManagementComponent;
-  let fixture: ComponentFixture<UserGroupManagementComponent>;
+  let component: GroupManagementComponent;
+  let fixture: ComponentFixture<GroupManagementComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [UserGroupManagementComponent],
+      imports: [GroupManagementComponent],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(UserGroupManagementComponent);
+    fixture = TestBed.createComponent(GroupManagementComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

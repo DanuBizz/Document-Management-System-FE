@@ -1,8 +1,8 @@
 import { Component, signal } from '@angular/core';
 import { MatTab, MatTabGroup, MatTabLabel } from '@angular/material/tabs';
 import { RouterLink } from '@angular/router';
-import { UserGroupManagementComponent } from './user-group-management/user-group-management.component';
-import { UserRoleManagementComponent } from './user-role-management/user-role-management.component';
+import { GroupManagementComponent } from './group-management/group-management.component';
+import { UserManagementComponent } from './user-management/user-management.component';
 import { MatIcon } from '@angular/material/icon';
 import { MatTooltip } from '@angular/material/tooltip';
 
@@ -13,15 +13,15 @@ import { MatTooltip } from '@angular/material/tooltip';
     MatTabGroup,
     MatTab,
     RouterLink,
-    UserGroupManagementComponent,
-    UserRoleManagementComponent,
+    GroupManagementComponent,
+    UserManagementComponent,
     MatIcon,
     MatTabLabel,
     MatTooltip,
   ],
-  templateUrl: './user-management.component.html',
-  styleUrl: './user-management.component.scss',
+  templateUrl: './users-groups-management.component.html',
+  styleUrl: './users-groups-management.component.scss',
 })
-export class UserManagementComponent {
+export class UsersGroupsManagementComponent {
   selectedTabIndex = signal(0);
 }

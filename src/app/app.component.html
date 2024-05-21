@@ -1,7 +1,6 @@
 <mat-sidenav-container fullscreen>
   <mat-sidenav #sidenav>
     <mat-nav-list (click)="sidenav.close()">
-
       <!-- Link to the 'login' route -->
       <a mat-list-item routerLink="login">
         <div class="d-inline-flex">
@@ -14,8 +13,8 @@
 
       <a mat-list-item routerLink="/">
         <div class="d-inline-flex">
-          <mat-icon class="mx-1">alternate_email</mat-icon>
-          <span>Kontakt</span>
+          <mat-icon>alternate_email</mat-icon>
+          <span class="mx-1">Kontakt</span>
         </div>
       </a>
 
@@ -23,8 +22,8 @@
 
       <a mat-list-item routerLink="">
         <div class="d-inline-flex">
-        <mat-icon>account_balance</mat-icon>
-        <span class="mx-1"> Impressum</span>
+          <mat-icon>account_balance</mat-icon>
+          <span class="mx-1">Impressum</span>
         </div>
       </a>
 
@@ -32,19 +31,18 @@
 
       <a mat-list-item routerLink="">
         <div class="d-inline-flex">
-        <mat-icon>security</mat-icon>
-        <span class="mx-1"> Datenschutz</span>
+          <mat-icon>security</mat-icon>
+          <span class="mx-1">Datenschutz</span>
         </div>
       </a>
 
       <mat-divider></mat-divider>
-
 
       <!-- Link to the 'login' route -->
       <a mat-list-item routerLink="user">
         <div class="d-inline-flex">
-        <mat-icon>library_books</mat-icon>
-        <span class="mx-1"> User</span>
+          <mat-icon>library_books</mat-icon>
+          <span class="mx-1">User</span>
         </div>
       </a>
 
@@ -53,7 +51,6 @@
       <a mat-list-item class="logo-item">
         <div class="side-nav-logo"></div>
       </a>
-
     </mat-nav-list>
   </mat-sidenav>
 

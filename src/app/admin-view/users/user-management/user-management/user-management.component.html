@@ -2,7 +2,13 @@
   <div class="container-fluid">
     <!-- Title -->
     <h1 class="text-center mobile-title">{{ title }}</h1>
-    <br />
+
+    <mat-form-field appearance="outline" hideRequiredMarker="true" class="mt-3">
+      <mat-label>Benutzer suchen</mat-label>
+      <input matInput [formControl]="searchControl" />
+      <app-fab-button icon="search" tooltip="Suchen" (click)="searchUsers()" matSuffix> </app-fab-button>
+    </mat-form-field>
+
     <!-- Progress bar: displayed while data is being fetched -->
     <mat-progress-bar mode="indeterminate" *ngIf="checkIsLoadingIsSubmitting()" color="accent"></mat-progress-bar>
 
@@ -48,7 +54,9 @@
 
           <!-- Expanded row column for user details -->
           <ng-container matColumnDef="expandedDetail">
-            <td mat-cell *matCellDef="let user" colspan="3" class="px-0 expandable-row"><strong>Email: </strong>{{ user.email }}</td>
+            <td mat-cell *matCellDef="let user" colspan="3" class="px-0 expandable-row">
+              <strong>Email: </strong>{{ user.email }}
+            </td>
           </ng-container>
 
           <!-- Header row definition -->
@@ -101,12 +109,30 @@
           <!-- Column header for role -->
           <ng-container matColumnDef="isAdmin">
             <th mat-header-cell *matHeaderCellDef mat-sort-header>Admin</th>
-            <td mat-cell *matCellDef="let user" (click)="$event.stopPropagation()">
+            <td mat-cell *matCellDef="let user">
               <mat-slide-toggle
                 color="primary"
                 [disabled]="data.currentUser?.username === user.username || checkIsLoadingIsSubmitting()"
                 [ngModel]="user.isAdmin"
                 (click)="toggleUserIsAdmin(user.id, user.isAdmin)"></mat-slide-toggle>
+            </td>
+          </ng-container>
+
+          <!-- Column header for role -->
+          <ng-container matColumnDef="groups">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Gruppe</th>
+            <td mat-cell *matCellDef="let user">
+              <mat-form-field appearance="outline">
+                <mat-select
+                  placeholder="Keine Gruppe"
+                  [formControl]="userGroupsControl"
+                  multiple
+                  (closed)="changeUserGroups()">
+                  @for (group of groups; track group) {
+                    <mat-option [value]="group">{{ group }}</mat-option>
+                  }
+                </mat-select>
+              </mat-form-field>
             </td>
           </ng-container>
 

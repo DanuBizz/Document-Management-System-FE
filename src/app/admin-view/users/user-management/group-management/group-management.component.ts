@@ -58,11 +58,11 @@ import { FormsModule } from '@angular/forms';
     FormsModule,
     MatIcon,
   ],
-  templateUrl: './user-group-management.component.html',
-  styleUrl: './user-group-management.component.scss',
+  templateUrl: './group-management.component.html',
+  styleUrl: './group-management.component.scss',
 })
-export class UserGroupManagementComponent implements OnInit {
-  title = 'Benutzer Gruppenverwaltung';
+export class GroupManagementComponent implements OnInit {
+  title = 'Gruppen Management';
 
   // Columns to display in the table
   displayedDesktopColumns: string[] = ['id', 'group', 'users'];
