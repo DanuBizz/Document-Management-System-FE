@@ -38,7 +38,6 @@ import { openDisplayDocumentDialog } from '../../../shared/component/display-doc
 import { selectFileData } from '../../../shared/store/file/file.reducers';
 import { MatBadge } from '@angular/material/badge';
 import { DispatchActionService } from '../../../shared/service/dispatch-action.service';
-import { selectCategoryAreLoaded } from '../../categories/store/category.reducers';
 
 @Component({
   selector: 'app-document-management',
@@ -133,7 +132,7 @@ export class DocumentManagementComponent implements OnInit {
 
     // Using the DispatchActionService to check if the data are loaded.
     // If not loaded, it dispatches the action to get the data with a query.
-    this.dispatchActionService.checkAndDispatchAction(this.store.select(selectCategoryAreLoaded), () =>
+    this.dispatchActionService.checkAndDispatchAction(this.store.select(selectDocumentAreLoaded), () =>
       this.dispatchGetDocumentsWithQueryAction()
     );
   }
