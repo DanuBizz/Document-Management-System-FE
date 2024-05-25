@@ -15,6 +15,7 @@ import { MatCheckbox } from '@angular/material/checkbox';
 import { FabButtonComponent } from '../../../shared/component/fab-button/fab-button.component';
 import { Store } from '@ngrx/store';
 import {
+  selectDocumentAreLoaded,
   selectDocumentData,
   selectDocumentError,
   selectDocumentIsLoading,
@@ -27,7 +28,6 @@ import { documentActions } from '../store/document.actions';
 import { MatProgressBar } from '@angular/material/progress-bar';
 import { MatDialog } from '@angular/material/dialog';
 import { openCreateDocumentDialog } from '../create-document-dialog/document-dialog.config';
-import { categoryActions } from '../../categories/store/category.actions';
 
 import { DocumentResponseInterface } from '../../type/document-response.interface';
 import { DocumentVersionsResponseInterface } from '../../type/document-versions-response.interface';
@@ -37,6 +37,8 @@ import { fileActions } from '../../../shared/store/file/file.actions';
 import { openDisplayDocumentDialog } from '../../../shared/component/display-document-dialog/display-document-dialog.config';
 import { selectFileData } from '../../../shared/store/file/file.reducers';
 import { MatBadge } from '@angular/material/badge';
+import { DispatchActionService } from '../../../shared/service/dispatch-action.service';
+import { selectCategoryAreLoaded } from '../../categories/store/category.reducers';
 
 @Component({
   selector: 'app-document-management',
@@ -73,6 +75,7 @@ export class DocumentManagementComponent implements OnInit {
     pageSizeOptions: this.store.select(selectDocumentPageSizeOptions),
     pagination: this.store.select(selectDocumentPagination),
     isSubmitting: this.store.select(selectDocumentIsSubmitting),
+    areLoaded: this.store.select(selectDocumentAreLoaded),
   });
 
   // Pagination and sorting properties for the component ts file
@@ -109,10 +112,12 @@ export class DocumentManagementComponent implements OnInit {
   /**
    * @param store - The Redux store instance injected via dependency injection.
    * @param dialog - The MatDialog service for opening dialogs.
+   * @param dispatchActionService - Dispatches an action only if needed, based on the current state of areLoaded
    */
   constructor(
     private store: Store,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private dispatchActionService: DispatchActionService
   ) {}
 
   ngOnInit(): void {
@@ -126,10 +131,11 @@ export class DocumentManagementComponent implements OnInit {
       this.isSubmitting = data.isSubmitting;
     });
 
-    this.dispatchGetDocumentsWithQueryAction();
-
-    // Load all categories on initialization
-    this.store.dispatch(categoryActions.getAllCategories());
+    // Using the DispatchActionService to check if the data are loaded.
+    // If not loaded, it dispatches the action to get the data with a query.
+    this.dispatchActionService.checkAndDispatchAction(this.store.select(selectCategoryAreLoaded), () =>
+      this.dispatchGetDocumentsWithQueryAction()
+    );
   }
 
   /**

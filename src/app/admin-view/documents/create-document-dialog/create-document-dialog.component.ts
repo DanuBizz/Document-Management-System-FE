@@ -30,6 +30,7 @@ import { docCategoryActions } from '../../../shared/store/doc-category/doc-categ
 import { selectDocCategoryData } from '../../../shared/store/doc-category/doc-category.reducers';
 import { DocumentRequestInterface } from '../../type/document-request.interface';
 import { FabButtonComponent } from '../../../shared/component/fab-button/fab-button.component';
+import { categoryActions } from '../../categories/store/category.actions';
 
 @Component({
   selector: 'app-create-document-dialog',
@@ -107,6 +108,9 @@ export class CreateDocumentDialogComponent implements OnInit {
       .subscribe(docCategories => {
         this.documentCategories = docCategories;
       });
+
+    // Load all categories on initialization
+    this.store.dispatch(categoryActions.getAllCategories());
   }
 
   /**

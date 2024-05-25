@@ -10,4 +10,5 @@ export interface DocumentStateInterface {
   totalElements: string;
   pageSizeOptions: number[];
   pagination: PaginationQueryParamsInterface;
+  areLoaded: boolean;
 }
