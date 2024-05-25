@@ -1,0 +1,11 @@
+.error-image {
+  max-width: 300px;
+  border-radius: 4px;
+  background-image: url('/assets/img/http-error-404-not-found.png');
+}
+
+.not-found {
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+}
