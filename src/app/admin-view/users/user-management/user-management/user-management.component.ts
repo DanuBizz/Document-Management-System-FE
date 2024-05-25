@@ -22,6 +22,7 @@ import { UserResponseInterface } from '../../../type/user-response.interface';
 import { combineLatest } from 'rxjs';
 import {
   selectTotalUserElements,
+  selectUserAreLoaded,
   selectUserError,
   selectUserIsLoading,
   selectUserIsSubmitting,
@@ -37,6 +38,7 @@ import { MatError, MatFormField, MatLabel, MatSuffix } from '@angular/material/f
 import { MatInput } from '@angular/material/input';
 import { FabButtonComponent } from '../../../../shared/component/fab-button/fab-button.component';
 import { MatOption, MatSelect } from '@angular/material/select';
+import { DispatchActionService } from '../../../../shared/service/dispatch-action.service';
 
 @Component({
   selector: 'app-user-role-management',
@@ -93,6 +95,7 @@ export class UserManagementComponent implements OnInit {
     currentUser: this.store.select(selectCurrentUser),
     pagination: this.store.select(selectUserPagination),
     isSubmitting: this.store.select(selectUserIsSubmitting),
+    areLoaded: this.store.select(selectUserAreLoaded),
   });
 
   // Pagination and sorting properties for the component ts file
@@ -111,7 +114,8 @@ export class UserManagementComponent implements OnInit {
   constructor(
     private store: Store,
     public paginationConfigService: PaginationConfigService,
-    private changeDetectorRef: ChangeDetectorRef
+    private changeDetectorRef: ChangeDetectorRef,
+    private dispatchActionService: DispatchActionService
   ) {}
 
   ngOnInit(): void {
@@ -127,7 +131,11 @@ export class UserManagementComponent implements OnInit {
       this.changeDetectorRef.detectChanges();
     });
 
-    this.dispatchGetUsersWithQueryAction();
+    // Using the DispatchActionService to check if the data are loaded.
+    // If not loaded, it dispatches the action to get the data with a query.
+    this.dispatchActionService.checkAndDispatchAction(this.store.select(selectUserAreLoaded), () =>
+      this.dispatchGetUsersWithQueryAction()
+    );
   }
 
   /**

@@ -18,6 +18,7 @@ export const initialState: UserStateInterface = {
     pageSize: paginationConfigService.getInitialPageSize(),
     sort: paginationConfigService.getInitialSort(),
   },
+  areLoaded: false,
 };
 
 export const userFeature = createFeature({
@@ -64,6 +65,7 @@ export const userFeature = createFeature({
         isLoading: false,
         tableData: users,
         totalElements: totalElements,
+        areLoaded: true,
       })
     ),
     on(
@@ -72,6 +74,7 @@ export const userFeature = createFeature({
         ...state,
         isLoading: false,
         error: action.error,
+        areLoaded: false,
       })
     ),
 
@@ -116,4 +119,5 @@ export const {
   selectAllData: selectUserAllData,
   selectTotalElements: selectTotalUserElements,
   selectPagination: selectUserPagination,
+  selectAreLoaded: selectUserAreLoaded,
 } = userFeature;

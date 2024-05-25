@@ -19,6 +19,7 @@ export const initialState: CategoryStateInterface = {
     pageSize: paginationConfigService.getInitialPageSize(),
     sort: paginationConfigService.getInitialSort(),
   },
+  areLoaded: false,
 };
 
 export const categoriesFeature = createFeature({
@@ -70,6 +71,7 @@ export const categoriesFeature = createFeature({
         isLoading: false,
         tableData: categories,
         totalElements: totalElements,
+        areLoaded: true,
       })
     ),
     on(
@@ -78,6 +80,7 @@ export const categoriesFeature = createFeature({
         ...state,
         isLoading: false,
         error: action.error,
+        areLoaded: false,
       })
     ),
 
@@ -153,4 +156,5 @@ export const {
   selectTotalElements: selectCategoryTotalElements,
   selectPageSizeOptions: selectCategoryPageSizeOptions,
   selectPagination: selectCategoryPagination,
+  selectAreLoaded: selectCategoryAreLoaded,
 } = categoriesFeature;

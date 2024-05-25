@@ -119,13 +119,14 @@ export const refreshGetCategoriesEffect = createEffect(
   (actions$ = inject(Actions), store = inject(Store)) => {
     return actions$.pipe(
       ofType(categoryActions.createCategorySuccess, categoryActions.updateCategorySuccess),
-      mergeMap(() => {
-        return store.select(selectCategoryPagination).pipe(
+      switchMap(() =>
+        store.select(selectCategoryPagination).pipe(
           mergeMap(pagination => {
-            return [categoryActions.getCategoriesWithQuery({ pagination }), categoryActions.getAllCategories()];
+            const action = categoryActions.getCategoriesWithQuery({ pagination });
+            return of(action);
           })
-        );
-      })
+        )
+      )
     );
   },
   { functional: true, dispatch: true }

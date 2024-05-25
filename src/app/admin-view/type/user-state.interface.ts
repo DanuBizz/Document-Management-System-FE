@@ -10,4 +10,5 @@ export interface UserStateInterface {
   tableData: UserResponseInterface[];
   totalElements: string;
   pagination: PaginationQueryParamsInterface;
+  areLoaded: boolean;
 }

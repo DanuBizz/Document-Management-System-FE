@@ -16,6 +16,7 @@ import { CategoryService } from '../../../shared/service/category.service';
 import { combineLatest, filter } from 'rxjs';
 import { Store } from '@ngrx/store';
 import {
+  selectCategoryAreLoaded,
   selectCategoryError,
   selectCategoryIsLoading,
   selectCategoryIsSubmitting,
@@ -32,6 +33,7 @@ import { CategoryRequestInterface } from '../../type/category-request.interface'
 import { PaginationQueryParamsInterface } from '../../../shared/type/pagination-query-params.interface';
 import { CategoryResponseInterface } from '../../type/category-response.interface';
 import { MatBadge } from '@angular/material/badge';
+import { DispatchActionService } from '../../../shared/service/dispatch-action.service';
 
 @Component({
   selector: 'app-category-management',
@@ -69,6 +71,7 @@ export class CategoryManagementComponent implements OnInit {
     pageSizeOptions: this.store.select(selectCategoryPageSizeOptions),
     pagination: this.store.select(selectCategoryPagination),
     isSubmitting: this.store.select(selectCategoryIsSubmitting),
+    areLoaded: this.store.select(selectCategoryAreLoaded),
   });
 
   // Pagination and sorting properties for the component ts file
@@ -94,10 +97,12 @@ export class CategoryManagementComponent implements OnInit {
   /**
    * @param store - The Redux store instance injected via dependency injection.
    * @param dialog - The MatDialog service for opening dialogs.
+   * @param dispatchActionService - Dispatches an action only if needed, based on the current state of areLoaded
    */
   constructor(
     private store: Store,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private dispatchActionService: DispatchActionService
   ) {}
 
   ngOnInit(): void {
@@ -112,7 +117,11 @@ export class CategoryManagementComponent implements OnInit {
       this.isSubmitting = data.isSubmitting;
     });
 
-    this.dispatchGetCategoriesWithQueryAction();
+    // Using the DispatchActionService to check if the data are loaded.
+    // If not loaded, it dispatches the action to get the data with a query.
+    this.dispatchActionService.checkAndDispatchAction(this.store.select(selectCategoryAreLoaded), () =>
+      this.dispatchGetCategoriesWithQueryAction()
+    );
   }
 
   /**

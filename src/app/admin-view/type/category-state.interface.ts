@@ -11,4 +11,5 @@ export interface CategoryStateInterface {
   totalElements: string;
   pageSizeOptions: number[];
   pagination: PaginationQueryParamsInterface;
+  areLoaded: boolean;
 }
