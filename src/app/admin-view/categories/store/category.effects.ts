@@ -1,14 +1,13 @@
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { inject } from '@angular/core';
 import { map, mergeMap, of, switchMap } from 'rxjs';
-import { catchError, tap } from 'rxjs/operators';
+import { catchError } from 'rxjs/operators';
 import { CategoryService } from '../../../shared/service/category.service';
 import { categoryActions } from './category.actions';
 import { CategoryResponseInterface } from '../../type/category-response.interface';
 import { HttpErrorResponse } from '@angular/common/http';
-import { SnackbarService } from '../../../shared/service/snackbar.service';
 import { Store } from '@ngrx/store';
-import { selectCategoryError, selectCategoryPagination } from './category.reducers';
+import { selectCategoryPagination } from './category.reducers';
 
 export const getAllCategoriesEffect = createEffect(
   // Injecting dependencies
@@ -111,45 +110,6 @@ export const updateCategoryEffect = createEffect(
     );
   },
   { functional: true }
-);
-
-export const openSnackbarErrorEffect = createEffect(
-  // Injecting dependencies
-  (actions$ = inject(Actions), snackbarService = inject(SnackbarService), store = inject(Store)) => {
-    return actions$.pipe(
-      // Listening for actions of type 'getAllCategoriesFailure'
-      ofType(
-        categoryActions.getAllCategoriesFailure,
-        categoryActions.getCategoriesWithQueryFailure,
-        categoryActions.createCategoryFailure,
-        categoryActions.updateCategoryFailure
-      ),
-      tap(() => {
-        // Subscribing to selectError selector to get the error from the store
-        store.select(selectCategoryError).subscribe(error => {
-          // Opening a snackbar to display the error message
-          snackbarService.openSnackBar('Fehler beim Übermitteln der Kategorien. \nError: ' + JSON.stringify(error));
-        });
-      })
-    );
-  },
-  { functional: true, dispatch: false } // indicates not to dispatch any actions
-);
-
-/**
- * Effect for displaying a snackbar notification.
- * Upon receiving such an action, it displays a snackbar notification containing the success message
- */
-export const openSnackbarSuccessEffect = createEffect(
-  (actions$ = inject(Actions), snackbarService = inject(SnackbarService)) => {
-    return actions$.pipe(
-      ofType(categoryActions.createCategorySuccess, categoryActions.updateCategorySuccess),
-      tap(({ message }) => {
-        snackbarService.openSnackBar(message);
-      })
-    );
-  },
-  { functional: true, dispatch: false }
 );
 
 /**

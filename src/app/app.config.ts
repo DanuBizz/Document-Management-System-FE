@@ -9,6 +9,7 @@ import * as userEffects from './admin-view/users/store/user/user.effects';
 import * as docCategoryEffects from './shared/store/doc-category/doc-category.effects';
 import * as fileEffects from './shared/store/file/file.effects';
 import * as groupEffects from './admin-view/users/store/group/group.effects';
+import * as notificationEffects from './shared/store/notification/notification.effects';
 
 import { routes } from './app.routes';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
@@ -53,6 +54,7 @@ export const appConfig: ApplicationConfig = {
       docCategoryEffects,
       fileEffects,
       groupEffects,
+      notificationEffects,
     ]),
     // Provide router store
     provideRouterStore(),

@@ -1,14 +1,13 @@
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { inject } from '@angular/core';
 import { map, mergeMap, of, switchMap } from 'rxjs';
-import { catchError, tap } from 'rxjs/operators';
+import { catchError } from 'rxjs/operators';
 import { HttpErrorResponse } from '@angular/common/http';
 import { userActions } from './user.actions';
 import { UserResponseInterface } from '../../../type/user-response.interface';
 import { UserService } from '../../../../shared/service/user.service';
-import { SnackbarService } from '../../../../shared/service/snackbar.service';
 import { Store } from '@ngrx/store';
-import { selectUserError, selectUserPagination } from './user.reducers';
+import { selectUserPagination } from './user.reducers';
 
 export const getAllUsersEffect = createEffect(
   // Injecting dependencies
@@ -83,42 +82,6 @@ export const changeUserRoleEffect = createEffect(
     );
   },
   { functional: true }
-);
-
-/**
- * Effect for displaying a snackbar notification and dispatch new action.
- * Upon receiving such a success-action, it displays a snackbar notification containing the success message
- * using the provided SnackbarService. It then retrieves the current query parameters from the store
- * and dispatches the 'get' action to fetch updated data.
- */
-export const openSnackbarSuccessEffect = createEffect(
-  (actions$ = inject(Actions), snackbarService = inject(SnackbarService)) => {
-    return actions$.pipe(
-      ofType(userActions.changeUserRoleSuccess),
-      tap(({ message }) => {
-        snackbarService.openSnackBar(message);
-      })
-    );
-  },
-  { functional: true, dispatch: false }
-);
-
-export const openSnackbarErrorEffect = createEffect(
-  // Injecting dependencies
-  (actions$ = inject(Actions), snackbarService = inject(SnackbarService), store = inject(Store)) => {
-    return actions$.pipe(
-      // Listening for actions of type
-      ofType(userActions.getAllUsersFailure, userActions.getUsersWithQueryFailure, userActions.changeUserRoleFailure),
-      tap(() => {
-        // Subscribing to selectError selector to get the error from the store
-        store.select(selectUserError).subscribe(error => {
-          // Opening a snackbar to display the error message
-          snackbarService.openSnackBar('Fehler bei Übermittlung der User. \nError: ' + JSON.stringify(error));
-        });
-      })
-    );
-  },
-  { functional: true, dispatch: false } // indicates not to dispatch any actions
 );
 
 /**

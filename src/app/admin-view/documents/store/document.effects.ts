@@ -1,12 +1,11 @@
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { inject } from '@angular/core';
 import { map, mergeMap, of, switchMap, take } from 'rxjs';
-import { catchError, tap } from 'rxjs/operators';
+import { catchError } from 'rxjs/operators';
 import { HttpErrorResponse } from '@angular/common/http';
 import { documentActions } from './document.actions';
-import { SnackbarService } from '../../../shared/service/snackbar.service';
 import { Store } from '@ngrx/store';
-import { selectDocumentError, selectDocumentPagination } from './document.reducers';
+import { selectDocumentPagination } from './document.reducers';
 import { DocumentService } from '../../../shared/service/document.service';
 
 export const getDocumentsWithQuery = createEffect(
@@ -82,47 +81,6 @@ export const changeDocumentVisibilityEffect = createEffect(
     );
   },
   { functional: true }
-);
-
-// Effect to open a snackbar with error message when fetching documents fails
-export const openSnackbarErrorEffect = createEffect(
-  // Injecting dependencies
-  (actions$ = inject(Actions), snackbarService = inject(SnackbarService), store = inject(Store)) => {
-    return actions$.pipe(
-      // Listening for actions of type
-      ofType(
-        documentActions.getDocumentsWithQueryFailure,
-        documentActions.createDocumentVersionFailure,
-        documentActions.changeDocumentVisibilityFailure
-      ),
-      tap(() => {
-        // Subscribing to selectError selector to get the error from the store
-        store.select(selectDocumentError).subscribe(error => {
-          // Opening a snackbar to display the error message
-          snackbarService.openSnackBar('Fehler bei der Übermittlung.\nError: ' + JSON.stringify(error));
-        });
-      })
-    );
-  },
-  { functional: true, dispatch: false } // Indicates not to dispatch any actions
-);
-
-/**
- * Effect for displaying a snackbar notification and dispatch get documents action.
- * Upon receiving such a success-action, it displays a snackbar notification containing the success message
- * using the provided SnackbarService. It then retrieves the current query parameters from the store
- * and dispatches the 'get' action to fetch updated data.
- */
-export const openSnackbarSuccessEffect = createEffect(
-  (actions$ = inject(Actions), snackbarService = inject(SnackbarService)) => {
-    return actions$.pipe(
-      ofType(documentActions.createDocumentVersionSuccess, documentActions.changeDocumentVisibilitySuccess),
-      tap(({ message }) => {
-        snackbarService.openSnackBar(message);
-      })
-    );
-  },
-  { functional: true, dispatch: false }
 );
 
 /**

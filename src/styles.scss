@@ -11,7 +11,7 @@ $mat-primary: (
   200: #ffcc80,
   300: #ffb74d,
   400: #ffa726,
-  500: #ffa451,
+  500: #e48e48,
   600: #ff9100,
   700: #ff6d00,
   800: #ff5700,
@@ -147,11 +147,6 @@ body {
   background-color: map-get($mat-accent, 600) !important;
 }
 
-.custom-snackbar {
-  white-space: pre-line;
-  text-align: center;
-}
-
 .expandable-row {
   background-color: map-get($mat-accent, 900) !important;
 }
@@ -219,4 +214,30 @@ mat-form-field {
 .mat-badge.mat-badge {
   display: inline-block;
   margin-bottom: 6px;
+}
+
+// changing the background color of the snackbar notifications
+.mat-mdc-snack-bar-container .mdc-snackbar__surface {
+  background-color: transparent !important;
+  box-shadow: none !important;
+}
+
+.mdc-snackbar__label {
+  padding: 0 1rem !important;
+}
+
+.custom-message-box {
+  background-color: map-get($mat-accent, 900) !important;
+  color: $light-primary-text !important;
+  padding: 0.1rem 1rem;
+  border-radius: 0.5rem;
+  box-shadow: 1px 1px 5px 0 rgba(0, 0, 0, 0.75);
+}
+
+.custom-snackbar {
+  position: fixed !important;
+  bottom: 35px !important;
+  right: 0 !important;
+  left: auto !important;
+  padding-bottom: 0 !important;
 }

@@ -1,0 +1,14 @@
+<div *ngFor="let message of messages | keyvalue" class="d-flex flex-column align-items-center">
+  <div class="custom-message-box d-flex flex-row align-items-center w-100">
+    @if (message.value) {
+      <mat-icon class="error-icon custom-icon">thumb_down</mat-icon>
+    } @else {
+      <mat-icon class="success-icon custom-icon">thumb_up</mat-icon>
+    }
+    <span class="custom-message flex-grow-1">{{ message.key }}</span>
+    <button mat-icon-button (click)="removeMessage(message.key)" color="accent">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+  <div class="empty"></div>
+</div>
