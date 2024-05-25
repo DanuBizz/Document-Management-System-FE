@@ -127,7 +127,8 @@
                   placeholder="Keine Gruppe"
                   [formControl]="userGroupsControl"
                   multiple
-                  (closed)="changeUserGroups()">
+                  (closed)="changeUserGroups()"
+                  class="text-center">
                   @for (group of groups; track group) {
                     <mat-option [value]="group">{{ group }}</mat-option>
                   }
