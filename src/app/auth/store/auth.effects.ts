@@ -20,7 +20,7 @@ export const loginEffect = createEffect(
       ofType(authActions.login),
       switchMap(({ request }) => {
         const encodedUsername = btoa(request.user.username);
-        persistenceService.set('accessToken', btoa((request.user.username + ':' + request.user.password)));
+        persistenceService.set('accessToken', btoa(request.user.username + ':' + request.user.password));
         return authService.login(request).pipe(
           switchMap(() => {
             console.log('Login successful, now fetching current user...');
@@ -29,9 +29,9 @@ export const loginEffect = createEffect(
                 console.log('Current user:', currentUser);
                 return authActions.loginSuccess({ currentUser });
               }),
-          catchError((errorResponse: HttpErrorResponse) => {
-            return of(authActions.loginFailure({ errors: errorResponse.error.errors }));
-          })
+              catchError((errorResponse: HttpErrorResponse) => {
+                return of(authActions.loginFailure({ errors: errorResponse.error.errors }));
+              })
             );
           })
         );
@@ -40,7 +40,6 @@ export const loginEffect = createEffect(
   },
   { functional: true }
 );
-
 
 /**
  * Effect that redirects the user after successful login.

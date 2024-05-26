@@ -10,7 +10,7 @@ import { environment } from '../../../environments/environment';
 })
 //AuthService provides authentication-related functionalities.
 export class AuthService {
-  authUrl = 'http://localhost:8080/usercontrol'
+  authUrl = 'http://localhost:8080/usercontrol';
   private isLoggedInSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   isLoggedIn$: Observable<boolean> = this.isLoggedInSubject.asObservable();
   /**
@@ -28,10 +28,12 @@ export class AuthService {
   login(data: LoginRequestInterface): Observable<HttpStatusCode> {
     const url = this.authUrl;
 
-    return this.http.post<HttpStatusCode>(url, data).pipe( map(response => {
-      console.log('Response from login:', response);
-      return response;
-    }));
+    return this.http.post<HttpStatusCode>(url, data).pipe(
+      map(response => {
+        console.log('Response from login:', response);
+        return response;
+      })
+    );
   }
 
   /**

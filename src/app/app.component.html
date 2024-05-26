@@ -24,10 +24,10 @@
 
       <!-- Link to the 'login' route -->
       <ng-container *ngIf="isLoggedIn; else loggedOut">
-        <a mat-list-item (click)="logout()">
+        <button mat-list-item (click)="logout()">
           <mat-icon>logout</mat-icon>
           <span>Logout</span>
-        </a>
+        </button>
       </ng-container>
       <ng-template #loggedOut>
         <a mat-list-item routerLink="login">
@@ -77,11 +77,11 @@
         </a>
 
         <!-- Link to the 'login' route -->
-        <ng-container *ngIf="isLoggedIn ; else loggedOutToolbar">
-          <a class="menu-item toolbar-button" mat-button (click)="logout()">
+        <ng-container *ngIf="isLoggedIn; else loggedOutToolbar">
+          <button class="menu-item toolbar-button" mat-button (click)="logout()" aria-label="Logout">
             <span class="icon-with-text"><mat-icon>logout</mat-icon></span>
             <span class="button-description">Logout</span>
-          </a>
+          </button>
         </ng-container>
         <ng-template #loggedOutToolbar>
           <a class="menu-item toolbar-button" mat-button routerLink="login" routerLinkActive="menu-item-active">
@@ -127,10 +127,10 @@
         </a>
 
         <!-- Link to the '/login' route -->
-        <ng-container *ngIf="isLoggedIn ; else loggedOutMobile">
-          <a class="menu-item" mat-button (click)="logout()">
+        <ng-container *ngIf="isLoggedIn; else loggedOutMobile">
+          <button class="menu-item" mat-button (click)="logout()">
             <mat-icon>logout</mat-icon>
-          </a>
+          </button>
         </ng-container>
         <ng-template #loggedOutMobile>
           <a class="menu-item" mat-button routerLink="/login" routerLinkActive="menu-item-active">
