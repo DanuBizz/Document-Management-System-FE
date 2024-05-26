@@ -180,6 +180,22 @@ mat-form-field {
   white-space: normal !important;
 }
 
+.custom-select-groups .mat-mdc-select-value-text {
+  white-space: nowrap !important;
+}
+
+.custom-select-groups .mdc-text-field--outlined .mat-mdc-form-field-infix,
+.mdc-text-field--no-label .mat-mdc-form-field-infix {
+  padding-top: 10px !important;
+  padding-bottom: 10px !important;
+}
+
+.custom-select-groups .mat-mdc-form-field-infix {
+  min-height: auto !important;
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+}
+
 .table-icon-hint {
   height: 15px !important;
   width: 15px !important;

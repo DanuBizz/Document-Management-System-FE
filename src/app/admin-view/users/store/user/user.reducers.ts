@@ -102,6 +102,31 @@ export const userFeature = createFeature({
         isSubmitting: false,
         error: action.error,
       })
+    ),
+
+    // CHANGE USER GROUP
+
+    on(
+      userActions.changeUserGroups,
+      (state): UserStateInterface => ({
+        ...state,
+        isSubmitting: true,
+      })
+    ),
+    on(
+      userActions.changeUserGroupsSuccess,
+      (state): UserStateInterface => ({
+        ...state,
+        isSubmitting: false,
+      })
+    ),
+    on(
+      userActions.changeUserGroupsFailure,
+      (state, action): UserStateInterface => ({
+        ...state,
+        isSubmitting: false,
+        error: action.error,
+      })
     )
 
     // Handling router navigated action

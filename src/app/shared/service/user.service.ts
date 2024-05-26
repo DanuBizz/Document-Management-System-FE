@@ -62,4 +62,14 @@ export class UserService {
       .put<{ message: string }>(this.baseUrl + `/${id}/toggle-admin`, { isAdmin: isAdmin })
       .pipe(map(() => ({ message: 'Erfolgreich geändert' })));
   }
+
+  /**
+   * Updates the groups of a user based on their ID.
+   *
+   * @param id The ID of the user who needs to be updated.
+   * @param groupIds
+   */
+  updateUserGroups(id: number, groupIds: number[]) {
+    return this.http.put<{ message: string }>(this.baseUrl + `/${id}/groups`, groupIds);
+  }
 }

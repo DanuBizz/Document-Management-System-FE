@@ -19,7 +19,7 @@ import { MatIcon } from '@angular/material/icon';
 import { Store } from '@ngrx/store';
 import { PaginationConfigService } from '../../../../shared/service/pagination-config.service';
 import { UserResponseInterface } from '../../../type/user-response.interface';
-import { combineLatest, debounceTime } from 'rxjs';
+import { combineLatest, debounceTime, Observable } from 'rxjs';
 import {
   selectTotalUserElements,
   selectUserAreLoaded,
@@ -39,6 +39,9 @@ import { FabButtonComponent } from '../../../../shared/component/fab-button/fab-
 import { MatOption, MatSelect } from '@angular/material/select';
 import { DispatchActionService } from '../../../../shared/service/dispatch-action.service';
 import { QueryParamsInterface } from '../../../../shared/type/query-params.interface';
+import { GroupResponseInterface } from '../../../type/group-response-interface';
+import { selectGroupAllData } from '../../store/group/group.reducers';
+import { groupActions } from '../../store/group/group.actions';
 
 @Component({
   selector: 'app-user-role-management',
@@ -80,7 +83,7 @@ export class UserManagementComponent implements OnInit {
   title = 'Benutzer Management';
 
   // Columns to display in the table
-  displayedMobileColumns: string[] = ['id', 'username', 'isAdmin'];
+  displayedMobileColumns: string[] = ['arrow', 'username', 'isAdmin'];
   displayedDesktopColumns: string[] = ['id', 'username', 'email', 'isAdmin', 'groups'];
 
   // Currently expanded user
@@ -107,8 +110,11 @@ export class UserManagementComponent implements OnInit {
   // Search control for the search input field
   searchControl: FormControl = new FormControl('');
 
-  userGroupsControl: FormControl = new FormControl('');
-  groups: string[] = ['Extra cheese', 'Mushroom', 'Onion', 'Pepperoni', 'Sausage', 'Tomato'];
+  // Observable for retrieving groups from the store
+  groups$: Observable<GroupResponseInterface[]> = this.store.select(selectGroupAllData);
+
+  // Values which will be displayed in the select-input and modified
+  userGroupSelections: { [key: number]: number[] } = {};
 
   constructor(
     private store: Store,
@@ -129,12 +135,20 @@ export class UserManagementComponent implements OnInit {
       this.isLoading = data.isLoading;
       this.isSubmitting = data.isSubmitting;
       this.changeDetectorRef.detectChanges();
+
+      data.users.forEach(user => {
+        this.userGroupSelections[user.id] = [...user.groupIds];
+      });
     });
 
     // Using the DispatchActionService to check if the data are loaded.
     // If not loaded, it dispatches the action to get the data with a query.
     this.dispatchActionService.checkAndDispatchAction(this.store.select(selectUserAreLoaded), () =>
       this.dispatchGetUsersWithQueryAction()
+    );
+
+    this.dispatchActionService.checkAndDispatchAction(this.store.select(selectUserAreLoaded), () =>
+      this.store.dispatch(groupActions.getAllGroups())
     );
 
     // sets initial the store value of search
@@ -224,9 +238,24 @@ export class UserManagementComponent implements OnInit {
     this.dispatchGetUsersWithQueryAction();
   }
 
-  changeUserGroups() {
-    // wenn control value gleich ist wie user.gruppen, dann nichts machen
+  /**
+   * Updates the groups of a user, if the values has been changed
+   */
+  changeUserGroups(userId: number, groupIdsNew: number[], groupIds: number[]) {
+    if (!this.arraysEqual(groupIds, groupIdsNew)) {
+      this.store.dispatch(userActions.changeUserGroups({ id: userId, groupIds: groupIdsNew }));
+    }
+  }
 
-    console.log(this.userGroupsControl.value);
+  /**
+   * Compares two arrays to determine if they are equal.
+   * Two arrays are considered equal if they have the same length and contain the same elements in the same order.
+   */
+  arraysEqual(arr1: number[], arr2: number[]): boolean {
+    if (arr1.length !== arr2.length) return false;
+    for (let i = 0; i < arr1.length; i++) {
+      if (arr1[i] !== arr2[i]) return false;
+    }
+    return true;
   }
 }

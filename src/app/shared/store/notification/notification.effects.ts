@@ -25,6 +25,7 @@ export const openNotificationErrorEffect = createEffect(
         userActions.getAllUsersFailure,
         userActions.getUsersWithQueryFailure,
         userActions.changeUserRoleFailure,
+        userActions.changeUserGroupsFailure,
 
         groupActions.getAllGroupsFailure,
         groupActions.getGroupsWithQueryFailure,
@@ -64,6 +65,7 @@ export const openNotificationSuccessEffect = createEffect(
         userActions.getAllUsersSuccess,
         userActions.getUsersWithQuerySuccess,
         userActions.changeUserRoleSuccess,
+        userActions.changeUserGroupsSuccess,
 
         groupActions.getAllGroupsSuccess,
         groupActions.getGroupsWithQuerySuccess,

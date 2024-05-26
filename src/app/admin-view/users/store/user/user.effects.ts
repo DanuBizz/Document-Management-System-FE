@@ -84,6 +84,30 @@ export const changeUserRoleEffect = createEffect(
   { functional: true }
 );
 
+export const changeUserGroupsEffect = createEffect(
+  // Injecting dependencies
+  (actions$ = inject(Actions), userService = inject(UserService)) => {
+    return actions$.pipe(
+      // Listening for actions of type
+      ofType(userActions.changeUserGroups),
+      switchMap(({ id, groupIds }) => {
+        // Calling the service method
+        return userService.updateUserGroups(id, groupIds).pipe(
+          map(() =>
+            // Handling the response and dispatching action when successful
+            userActions.changeUserGroupsSuccess()
+          ),
+          catchError((errorResponse: HttpErrorResponse) => {
+            // Handling errors and dispatching action when fetching fails
+            return of(userActions.changeUserGroupsFailure(errorResponse.error));
+          })
+        );
+      })
+    );
+  },
+  { functional: true }
+);
+
 /**
  * Effect for dispatching a new action to refresh the table data
  * Upon receiving such an action, it dispatches the 'get' action to fetch updated data.
@@ -91,7 +115,12 @@ export const changeUserRoleEffect = createEffect(
 export const refreshGetUserWithQuery = createEffect(
   (actions$ = inject(Actions), store = inject(Store)) => {
     return actions$.pipe(
-      ofType(userActions.changeUserRoleSuccess, userActions.changeUserRoleFailure),
+      ofType(
+        userActions.changeUserRoleSuccess,
+        userActions.changeUserRoleFailure,
+        userActions.changeUserGroupsSuccess,
+        userActions.changeUserGroupsFailure
+      ),
       mergeMap(() => {
         return store
           .select(selectUserQueryParams)

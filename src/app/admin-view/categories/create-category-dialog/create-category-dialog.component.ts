@@ -12,8 +12,7 @@ import { MatFormFieldModule, MatLabel } from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
 import { MatOption, MatSelect } from '@angular/material/select';
 import { Store } from '@ngrx/store';
-import { first, Observable } from 'rxjs';
-import { userActions } from '../../users/store/user/user.actions';
+import { Observable } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { CategoryResponseInterface } from '../../type/category-response.interface';
 import { selectCategoryAllData } from '../store/category.reducers';
@@ -21,6 +20,7 @@ import { categoryActions } from '../store/category.actions';
 import { CategoryRequestInterface } from '../../type/category-request.interface';
 import { selectGroupAllData } from '../../users/store/group/group.reducers';
 import { GroupResponseInterface } from '../../type/group-response-interface';
+import { groupActions } from '../../users/store/group/group.actions';
 
 @Component({
   selector: 'app-create-category-dialog',
@@ -84,12 +84,12 @@ export class CreateCategoryDialogComponent {
     this.initializeForm();
 
     // dispatch actions to get all users and categories
-    this.store.dispatch(userActions.getAllUsers());
     this.store.dispatch(categoryActions.getAllCategories());
+    this.store.dispatch(groupActions.getAllGroups());
 
     this.store
       .select(selectCategoryAllData)
-      .pipe(first())
+      .pipe()
       .subscribe(categories => {
         this.categories = categories;
       });
