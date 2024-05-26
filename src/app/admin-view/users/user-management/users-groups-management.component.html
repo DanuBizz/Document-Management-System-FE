@@ -7,6 +7,7 @@
     </ng-template>
 
     @defer (when selectedTabIndex() === 0) {
+      <div class="mb-2"></div>
       <app-user-role-management></app-user-role-management>
     }
   </mat-tab>
@@ -15,6 +16,7 @@
       <mat-icon matTooltip="Benutzergruppen" matTooltipPosition="above" [matTooltipShowDelay]="300"> group </mat-icon>
     </ng-template>
     @defer (when selectedTabIndex() === 1) {
+      <div class="mb-2"></div>
       <app-user-group-management></app-user-group-management>
     }
   </mat-tab>

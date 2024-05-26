@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { delay, map, Observable } from 'rxjs';
 import { QueryParamsInterface } from '../type/query-params.interface';
 import { GroupResponseInterface } from '../../admin-view/type/group-response-interface';
@@ -28,19 +28,19 @@ export class GroupService {
    * Retrieves groups from the server based on pagination parameters.
    *
    * @returns Observable emitting groups array and total number of elements.
-   * @param pagination includes the page number, page size, and sort order.
+   * @param queryParams includes the page number, page size, sort order and search string.
    */
   fetchGroupsWithQuery(
     queryParams: QueryParamsInterface
   ): Observable<{ groups: GroupResponseInterface[]; totalElements: string }> {
+    const params = new HttpParams()
+      .set('search', queryParams.search)
+      .set('page', queryParams.pageNumber)
+      .set('size', queryParams.pageSize)
+      .set('sort', queryParams.sort);
+
     return this.http
-      .get<{ content: GroupResponseInterface[]; totalElements: string }>(this.baseUrl, {
-        params: {
-          page: queryParams.pageNumber,
-          size: queryParams.pageSize,
-          sort: queryParams.sort,
-        },
-      })
+      .get<{ content: GroupResponseInterface[]; totalElements: string }>(this.baseUrl + `/search`, { params })
       .pipe(
         delay(1000), // Simulate delay for demonstration purposes
         map(response => ({

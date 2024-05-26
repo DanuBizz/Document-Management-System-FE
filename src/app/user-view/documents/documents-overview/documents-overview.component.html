@@ -5,9 +5,15 @@
     <h1 class="text-center mobile-title">{{ title }}</h1>
 
     <!-- Buttons for actions -->
-    <div class="d-flex justify-content-center mobile-without-title mb-4">
+    <div class="d-flex justify-content-center mobile-without-title my-2">
       <!--Filter section -->
     </div>
+
+    <mat-form-field appearance="outline" hideRequiredMarker="true">
+      <mat-label>Dokumente suchen</mat-label>
+      <input matInput [formControl]="searchControl" />
+      <mat-icon matSuffix>search</mat-icon>
+    </mat-form-field>
 
     <!-- Progress bar: displayed while data is being fetched -->
     <mat-progress-bar mode="indeterminate" *ngIf="data.isLoading" color="accent"></mat-progress-bar>

@@ -7,7 +7,7 @@ import { MatSortModule, Sort } from '@angular/material/sort';
 import { QueryParamsInterface } from '../../../shared/type/query-params.interface';
 import { Store } from '@ngrx/store';
 import { documentActions } from '../../../admin-view/documents/store/document.actions';
-import { combineLatest, first } from 'rxjs';
+import { combineLatest, debounceTime, first } from 'rxjs';
 import {
   selectDocumentData,
   selectDocumentError,
@@ -28,6 +28,7 @@ import { DocumentVersionsResponseInterface } from '../../../admin-view/type/docu
 import { DocumentResponseInterface } from '../../../admin-view/type/document-response.interface';
 import { selectUserAreLoaded } from '../../../admin-view/users/store/user/user.reducers';
 import { DispatchActionService } from '../../../shared/service/dispatch-action.service';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-documents-overview',
@@ -42,6 +43,7 @@ import { DispatchActionService } from '../../../shared/service/dispatch-action.s
     MatPaginator,
     MatProgressBar,
     MatIcon,
+    ReactiveFormsModule,
   ],
   templateUrl: './documents-overview.component.html',
   styleUrl: './documents-overview.component.scss',
@@ -68,6 +70,9 @@ export class DocumentsOverviewComponent implements OnInit {
   // Currently expanded document
   expandedDocument: DocumentVersionsResponseInterface | null = null;
 
+  // Search control for the search input field
+  searchControl: FormControl = new FormControl('');
+
   /**
    * @param store - The Redux store instance injected via dependency injection.
    * @param dialog
@@ -93,6 +98,16 @@ export class DocumentsOverviewComponent implements OnInit {
     this.dispatchActionService.checkAndDispatchAction(this.store.select(selectUserAreLoaded), () =>
       this.dispatchGetDocumentsWithQueryAction()
     );
+
+    // sets initial the store value of search
+    this.searchControl.setValue(this.queryParams.search);
+
+    // Subscribe to the search control value changes and debounce them to prevent too many requests
+    this.searchControl.valueChanges
+      .pipe(debounceTime(700)) //
+      .subscribe(value => {
+        this.searchDocuments(value);
+      });
   }
 
   /**
@@ -184,5 +199,14 @@ export class DocumentsOverviewComponent implements OnInit {
       .subscribe(() => {
         openDisplayDocumentDialog(this.dialog);
       });
+  }
+
+  searchDocuments(search: string) {
+    this.queryParams = {
+      ...this.queryParams,
+      search: search.trim(),
+    };
+
+    this.dispatchGetDocumentsWithQueryAction();
   }
 }

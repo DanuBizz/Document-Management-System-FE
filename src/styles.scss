@@ -133,6 +133,11 @@ body {
   margin: 0 0.5rem !important;
 }
 
+// changes the size of the mat-button touch-field
+.mat-mdc-button .mat-mdc-button-touch-target {
+  max-height: 100% !important;
+}
+
 .mat-toolbar-single-row {
   height: auto !important;
   padding: 0.2rem !important;
@@ -242,6 +247,13 @@ mat-form-field {
   padding-bottom: 0 !important;
 }
 
+// form field bottom space/element
+.mat-mdc-form-field-subscript-wrapper,
+.mat-mdc-form-field-bottom-align::before {
+  height: 0.5rem !important;
+}
+
+// form field bottom space/element within the user-table
 .without-bottom-space .mat-mdc-form-field-subscript-wrapper,
 .without-bottom-space .mat-mdc-form-field-bottom-align::before {
   height: 0 !important;

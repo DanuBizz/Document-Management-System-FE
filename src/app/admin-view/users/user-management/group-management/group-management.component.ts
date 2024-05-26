@@ -36,6 +36,8 @@ import { groupActions } from '../../store/group/group.actions';
 import { MatFormField, MatLabel, MatSuffix } from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
 import { QueryParamsInterface } from '../../../../shared/type/query-params.interface';
+import { FabButtonComponent } from '../../../../shared/component/fab-button/fab-button.component';
+import { MatBadge } from '@angular/material/badge';
 
 @Component({
   selector: 'app-user-group-management',
@@ -65,6 +67,8 @@ import { QueryParamsInterface } from '../../../../shared/type/query-params.inter
     MatLabel,
     MatSuffix,
     ReactiveFormsModule,
+    FabButtonComponent,
+    MatBadge,
   ],
   templateUrl: './group-management.component.html',
   styleUrl: './group-management.component.scss',
@@ -73,7 +77,8 @@ export class GroupManagementComponent implements OnInit {
   title = 'Gruppen Management';
 
   // Columns to display in the table
-  displayedDesktopColumns: string[] = ['name', 'usernames'];
+  displayedDesktopColumns: string[] = ['id', 'name', 'usernames'];
+  displayedMobileColumns: string[] = ['id', 'name'];
 
   // Currently expanded user
   expandedGroup: GroupResponseInterface | null = null;
@@ -97,6 +102,10 @@ export class GroupManagementComponent implements OnInit {
 
   // Search control for the search input field
   searchControl: FormControl = new FormControl('');
+
+  // Maximum number of users to display in the list
+  maxUsersVisibleDesktop = 10;
+  maxUsersVisibleMobile = 5;
 
   constructor(
     private store: Store,
@@ -195,6 +204,37 @@ export class GroupManagementComponent implements OnInit {
       search: search.trim(),
     };
 
-    //this.store.dispatch(userActions.getUsersWithQuery({ queryParams: this.queryParams }));
+    this.dispatchGetGroupsWithQueryAction();
+  }
+
+  createNewGroup() {}
+
+  /**
+   * Sorts an array of names alphabetically and joins them into a single string.
+   *
+   * @param names An array of category names to be sorted and joined.
+   * @param trunc A boolean indicating whether the string should be truncated, when the list is too long.
+   * @param maxUserVisible truncate the list up to this number of users.
+   * @return A string containing the sorted category names joined by commas.
+   */
+  sortAndJoinNames(names: string[], trunc: boolean, maxUserVisible: number): string {
+    const sortedNames = names.slice().sort().join(', ');
+    if (trunc) {
+      const truncatedSortedNames = names.slice().sort().slice(0, maxUserVisible).join(', ');
+      return truncatedSortedNames + '...';
+    }
+    return sortedNames;
+  }
+
+  /**
+   * Toggles the expansion of a row to display the details.
+   * @param group to toggle the row expansion.
+   */
+  onToggleExpandedCategoryRow(group: GroupResponseInterface) {
+    if (group == this.expandedGroup) {
+      this.expandedGroup = null;
+    } else {
+      this.expandedGroup = group;
+    }
   }
 }

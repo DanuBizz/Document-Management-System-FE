@@ -7,13 +7,13 @@ import { MatSortModule, Sort } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSelectModule } from '@angular/material/select';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { FabButtonComponent } from '../../../shared/component/fab-button/fab-button.component';
 import { MatTooltip } from '@angular/material/tooltip';
 import { MatCheckbox } from '@angular/material/checkbox';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { CategoryService } from '../../../shared/service/category.service';
-import { combineLatest, filter } from 'rxjs';
+import { combineLatest, debounceTime, filter } from 'rxjs';
 import { Store } from '@ngrx/store';
 import {
   selectCategoryAreLoaded,
@@ -94,6 +94,9 @@ export class CategoryManagementComponent implements OnInit {
   maxUsersVisibleDesktop = 9;
   maxUsersVisibleMobile = 5;
 
+  // Search control for the search input field
+  searchControl: FormControl = new FormControl('');
+
   /**
    * @param store - The Redux store instance injected via dependency injection.
    * @param dialog - The MatDialog service for opening dialogs.
@@ -123,6 +126,16 @@ export class CategoryManagementComponent implements OnInit {
     this.dispatchActionService.checkAndDispatchAction(this.store.select(selectCategoryAreLoaded), () =>
       this.dispatchGetCategoriesWithQueryAction()
     );
+
+    // sets initial the store value of search
+    this.searchControl.setValue(this.queryParams.search);
+
+    // Subscribe to the search control value changes and debounce them to prevent too many requests
+    this.searchControl.valueChanges
+      .pipe(debounceTime(700)) //
+      .subscribe(value => {
+        this.searchCategories(value);
+      });
   }
 
   /**
@@ -194,17 +207,17 @@ export class CategoryManagementComponent implements OnInit {
   }
 
   /**
-   * Sorts an array of category names alphabetically and joins them into a single string.
+   * Sorts an array of names alphabetically and joins them into a single string.
    *
-   * @param userNames An array of category names to be sorted and joined.
+   * @param names An array of category names to be sorted and joined.
    * @param trunc A boolean indicating whether the string should be truncated, when the list is too long.
-   * @param maxUsersVisible truncate the list up to this number of users.
+   * @param maxGroupsVisible truncate the list up to this number of users.
    * @return A string containing the sorted category names joined by commas.
    */
-  sortAndJoinCategoryNames(userNames: string[], trunc: boolean, maxUsersVisible: number): string {
-    const sortedNames = userNames.slice().sort().join(', ');
+  sortAndJoinNames(names: string[], trunc: boolean, maxGroupsVisible: number): string {
+    const sortedNames = names.slice().sort().join(', ');
     if (trunc) {
-      const truncatedSortedNames = userNames.slice().sort().slice(0, maxUsersVisible).join(', ');
+      const truncatedSortedNames = names.slice().sort().slice(0, maxGroupsVisible).join(', ');
       return truncatedSortedNames + '...';
     }
     return sortedNames;
@@ -224,5 +237,14 @@ export class CategoryManagementComponent implements OnInit {
 
   checkIsLoadingIsSubmitting(): boolean {
     return this.isLoading || this.isSubmitting;
+  }
+
+  searchCategories(search: string) {
+    this.queryParams = {
+      ...this.queryParams,
+      search: search.trim(),
+    };
+
+    this.dispatchGetCategoriesWithQueryAction();
   }
 }

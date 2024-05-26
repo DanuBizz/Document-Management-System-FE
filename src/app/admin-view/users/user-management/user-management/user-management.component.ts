@@ -221,7 +221,7 @@ export class UserManagementComponent implements OnInit {
       search: search.trim(),
     };
 
-    this.store.dispatch(userActions.getUsersWithQuery({ queryParams: this.queryParams }));
+    this.dispatchGetUsersWithQueryAction();
   }
 
   changeUserGroups() {

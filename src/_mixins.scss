@@ -48,7 +48,7 @@
   }
 
   @media (max-height: 750px) and (max-width: 992px) {
-    max-height: 55vh;
+    max-height: 50vh;
   }
 
   @media (max-height: 650px) and (min-width: 992px) {
@@ -58,11 +58,11 @@
 
 @mixin mobile-responsive-title {
   .mobile-title {
-    margin-top: 2rem !important;
+    margin-top: 1.5rem !important;
   }
 
   .mobile-without-title {
-    margin-top: 2rem;
+    margin-top: 1.5rem;
   }
 
   @media (max-width: 576px) {

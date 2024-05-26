@@ -6,7 +6,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSortModule, Sort } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatButtonModule } from '@angular/material/button';
-import { combineLatest, filter, first } from 'rxjs';
+import { combineLatest, debounceTime, filter, first } from 'rxjs';
 import { DocumentService } from '../../../shared/service/document.service';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
@@ -38,6 +38,7 @@ import { openDisplayDocumentDialog } from '../../../shared/component/display-doc
 import { selectFileData } from '../../../shared/store/file/file.reducers';
 import { MatBadge } from '@angular/material/badge';
 import { DispatchActionService } from '../../../shared/service/dispatch-action.service';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-document-management',
@@ -57,6 +58,7 @@ import { DispatchActionService } from '../../../shared/service/dispatch-action.s
     MatProgressBar,
     MatDivider,
     MatBadge,
+    ReactiveFormsModule,
   ],
   providers: [DocumentService],
   templateUrl: './document-management.component.html',
@@ -107,6 +109,9 @@ export class DocumentManagementComponent implements OnInit {
   // Maximum number of users to display in the list
   maxVisibleCategories = 4;
 
+  // Search control for the search input field
+  searchControl: FormControl = new FormControl('');
+
   /**
    * @param store - The Redux store instance injected via dependency injection.
    * @param dialog - The MatDialog service for opening dialogs.
@@ -135,6 +140,16 @@ export class DocumentManagementComponent implements OnInit {
     this.dispatchActionService.checkAndDispatchAction(this.store.select(selectDocumentAreLoaded), () =>
       this.dispatchGetDocumentsWithQueryAction()
     );
+
+    // sets initial the store value of search
+    this.searchControl.setValue(this.queryParams.search);
+
+    // Subscribe to the search control value changes and debounce them to prevent too many requests
+    this.searchControl.valueChanges
+      .pipe(debounceTime(700)) //
+      .subscribe(value => {
+        this.searchDocuments(value);
+      });
   }
 
   /**
@@ -316,5 +331,14 @@ export class DocumentManagementComponent implements OnInit {
       .subscribe(() => {
         openDisplayDocumentDialog(this.dialog);
       });
+  }
+
+  searchDocuments(search: string) {
+    this.queryParams = {
+      ...this.queryParams,
+      search: search.trim(),
+    };
+
+    this.dispatchGetDocumentsWithQueryAction();
   }
 }
