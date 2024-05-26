@@ -1,12 +1,13 @@
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { inject } from '@angular/core';
 import { map, mergeMap, of, switchMap, take } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import { catchError, tap } from 'rxjs/operators';
 import { HttpErrorResponse } from '@angular/common/http';
 import { documentActions } from './document.actions';
 import { Store } from '@ngrx/store';
 import { selectDocumentQueryParams } from './document.reducers';
 import { DocumentService } from '../../../shared/service/document.service';
+import { NotificationService } from '../../../shared/service/notification.service';
 
 export const getDocumentsWithQuery = createEffect(
   // Injecting dependencies
@@ -44,9 +45,9 @@ export const createDocumentVersionEffect = createEffect(
       switchMap(({ doc }) => {
         // Calling the service method to create document
         return documentService.createDocVersion(doc).pipe(
-          map(({ message }) =>
+          map(({ emailSent }) =>
             // Handling the response and dispatching action when successful
-            documentActions.createDocumentVersionSuccess({ message })
+            documentActions.createDocumentVersionSuccess({ emailSent })
           ),
           catchError((errorResponse: HttpErrorResponse) => {
             // Handling errors and dispatching action when fetching fails
@@ -68,9 +69,9 @@ export const changeDocumentVisibilityEffect = createEffect(
       switchMap(({ id }) => {
         // Calling the service method to create document
         return documentService.updateDocumentVisibility(id).pipe(
-          map(({ message }) =>
+          map(() =>
             // Handling the response and dispatching action when successful
-            documentActions.changeDocumentVisibilitySuccess({ message })
+            documentActions.changeDocumentVisibilitySuccess()
           ),
           catchError((errorResponse: HttpErrorResponse) => {
             // Handling errors and dispatching action when fetching fails
@@ -100,4 +101,24 @@ export const refreshGetDocumentWithQueryEffect = createEffect(
     );
   },
   { functional: true, dispatch: true }
+);
+
+/**
+ * Effect for opening a notification if a document is created
+ * It receives a boolean if email has succesfully sent or not and displays the result
+ */
+export const openNotificationEmailSent = createEffect(
+  (actions$ = inject(Actions), notificationService = inject(NotificationService)) => {
+    return actions$.pipe(
+      ofType(documentActions.createDocumentVersionSuccess),
+      tap(({ emailSent }) => {
+        if (emailSent) {
+          notificationService.pushNotification(`Email erfolgreich gesendet`, false);
+        } else {
+          notificationService.pushNotification(`Email senden fehlgeschlagen`, true);
+        }
+      })
+    );
+  },
+  { functional: true, dispatch: false }
 );

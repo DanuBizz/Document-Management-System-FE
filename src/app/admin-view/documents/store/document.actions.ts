@@ -1,4 +1,4 @@
-import { createActionGroup, props } from '@ngrx/store';
+import { createActionGroup, emptyProps, props } from '@ngrx/store';
 import { BackendErrorsInterface } from '../../../shared/type/backend-erros.interface';
 import { DocumentRequestInterface } from '../../type/document-request.interface';
 import { DocumentVersionsResponseInterface } from '../../type/document-versions-response.interface';
@@ -15,11 +15,11 @@ export const documentActions = createActionGroup({
     'get documents with query failure': props<{ error: BackendErrorsInterface }>(),
 
     'create document version': props<{ doc: DocumentRequestInterface }>(),
-    'create document version success': props<{ message: string }>(),
+    'create document version success': props<{ emailSent: boolean }>(),
     'create document version failure': props<{ error: BackendErrorsInterface }>(),
 
     'change document visibility': props<{ id: number }>(),
-    'change document visibility success': props<{ message: string }>(),
+    'change document visibility success': emptyProps(),
     'change document visibility failure': props<{ error: BackendErrorsInterface }>(),
   },
 });

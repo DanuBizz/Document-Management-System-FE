@@ -46,11 +46,10 @@ export class DocumentService {
   /**
    * Method to create a new document.
    * Creates a form data to transfer a file into a POST request.
-   * Upon successful creation, returns an observable containing a success message.
    * @param newDocumentVersion The data of the new category to be created.
-   * @returns An observable containing a success message upon successful creation.
+   * @returns An boolean if email has sent or not
    */
-  createDocVersion(newDocumentVersion: DocumentRequestInterface): Observable<{ message: string }> {
+  createDocVersion(newDocumentVersion: DocumentRequestInterface): Observable<{ emailSent: boolean }> {
     const formData = new FormData();
     formData.append('file', newDocumentVersion.file);
     formData.append('name', newDocumentVersion.name);
@@ -60,8 +59,8 @@ export class DocumentService {
     });
 
     return this.http
-      .post<{ message: string }>(this.baseUrl, formData)
-      .pipe(map(() => ({ message: 'Erfolgreich hochgeladen' })));
+      .post<{ emailSent: boolean }>(this.baseUrl, formData)
+      .pipe(map(response => ({ emailSent: response.emailSent })));
   }
 
   /**
@@ -69,9 +68,7 @@ export class DocumentService {
    * @param id The ID of the document whose visibility should be updated.
    * @return An Observable that emits a success message upon successful update.
    */
-  updateDocumentVisibility(id: number): Observable<{ message: string }> {
-    return this.http
-      .put<{ message: string }>(this.baseUrl + `/${id}/toggle-visibility`, null)
-      .pipe(map(() => ({ message: 'Erfolgreich geändert' })));
+  updateDocumentVisibility(id: number) {
+    return this.http.put(this.baseUrl + `/${id}/toggle-visibility`, null);
   }
 }
