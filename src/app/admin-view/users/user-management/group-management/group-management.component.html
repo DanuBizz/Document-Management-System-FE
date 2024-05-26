@@ -13,31 +13,34 @@
         <table
           mat-table
           class="default-table-design"
-          [dataSource]="data.users"
+          [dataSource]="data.groups"
           matSort
           (matSortChange)="changeSort($event)"
           multiTemplateDataRows>
           <!-- Column header for ID -->
+          <!--
+
           <ng-container matColumnDef="id">
             <th mat-header-cell *matHeaderCellDef mat-sort-header>ID</th>
             <td mat-cell *matCellDef="let user">
               {{ user.id }}
             </td>
           </ng-container>
+-->
 
           <!-- Column header for Name -->
-          <ng-container matColumnDef="group">
+          <ng-container matColumnDef="name">
             <th mat-header-cell *matHeaderCellDef mat-sort-header>Gruppe</th>
-            <td mat-cell *matCellDef="let user">
-              {{ user.username }}
+            <td mat-cell *matCellDef="let group">
+              {{ group.name }}
             </td>
           </ng-container>
 
           <!-- Column header for Name -->
-          <ng-container matColumnDef="users">
+          <ng-container matColumnDef="usernames">
             <th mat-header-cell *matHeaderCellDef>Benutzer</th>
-            <td mat-cell *matCellDef="let user">
-              {{ user.username }}
+            <td mat-cell *matCellDef="let group">
+              {{ group.usernames }}
             </td>
           </ng-container>
 
@@ -53,11 +56,12 @@
       <mat-paginator
         class="default-paginator-design"
         [length]="data.totalElements"
-        [pageSize]="pagination.pageSize"
+        [pageSize]="queryParams.pageSize"
         [pageSizeOptions]="paginationConfigService.getPageSizeOptions()"
-        [pageIndex]="pagination.pageNumber"
+        [pageIndex]="queryParams.pageNumber"
         (page)="handlePageEvent($event)"
         [showFirstLastButtons]="true"
+        [disabled]="checkIsLoadingIsSubmitting()"
         aria-label="Select page of groups">
       </mat-paginator>
     </div>

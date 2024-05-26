@@ -10,5 +10,6 @@ export interface GroupStateInterface {
   allData: GroupResponseInterface[];
   totalElements: string;
   pageSizeOptions: number[];
-  pagination: PaginationQueryParamsInterface;
+  queryParams: PaginationQueryParamsInterface;
+  areLoaded: boolean;
 }

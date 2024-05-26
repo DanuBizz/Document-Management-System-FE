@@ -31,14 +31,14 @@ export class GroupService {
    * @param pagination includes the page number, page size, and sort order.
    */
   fetchGroupsWithQuery(
-    pagination: PaginationQueryParamsInterface
+    queryParams: PaginationQueryParamsInterface
   ): Observable<{ groups: GroupResponseInterface[]; totalElements: string }> {
     return this.http
       .get<{ content: GroupResponseInterface[]; totalElements: string }>(this.baseUrl, {
         params: {
-          page: pagination.pageNumber,
-          size: pagination.pageSize,
-          sort: pagination.sort,
+          page: queryParams.pageNumber,
+          size: queryParams.pageSize,
+          sort: queryParams.sort,
         },
       })
       .pipe(

@@ -82,7 +82,7 @@ export class CategoryManagementComponent implements OnInit {
   isSubmitting: boolean = false;
 
   // Columns to display in the table
-  displayedColumnsDesktop: string[] = ['edit', 'id', 'name', 'users'];
+  displayedColumnsDesktop: string[] = ['edit', 'id', 'name', 'groups'];
 
   // Columns to display in the table
   displayedColumnsMobile: string[] = ['edit', 'id', 'name'];

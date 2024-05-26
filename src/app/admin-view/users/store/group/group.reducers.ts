@@ -10,11 +10,12 @@ export const initialState: GroupStateInterface = {
   allData: [],
   totalElements: '0',
   pageSizeOptions: [],
-  pagination: {
+  queryParams: {
     pageNumber: '0',
     pageSize: '0',
     sort: '',
   },
+  areLoaded: false,
 };
 
 export const groupFeature = createFeature({
@@ -105,5 +106,6 @@ export const {
   selectTableData: selectGroupTableData,
   selectAllData: selectGroupAllData,
   selectTotalElements: selectTotalGroupElements,
-  selectPagination: selectGroupPagination,
+  selectQueryParams: selectGroupQueryParams,
+  selectAreLoaded: selectGroupAreLoaded,
 } = groupFeature;

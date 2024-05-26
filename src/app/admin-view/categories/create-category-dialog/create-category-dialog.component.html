@@ -18,16 +18,16 @@
       }
     </mat-form-field>
 
-    <!-- Select field for adding users -->
+    <!-- Select field for adding groups -->
     <mat-form-field appearance="outline" hideRequiredMarker="true" class="select-field">
-      <mat-label>Benutzer hinzufügen</mat-label>
-      <mat-select formControlName="userIds" multiple>
-        @for (user of users$ | async; track user) {
-          <mat-option [value]="user.id">{{ user.username }}</mat-option>
+      <mat-label>Gruppen hinzufügen</mat-label>
+      <mat-select formControlName="groupIds" multiple>
+        @for (group of groups$ | async; track group) {
+          <mat-option [value]="group.id">{{ group.name }}</mat-option>
         }
       </mat-select>
-      @if (form.controls['userIds'].hasError('required')) {
-        <mat-error>Benutzer ist <strong>erforderlich</strong></mat-error>
+      @if (form.controls['groupIds'].hasError('required')) {
+        <mat-error>Gruppe ist <strong>erforderlich</strong></mat-error>
       }
     </mat-form-field>
   </mat-dialog-content>

@@ -11,7 +11,7 @@ export const groupActions = createActionGroup({
     'get all groups success': props<{ groups: GroupResponseInterface[] }>(),
     'get all groups failure': props<{ error: BackendErrorsInterface }>(),
 
-    'get groups with query': props<{ pagination: PaginationQueryParamsInterface }>(),
+    'get groups with query': props<{ queryParams: PaginationQueryParamsInterface }>(),
     'get groups with query success': props<{ groups: GroupResponseInterface[]; totalElements: string }>(),
     'get groups with query failure': props<{ error: BackendErrorsInterface }>(),
 

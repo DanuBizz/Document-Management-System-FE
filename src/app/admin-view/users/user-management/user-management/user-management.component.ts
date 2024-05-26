@@ -95,7 +95,6 @@ export class UserManagementComponent implements OnInit {
     currentUser: this.store.select(selectCurrentUser),
     queryParams: this.store.select(selectUserQueryParams),
     isSubmitting: this.store.select(selectUserIsSubmitting),
-    areLoaded: this.store.select(selectUserAreLoaded),
   });
 
   // Pagination and sorting properties for the component ts file

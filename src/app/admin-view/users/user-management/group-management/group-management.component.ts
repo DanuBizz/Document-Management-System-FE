@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { AsyncPipe, DatePipe, NgIf } from '@angular/common';
 import {
   MatCell,
@@ -17,22 +17,24 @@ import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatProgressBar } from '@angular/material/progress-bar';
 import { MatSlideToggle } from '@angular/material/slide-toggle';
 import { MatSortModule, Sort } from '@angular/material/sort';
-import { UserResponseInterface } from '../../../type/user-response.interface';
+import { FormsModule } from '@angular/forms';
+import { selectUserAreLoaded } from '../../store/user/user.reducers';
+import { GroupResponseInterface } from '../../../type/group-response-interface';
 import { combineLatest } from 'rxjs';
 import {
-  selectTotalUserElements,
-  selectUserError,
-  selectUserIsLoading,
-  selectUserIsSubmitting,
-  selectUserPagination,
-  selectUserTableData,
-} from '../../store/user/user.reducers';
-import { selectCurrentUser } from '../../../../auth/store/auth.reducers';
+  selectGroupAreLoaded,
+  selectGroupError,
+  selectGroupIsLoading,
+  selectGroupIsSubmitting,
+  selectGroupQueryParams,
+  selectGroupTableData,
+  selectTotalGroupElements,
+} from '../../store/group/group.reducers';
 import { PaginationQueryParamsInterface } from '../../../../shared/type/pagination-query-params.interface';
 import { Store } from '@ngrx/store';
 import { PaginationConfigService } from '../../../../shared/service/pagination-config.service';
-import { userActions } from '../../store/user/user.actions';
-import { FormsModule } from '@angular/forms';
+import { DispatchActionService } from '../../../../shared/service/dispatch-action.service';
+import { groupActions } from '../../store/group/group.actions';
 
 @Component({
   selector: 'app-user-group-management',
@@ -61,28 +63,27 @@ import { FormsModule } from '@angular/forms';
   templateUrl: './group-management.component.html',
   styleUrl: './group-management.component.scss',
 })
-export class GroupManagementComponent implements OnInit {
+export class GroupManagementComponent {
   title = 'Gruppen Management';
 
   // Columns to display in the table
-  displayedDesktopColumns: string[] = ['id', 'group', 'users'];
+  displayedDesktopColumns: string[] = ['name', 'usernames'];
 
   // Currently expanded user
-  expandedUser: UserResponseInterface | null = null;
+  expandedGroup: GroupResponseInterface | null = null;
 
   // Observable combining necessary data from the store for the component
   data$ = combineLatest({
-    users: this.store.select(selectUserTableData),
-    isLoading: this.store.select(selectUserIsLoading),
-    error: this.store.select(selectUserError),
-    totalElements: this.store.select(selectTotalUserElements),
-    currentUser: this.store.select(selectCurrentUser),
-    pagination: this.store.select(selectUserPagination),
-    isSubmitting: this.store.select(selectUserIsSubmitting),
+    groups: this.store.select(selectGroupTableData),
+    isLoading: this.store.select(selectGroupIsLoading),
+    error: this.store.select(selectGroupError),
+    totalElements: this.store.select(selectTotalGroupElements),
+    queryParams: this.store.select(selectGroupQueryParams),
+    isSubmitting: this.store.select(selectGroupIsSubmitting),
   });
 
   // Pagination and sorting properties for the component ts file
-  pagination!: PaginationQueryParamsInterface;
+  queryParams!: PaginationQueryParamsInterface;
 
   // Booleans indicating whether data is currently being fetched or submitted to the database
   isLoading: boolean = false;
@@ -90,66 +91,60 @@ export class GroupManagementComponent implements OnInit {
 
   constructor(
     private store: Store,
-    public paginationConfigService: PaginationConfigService
+    public paginationConfigService: PaginationConfigService,
+    private dispatchActionService: DispatchActionService
   ) {}
 
   ngOnInit(): void {
     this.data$.subscribe(data => {
-      this.pagination = {
-        pageNumber: data.pagination.pageNumber,
-        pageSize: data.pagination.pageSize,
-        sort: data.pagination.sort,
+      this.queryParams = {
+        pageNumber: data.queryParams.pageNumber,
+        pageSize: data.queryParams.pageSize,
+        sort: data.queryParams.sort,
       };
 
       this.isLoading = data.isLoading;
       this.isSubmitting = data.isSubmitting;
     });
 
-    this.dispatchGetUsersWithQueryAction();
+    // Using the DispatchActionService to check if the data are loaded.
+    // If not loaded, it dispatches the action to get the data with a query.
+    this.dispatchActionService.checkAndDispatchAction(this.store.select(selectGroupAreLoaded), () =>
+      this.dispatchGetGroupsWithQueryAction()
+    );
   }
 
   /**
-   * Toggles the expansion of a user row to display the details.
-   * @param user The user for which to toggle the row expansion.
+   * Toggles the expansion of a row to display the details.
+   * @param group to toggle the row expansion.
    */
-  onToggleExpandedUserRow(user: UserResponseInterface) {
-    if (user == this.expandedUser) {
-      this.expandedUser = null;
+  onToggleExpandedUserRow(group: GroupResponseInterface) {
+    if (group == this.expandedGroup) {
+      this.expandedGroup = null;
     } else {
-      this.expandedUser = user;
+      this.expandedGroup = group;
     }
   }
 
   /**
    * Handles page events by updating the pagination configuration service with the new page size,
-   * constructing a pagination query interface to retrieve users with query parameter.
+   * constructing a pagination query interface to retrieve data's with query parameter.
    * @param event - The PageEvent object containing information about the page event.
    */
   handlePageEvent(event: PageEvent) {
-    this.pagination = {
-      ...this.pagination,
+    this.queryParams = {
+      ...this.queryParams,
       pageNumber: event.pageIndex.toString(),
       pageSize: event.pageSize.toString(),
     };
-    this.dispatchGetUsersWithQueryAction();
-  }
-
-  /**
-   * Toggles the admin role state of the user with the specified ID.
-   *
-   * @param id The ID of the user.
-   * @param role The current state of the user's admin role.
-   */
-  toggleUserIsAdmin(id: number, role: boolean) {
-    // Dispatch an action to change the currentState of isAdmin
-    this.store.dispatch(userActions.changeUserRole({ id: id, isAdmin: !role }));
+    this.dispatchGetGroupsWithQueryAction();
   }
 
   /**
    * Dispatches an action to fetch user data based on the current pagination and sorting options.
    */
-  private dispatchGetUsersWithQueryAction(): void {
-    this.store.dispatch(userActions.getUsersWithQuery({ pagination: this.pagination }));
+  private dispatchGetGroupsWithQueryAction(): void {
+    this.store.dispatch(groupActions.getGroupsWithQuery({ queryParams: this.queryParams }));
   }
 
   /**
@@ -163,12 +158,12 @@ export class GroupManagementComponent implements OnInit {
       sort = sortState.active + ',' + sortState.direction;
     }
 
-    this.pagination = {
-      ...this.pagination,
+    this.queryParams = {
+      ...this.queryParams,
       sort: sort,
     };
 
-    this.dispatchGetUsersWithQueryAction();
+    this.dispatchGetGroupsWithQueryAction();
   }
 
   checkIsLoadingIsSubmitting(): boolean {

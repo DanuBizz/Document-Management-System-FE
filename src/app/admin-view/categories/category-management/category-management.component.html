@@ -58,14 +58,14 @@
           </ng-container>
 
           <!-- Column header for Users -->
-          <ng-container matColumnDef="users">
-            <th mat-header-cell *matHeaderCellDef>Benutzer</th>
+          <ng-container matColumnDef="groups">
+            <th mat-header-cell *matHeaderCellDef>Gruppen</th>
             <td mat-cell *matCellDef="let category">
-              @if (category.userNames.length <= maxUsersVisibleDesktop) {
-                {{ sortAndJoinCategoryNames(category.userNames, false, 0) }}
+              @if (category.groupNames.length <= maxUsersVisibleDesktop) {
+                {{ sortAndJoinCategoryNames(category.groupNames, false, 0) }}
               } @else {
-                {{ sortAndJoinCategoryNames(category.userNames, true, maxUsersVisibleDesktop) }}
-                <div matBadge="{{ category.userNames.length }}" matBadgeOverlap="false"></div>
+                {{ sortAndJoinCategoryNames(category.groupNames, true, maxUsersVisibleDesktop) }}
+                <div matBadge="{{ category.groupNames.length }}" matBadgeOverlap="false"></div>
               }
             </td>
           </ng-container>
@@ -120,11 +120,11 @@
           <!-- Expanded row column for user details -->
           <ng-container matColumnDef="expandedDetail">
             <td mat-cell *matCellDef="let category" colspan="3" class="expandable-row">
-              @if (category.userNames.length <= maxUsersVisibleDesktop) {
-                {{ sortAndJoinCategoryNames(category.userNames, false, 0) }}
+              @if (category.groupNames.length <= maxUsersVisibleDesktop) {
+                {{ sortAndJoinCategoryNames(category.groupNames, false, 0) }}
               } @else {
-                {{ sortAndJoinCategoryNames(category.userNames, true, maxUsersVisibleMobile) }}
-                <div matBadge="{{ category.userNames.length }}" matBadgeOverlap="false"></div>
+                {{ sortAndJoinCategoryNames(category.groupNames, true, maxUsersVisibleMobile) }}
+                <div matBadge="{{ category.groupNames.length }}" matBadgeOverlap="false"></div>
               }
             </td>
           </ng-container>

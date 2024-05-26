@@ -30,8 +30,8 @@ export const getGroupsWithQueryEffect = createEffect(
   (actions$ = inject(Actions), groupService = inject(GroupService)) => {
     return actions$.pipe(
       ofType(groupActions.getGroupsWithQuery),
-      switchMap(({ pagination }) =>
-        groupService.fetchGroupsWithQuery(pagination).pipe(
+      switchMap(({ queryParams }) =>
+        groupService.fetchGroupsWithQuery(queryParams).pipe(
           map(response =>
             groupActions.getGroupsWithQuerySuccess({
               groups: response.groups,
