@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpResponse, HttpStatusCode } from '@angular/common/http';
 import { CurrentUserInterface } from '../../shared/type/current-user.interface';
 import { map, Observable } from 'rxjs';
 import { AuthResponseInterface } from '../type/auth-response.interface';
 import { LoginRequestInterface } from '../type/login-request.interface';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
@@ -11,7 +12,7 @@ import { LoginRequestInterface } from '../type/login-request.interface';
 //AuthService provides authentication-related functionalities.
 export class AuthService {
   testApiUrl = 'https://api.realworld.io/api';
-  authUrl = 'http://localhost:8080'
+  authUrl = 'http://localhost:8080/usercontrol'
 
   /**
    * @param http HttpClient instance for making HTTP requests
@@ -23,19 +24,21 @@ export class AuthService {
    * @param data LoginRequestInterface containing user credentials
    * @returns Observable of CurrentUserInterface
    */
-  login(data: LoginRequestInterface): Observable<CurrentUserInterface> {
+  login(data: LoginRequestInterface): Observable<HttpStatusCode> {
     const url = this.authUrl;
 
-    return this.http.post<CurrentUserInterface>(url, data).pipe(map(response => response));
+    return this.http.post<HttpStatusCode>(url, data).pipe( map(response => {
+      console.log('Response from login:', response);
+      return response;
+    }));
   }
 
   /**
    * Fetching the current user response.
    * @returns Observable of AuthResponseInterface
    */
-  getCurrentUser(): Observable<CurrentUserInterface> {
-    const url = this.authUrl + `/users`;
-
-    return this.http.get<AuthResponseInterface>(url).pipe(map(response => response.user));
+  getCurrentUser(encodedUsername: string): Observable<CurrentUserInterface> {
+    const url = environment.apiUrl + `/users/user/coded/${encodedUsername}`;
+    return this.http.get<CurrentUserInterface>(url);
   }
 }

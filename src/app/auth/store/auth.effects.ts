@@ -2,13 +2,12 @@ import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { inject } from '@angular/core';
 import { AuthService } from '../service/auth.service';
 import { authActions } from './auth.actions';
-import { map, of, switchMap } from 'rxjs';
+import { filter, map, of, switchMap } from 'rxjs';
 import { CurrentUserInterface } from '../../shared/type/current-user.interface';
 import { catchError, tap } from 'rxjs/operators';
-import { HttpErrorResponse } from '@angular/common/http';
+import { HttpErrorResponse, HttpResponse, HttpStatusCode } from '@angular/common/http';
 import { PersistenceService } from '../service/persistence.service';
 import { Router } from '@angular/router';
-import { AuthResponseInterface } from '../type/auth-response.interface';
 
 /**
  * Effect that handles the login action. It sends a login request to the AuthService,
@@ -20,14 +19,20 @@ export const loginEffect = createEffect(
     return actions$.pipe(
       ofType(authActions.login),
       switchMap(({ request }) => {
+        const encodedUsername = btoa(request.user.username);
         persistenceService.set('accessToken', btoa((request.user.username + ':' + request.user.password)));
         return authService.login(request).pipe(
-          map((response: CurrentUserInterface) => {
-            getCurrentUserEffect();
-            return authActions.loginSuccess({ currentUser: response });
-          }),
+          switchMap(() => {
+            console.log('Login successful, now fetching current user...');
+            return authService.getCurrentUser(encodedUsername).pipe(
+              map((currentUser: CurrentUserInterface) => {
+                console.log('Current user:', currentUser);
+                return authActions.loginSuccess({ currentUser });
+              }),
           catchError((errorResponse: HttpErrorResponse) => {
             return of(authActions.loginFailure({ errors: errorResponse.error.errors }));
+          })
+            );
           })
         );
       })
@@ -35,6 +40,7 @@ export const loginEffect = createEffect(
   },
   { functional: true }
 );
+
 
 /**
  * Effect that redirects the user after successful login.
@@ -65,18 +71,14 @@ export const getCurrentUserEffect = createEffect(
   (actions$ = inject(Actions), authService = inject(AuthService), persistanceService = inject(PersistenceService)) => {
     return actions$.pipe(
       ofType(authActions.getCurrentUser),
-      switchMap(() => {
+      switchMap(({ encodedUsername }) => {
         const token = persistanceService.get('accessToken');
         if (!token) {
           return of(authActions.getCurrentUserFailure());
         }
-        return authService.getCurrentUser().pipe(
-          map((currentUser: CurrentUserInterface) => {
-            return authActions.getCurrentUserSuccess({ currentUser });
-          }),
-          catchError(() => {
-            return of(authActions.getCurrentUserFailure());
-          })
+        return authService.getCurrentUser(encodedUsername).pipe(
+          map((currentUser: CurrentUserInterface) => authActions.getCurrentUserSuccess({ currentUser })),
+          catchError(() => of(authActions.getCurrentUserFailure()))
         );
       })
     );
