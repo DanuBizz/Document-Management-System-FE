@@ -11,8 +11,7 @@ import { QueryParamsInterface } from '../type/query-params.interface';
 export class UserService {
   private baseUrl: string = environment.apiUrl + '/users';
 
-  constructor(private http: HttpClient) {
-  }
+  constructor(private http: HttpClient) {}
 
   /**
    * Retrieves all users from the backend.
@@ -31,7 +30,7 @@ export class UserService {
    * @param queryParams includes the page number, page size, and sort order and search string.
    */
   fetchUsersWitQuery(
-    queryParams: QueryParamsInterface,
+    queryParams: QueryParamsInterface
   ): Observable<{ users: UserResponseInterface[]; totalElements: string }> {
     const params = new HttpParams()
       .set('search', queryParams.search)
@@ -40,14 +39,13 @@ export class UserService {
       .set('sort', queryParams.sort);
 
     return this.http
-      .get<{ content: UserResponseInterface[]; totalElements: string }>(this.baseUrl + `/search`, { params
-      })
+      .get<{ content: UserResponseInterface[]; totalElements: string }>(this.baseUrl + `/search`, { params })
       .pipe(
         delay(1000), // Simulate delay for demonstration purposes
         map(response => ({
           users: response.content,
           totalElements: response.totalElements.toString(),
-        })),
+        }))
       );
   }
 

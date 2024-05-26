@@ -124,7 +124,7 @@ export class UserManagementComponent implements OnInit {
         pageNumber: data.queryParams.pageNumber,
         pageSize: data.queryParams.pageSize,
         sort: data.queryParams.sort,
-        search: data.queryParams.search
+        search: data.queryParams.search,
       };
 
       this.isLoading = data.isLoading;
