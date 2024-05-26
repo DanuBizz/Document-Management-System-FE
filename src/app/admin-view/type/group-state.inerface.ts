@@ -1,6 +1,6 @@
 import { BackendErrorsInterface } from '../../shared/type/backend-erros.interface';
-import { PaginationQueryParamsInterface } from '../../shared/type/pagination-query-params.interface';
 import { GroupResponseInterface } from './group-response-interface';
+import { QueryParamsInterface } from '../../shared/type/query-params.interface';
 
 export interface GroupStateInterface {
   isSubmitting: boolean;
@@ -10,6 +10,6 @@ export interface GroupStateInterface {
   allData: GroupResponseInterface[];
   totalElements: string;
   pageSizeOptions: number[];
-  queryParams: PaginationQueryParamsInterface;
+  queryParams: QueryParamsInterface;
   areLoaded: boolean;
 }

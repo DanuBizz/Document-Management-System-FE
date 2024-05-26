@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { AsyncPipe, DatePipe, NgIf } from '@angular/common';
 import {
   MatCell,
@@ -17,10 +17,9 @@ import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatProgressBar } from '@angular/material/progress-bar';
 import { MatSlideToggle } from '@angular/material/slide-toggle';
 import { MatSortModule, Sort } from '@angular/material/sort';
-import { FormsModule } from '@angular/forms';
-import { selectUserAreLoaded } from '../../store/user/user.reducers';
+import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { GroupResponseInterface } from '../../../type/group-response-interface';
-import { combineLatest } from 'rxjs';
+import { combineLatest, debounceTime } from 'rxjs';
 import {
   selectGroupAreLoaded,
   selectGroupError,
@@ -30,11 +29,13 @@ import {
   selectGroupTableData,
   selectTotalGroupElements,
 } from '../../store/group/group.reducers';
-import { PaginationQueryParamsInterface } from '../../../../shared/type/pagination-query-params.interface';
 import { Store } from '@ngrx/store';
 import { PaginationConfigService } from '../../../../shared/service/pagination-config.service';
 import { DispatchActionService } from '../../../../shared/service/dispatch-action.service';
 import { groupActions } from '../../store/group/group.actions';
+import { MatFormField, MatLabel, MatSuffix } from '@angular/material/form-field';
+import { MatInput } from '@angular/material/input';
+import { QueryParamsInterface } from '../../../../shared/type/query-params.interface';
 
 @Component({
   selector: 'app-user-group-management',
@@ -59,11 +60,16 @@ import { groupActions } from '../../store/group/group.actions';
     MatSlideToggle,
     FormsModule,
     MatIcon,
+    MatFormField,
+    MatInput,
+    MatLabel,
+    MatSuffix,
+    ReactiveFormsModule,
   ],
   templateUrl: './group-management.component.html',
   styleUrl: './group-management.component.scss',
 })
-export class GroupManagementComponent {
+export class GroupManagementComponent implements OnInit {
   title = 'Gruppen Management';
 
   // Columns to display in the table
@@ -83,11 +89,14 @@ export class GroupManagementComponent {
   });
 
   // Pagination and sorting properties for the component ts file
-  queryParams!: PaginationQueryParamsInterface;
+  queryParams!: QueryParamsInterface;
 
   // Booleans indicating whether data is currently being fetched or submitted to the database
   isLoading: boolean = false;
   isSubmitting: boolean = false;
+
+  // Search control for the search input field
+  searchControl: FormControl = new FormControl('');
 
   constructor(
     private store: Store,
@@ -101,6 +110,7 @@ export class GroupManagementComponent {
         pageNumber: data.queryParams.pageNumber,
         pageSize: data.queryParams.pageSize,
         sort: data.queryParams.sort,
+        search: data.queryParams.search,
       };
 
       this.isLoading = data.isLoading;
@@ -112,6 +122,16 @@ export class GroupManagementComponent {
     this.dispatchActionService.checkAndDispatchAction(this.store.select(selectGroupAreLoaded), () =>
       this.dispatchGetGroupsWithQueryAction()
     );
+
+    // sets initial the store value of search
+    this.searchControl.setValue(this.queryParams.search);
+
+    // Subscribe to the search control value changes and debounce them to prevent too many requests
+    this.searchControl.valueChanges
+      .pipe(debounceTime(700)) //
+      .subscribe(value => {
+        this.searchGroups(value);
+      });
   }
 
   /**
@@ -168,5 +188,13 @@ export class GroupManagementComponent {
 
   checkIsLoadingIsSubmitting(): boolean {
     return this.isLoading || this.isSubmitting;
+  }
+  searchGroups(search: string) {
+    this.queryParams = {
+      ...this.queryParams,
+      search: search.trim(),
+    };
+
+    //this.store.dispatch(userActions.getUsersWithQuery({ queryParams: this.queryParams }));
   }
 }

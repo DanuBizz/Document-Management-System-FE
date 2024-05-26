@@ -1,6 +1,9 @@
 import { GroupStateInterface } from '../../../type/group-state.inerface';
 import { createFeature, createReducer, on } from '@ngrx/store';
 import { groupActions } from './group.actions';
+import { PaginationConfigService } from '../../../../shared/service/pagination-config.service';
+
+const paginationConfigService = new PaginationConfigService();
 
 export const initialState: GroupStateInterface = {
   isSubmitting: false,
@@ -11,9 +14,10 @@ export const initialState: GroupStateInterface = {
   totalElements: '0',
   pageSizeOptions: [],
   queryParams: {
-    pageNumber: '0',
-    pageSize: '0',
-    sort: '',
+    pageNumber: paginationConfigService.getInitialPageIndex(),
+    pageSize: paginationConfigService.getInitialPageSize(),
+    sort: paginationConfigService.getInitialSort(),
+    search: '',
   },
   areLoaded: false,
 };
