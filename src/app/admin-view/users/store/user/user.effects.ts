@@ -7,7 +7,7 @@ import { userActions } from './user.actions';
 import { UserResponseInterface } from '../../../type/user-response.interface';
 import { UserService } from '../../../../shared/service/user.service';
 import { Store } from '@ngrx/store';
-import { selectUserPagination } from './user.reducers';
+import { selectUserQueryParams } from './user.reducers';
 
 export const getAllUsersEffect = createEffect(
   // Injecting dependencies
@@ -39,9 +39,9 @@ export const getUsersWithQuery = createEffect(
     return actions$.pipe(
       // Listening for actions of type
       ofType(userActions.getUsersWithQuery),
-      switchMap(({ pagination }) => {
+      switchMap(({ queryParams }) => {
         // Calling the service method
-        return userService.fetchUsersWitQuery(pagination).pipe(
+        return userService.fetchUsersWitQuery(queryParams).pipe(
           map(users =>
             // Handling the response and dispatching action when successful
             userActions.getUsersWithQuerySuccess({
@@ -94,8 +94,8 @@ export const refreshGetUserWithQuery = createEffect(
       ofType(userActions.changeUserRoleSuccess, userActions.changeUserRoleFailure),
       mergeMap(() => {
         return store
-          .select(selectUserPagination)
-          .pipe(map(pagination => userActions.getUsersWithQuery({ pagination })));
+          .select(selectUserQueryParams)
+          .pipe(map(queryParams => userActions.getUsersWithQuery({ queryParams: queryParams })));
       })
     );
   },

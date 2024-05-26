@@ -13,10 +13,11 @@ export const initialState: UserStateInterface = {
   allData: [],
   tableData: [],
   totalElements: '0',
-  pagination: {
+  queryParams: {
     pageNumber: paginationConfigService.getInitialPageIndex(),
     pageSize: paginationConfigService.getInitialPageSize(),
     sort: paginationConfigService.getInitialSort(),
+    search: '',
   },
   areLoaded: false,
 };
@@ -49,13 +50,13 @@ export const userFeature = createFeature({
         error: action.error,
       })
     ),
-
+    // GET WITH QUERY
     on(
       userActions.getUsersWithQuery,
       (state, action): UserStateInterface => ({
         ...state,
         isLoading: true,
-        pagination: action.pagination,
+        queryParams: action.queryParams,
       })
     ),
     on(
@@ -77,6 +78,8 @@ export const userFeature = createFeature({
         areLoaded: false,
       })
     ),
+
+    // CHANGE ROLE
 
     on(
       userActions.changeUserRole,
@@ -118,6 +121,6 @@ export const {
   selectTableData: selectUserTableData,
   selectAllData: selectUserAllData,
   selectTotalElements: selectTotalUserElements,
-  selectPagination: selectUserPagination,
+  selectQueryParams: selectUserQueryParams,
   selectAreLoaded: selectUserAreLoaded,
 } = userFeature;

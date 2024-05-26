@@ -154,6 +154,7 @@
         [pageIndex]="pagination.pageNumber"
         (page)="handlePageEvent($event)"
         [showFirstLastButtons]="true"
+        [disabled]="checkIsLoadingIsSubmitting()"
         aria-label="Select page of documents">
       </mat-paginator>
     </div>

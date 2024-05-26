@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { delay, map, Observable } from 'rxjs';
 import { UserResponseInterface } from '../../admin-view/type/user-response.interface';
-import { PaginationQueryParamsInterface } from '../type/pagination-query-params.interface';
+import { QueryParamsInterface } from '../type/query-params.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -11,7 +11,8 @@ import { PaginationQueryParamsInterface } from '../type/pagination-query-params.
 export class UserService {
   private baseUrl: string = environment.apiUrl + '/users';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) {
+  }
 
   /**
    * Retrieves all users from the backend.
@@ -24,28 +25,29 @@ export class UserService {
   }
 
   /**
-   * Retrieves users from the server based on pagination parameters.
+   * Retrieves users from the server based on queryParams parameters.
    *
    * @returns Observable emitting users array and total number of elements.
-   * @param pagination includes the page number, page size, and sort order.
+   * @param queryParams includes the page number, page size, and sort order and search string.
    */
   fetchUsersWitQuery(
-    pagination: PaginationQueryParamsInterface
+    queryParams: QueryParamsInterface,
   ): Observable<{ users: UserResponseInterface[]; totalElements: string }> {
+    const params = new HttpParams()
+      .set('search', queryParams.search)
+      .set('page', queryParams.pageNumber)
+      .set('size', queryParams.pageSize)
+      .set('sort', queryParams.sort);
+
     return this.http
-      .get<{ content: UserResponseInterface[]; totalElements: string }>(this.baseUrl, {
-        params: {
-          page: pagination.pageNumber,
-          size: pagination.pageSize,
-          sort: pagination.sort,
-        },
+      .get<{ content: UserResponseInterface[]; totalElements: string }>(this.baseUrl + `/search`, { params
       })
       .pipe(
         delay(1000), // Simulate delay for demonstration purposes
         map(response => ({
           users: response.content,
           totalElements: response.totalElements.toString(),
-        }))
+        })),
       );
   }
 
