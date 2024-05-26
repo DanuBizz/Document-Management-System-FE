@@ -121,8 +121,8 @@
           <!-- Column header for role -->
           <ng-container matColumnDef="groups">
             <th mat-header-cell *matHeaderCellDef mat-sort-header>Gruppe</th>
-            <td mat-cell *matCellDef="let user">
-              <mat-form-field appearance="outline">
+            <td mat-cell *matCellDef="let user" class="py-1">
+              <mat-form-field appearance="outline" class="without-bottom-space">
                 <mat-select
                   placeholder="Keine Gruppe"
                   [formControl]="userGroupsControl"

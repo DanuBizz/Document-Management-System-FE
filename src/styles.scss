@@ -241,3 +241,8 @@ mat-form-field {
   left: auto !important;
   padding-bottom: 0 !important;
 }
+
+.without-bottom-space .mat-mdc-form-field-subscript-wrapper,
+.without-bottom-space .mat-mdc-form-field-bottom-align::before {
+  height: 0 !important;
+}
