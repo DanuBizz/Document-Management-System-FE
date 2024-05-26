@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { delay, map, Observable } from 'rxjs';
-import { PaginationQueryParamsInterface } from '../type/pagination-query-params.interface';
+import { QueryParamsInterface } from '../type/query-params.interface';
 import { GroupResponseInterface } from '../../admin-view/type/group-response-interface';
 import { GroupRequestInterface } from '../../admin-view/type/group-request.interface';
 
@@ -31,7 +31,7 @@ export class GroupService {
    * @param pagination includes the page number, page size, and sort order.
    */
   fetchGroupsWithQuery(
-    queryParams: PaginationQueryParamsInterface
+    queryParams: QueryParamsInterface
   ): Observable<{ groups: GroupResponseInterface[]; totalElements: string }> {
     return this.http
       .get<{ content: GroupResponseInterface[]; totalElements: string }>(this.baseUrl, {

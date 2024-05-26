@@ -7,7 +7,7 @@ import { categoryActions } from './category.actions';
 import { CategoryResponseInterface } from '../../type/category-response.interface';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Store } from '@ngrx/store';
-import { selectCategoryPagination } from './category.reducers';
+import { selectCategoryQueryParams } from './category.reducers';
 
 export const getAllCategoriesEffect = createEffect(
   // Injecting dependencies
@@ -39,9 +39,9 @@ export const getCategoryWithQueryEffect = createEffect(
     return actions$.pipe(
       // Listening for actions of type
       ofType(categoryActions.getCategoriesWithQuery),
-      switchMap(({ pagination }) => {
+      switchMap(({ queryParams }) => {
         // Calling the service method to fetch documents
-        return categoryService.fetchCategoriesWithQuery(pagination).pipe(
+        return categoryService.fetchCategoriesWithQuery(queryParams).pipe(
           map(categories =>
             // Handling the response and dispatching action when successful
             categoryActions.getCategoriesWithQuerySuccess({
@@ -120,9 +120,9 @@ export const refreshGetCategoriesEffect = createEffect(
     return actions$.pipe(
       ofType(categoryActions.createCategorySuccess, categoryActions.updateCategorySuccess),
       switchMap(() =>
-        store.select(selectCategoryPagination).pipe(
-          mergeMap(pagination => {
-            const action = categoryActions.getCategoriesWithQuery({ pagination });
+        store.select(selectCategoryQueryParams).pipe(
+          mergeMap(queryParams => {
+            const action = categoryActions.getCategoriesWithQuery({ queryParams: queryParams });
             return of(action);
           })
         )

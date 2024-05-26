@@ -4,7 +4,7 @@ import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatProgressBar } from '@angular/material/progress-bar';
 import { MatSortModule, Sort } from '@angular/material/sort';
-import { PaginationQueryParamsInterface } from '../../../shared/type/pagination-query-params.interface';
+import { QueryParamsInterface } from '../../../shared/type/query-params.interface';
 import { Store } from '@ngrx/store';
 import { documentActions } from '../../../admin-view/documents/store/document.actions';
 import { combineLatest, first } from 'rxjs';
@@ -13,7 +13,7 @@ import {
   selectDocumentError,
   selectDocumentIsLoading,
   selectDocumentPageSizeOptions,
-  selectDocumentPagination,
+  selectDocumentQueryParams,
   selectDocumentTotalElements,
 } from '../../../admin-view/documents/store/document.reducers';
 import { MatInputModule } from '@angular/material/input';
@@ -26,6 +26,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatIcon } from '@angular/material/icon';
 import { DocumentVersionsResponseInterface } from '../../../admin-view/type/document-versions-response.interface';
 import { DocumentResponseInterface } from '../../../admin-view/type/document-response.interface';
+import { selectUserAreLoaded } from '../../../admin-view/users/store/user/user.reducers';
+import { DispatchActionService } from '../../../shared/service/dispatch-action.service';
 
 @Component({
   selector: 'app-documents-overview',
@@ -54,11 +56,11 @@ export class DocumentsOverviewComponent implements OnInit {
     error: this.store.select(selectDocumentError),
     totalElements: this.store.select(selectDocumentTotalElements),
     pageSizeOptions: this.store.select(selectDocumentPageSizeOptions),
-    pagination: this.store.select(selectDocumentPagination),
+    queryParams: this.store.select(selectDocumentQueryParams),
   });
 
   // Pagination and sorting properties for the component ts file
-  pagination!: PaginationQueryParamsInterface;
+  queryParams!: QueryParamsInterface;
 
   // Columns to display in the document table
   displayedColumns: string[] = ['arrow', 'documentName', 'timestamp'];
@@ -69,22 +71,28 @@ export class DocumentsOverviewComponent implements OnInit {
   /**
    * @param store - The Redux store instance injected via dependency injection.
    * @param dialog
+   * @param dispatchActionService
    */
   constructor(
     private store: Store,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private dispatchActionService: DispatchActionService
   ) {}
 
   ngOnInit(): void {
     this.data$.subscribe(data => {
-      this.pagination = {
-        pageNumber: data.pagination.pageNumber,
-        pageSize: data.pagination.pageSize,
-        sort: data.pagination.sort,
+      this.queryParams = {
+        pageNumber: data.queryParams.pageNumber,
+        pageSize: data.queryParams.pageSize,
+        sort: data.queryParams.sort,
+        search: data.queryParams.search,
       };
     });
-
-    this.dispatchGetDocumentsWithQueryAction();
+    // Using the DispatchActionService to check if the data are loaded.
+    // If not loaded, it dispatches the action to get the data with a query.
+    this.dispatchActionService.checkAndDispatchAction(this.store.select(selectUserAreLoaded), () =>
+      this.dispatchGetDocumentsWithQueryAction()
+    );
   }
 
   /**
@@ -120,8 +128,8 @@ export class DocumentsOverviewComponent implements OnInit {
    * @param event - The PageEvent object containing information about the page event.
    */
   handlePageEvent(event: PageEvent) {
-    this.pagination = {
-      ...this.pagination,
+    this.queryParams = {
+      ...this.queryParams,
       pageNumber: event.pageIndex.toString(),
       pageSize: event.pageSize.toString(),
     };
@@ -140,8 +148,8 @@ export class DocumentsOverviewComponent implements OnInit {
       sort = sortState.active + ',' + sortState.direction;
     }
 
-    this.pagination = {
-      ...this.pagination,
+    this.queryParams = {
+      ...this.queryParams,
       sort: sort,
     };
 
@@ -152,7 +160,7 @@ export class DocumentsOverviewComponent implements OnInit {
    * Dispatches an action to fetch documents data based on the current pagination and sorting options.
    */
   private dispatchGetDocumentsWithQueryAction() {
-    this.store.dispatch(documentActions.getDocumentsWithQuery({ pagination: this.pagination }));
+    this.store.dispatch(documentActions.getDocumentsWithQuery({ queryParams: this.queryParams }));
   }
 
   /**

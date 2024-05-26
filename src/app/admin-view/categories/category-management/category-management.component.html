@@ -149,9 +149,9 @@
       <mat-paginator
         class="default-paginator-design"
         [length]="data.totalElements"
-        [pageSize]="pagination.pageSize"
+        [pageSize]="queryParams.pageSize"
         [pageSizeOptions]="data.pageSizeOptions"
-        [pageIndex]="pagination.pageNumber"
+        [pageIndex]="queryParams.pageNumber"
         (page)="handlePageEvent($event)"
         [showFirstLastButtons]="true"
         [disabled]="checkIsLoadingIsSubmitting()"

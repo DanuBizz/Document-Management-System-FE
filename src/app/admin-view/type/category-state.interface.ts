@@ -1,6 +1,6 @@
 import { CategoryResponseInterface } from './category-response.interface';
 import { BackendErrorsInterface } from '../../shared/type/backend-erros.interface';
-import { PaginationQueryParamsInterface } from '../../shared/type/pagination-query-params.interface';
+import { QueryParamsInterface } from '../../shared/type/query-params.interface';
 
 export interface CategoryStateInterface {
   isSubmitting: boolean;
@@ -10,6 +10,6 @@ export interface CategoryStateInterface {
   allData: CategoryResponseInterface[];
   totalElements: string;
   pageSizeOptions: number[];
-  pagination: PaginationQueryParamsInterface;
+  queryParams: QueryParamsInterface;
   areLoaded: boolean;
 }

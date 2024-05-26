@@ -21,7 +21,7 @@ import {
   selectDocumentIsLoading,
   selectDocumentIsSubmitting,
   selectDocumentPageSizeOptions,
-  selectDocumentPagination,
+  selectDocumentQueryParams,
   selectDocumentTotalElements,
 } from '../store/document.reducers';
 import { documentActions } from '../store/document.actions';
@@ -31,7 +31,7 @@ import { openCreateDocumentDialog } from '../create-document-dialog/document-dia
 
 import { DocumentResponseInterface } from '../../type/document-response.interface';
 import { DocumentVersionsResponseInterface } from '../../type/document-versions-response.interface';
-import { PaginationQueryParamsInterface } from '../../../shared/type/pagination-query-params.interface';
+import { QueryParamsInterface } from '../../../shared/type/query-params.interface';
 import { MatDivider } from '@angular/material/divider';
 import { fileActions } from '../../../shared/store/file/file.actions';
 import { openDisplayDocumentDialog } from '../../../shared/component/display-document-dialog/display-document-dialog.config';
@@ -72,13 +72,12 @@ export class DocumentManagementComponent implements OnInit {
     error: this.store.select(selectDocumentError),
     totalElements: this.store.select(selectDocumentTotalElements),
     pageSizeOptions: this.store.select(selectDocumentPageSizeOptions),
-    pagination: this.store.select(selectDocumentPagination),
+    queryParams: this.store.select(selectDocumentQueryParams),
     isSubmitting: this.store.select(selectDocumentIsSubmitting),
-    areLoaded: this.store.select(selectDocumentAreLoaded),
   });
 
   // Pagination and sorting properties for the component ts file
-  pagination!: PaginationQueryParamsInterface;
+  queryParams!: QueryParamsInterface;
 
   // Booleans indicating whether data is currently being fetched or submitted to the database
   isSubmitting: boolean = false;
@@ -121,10 +120,11 @@ export class DocumentManagementComponent implements OnInit {
 
   ngOnInit(): void {
     this.data$.subscribe(data => {
-      this.pagination = {
-        pageNumber: data.pagination.pageNumber,
-        pageSize: data.pagination.pageSize,
-        sort: data.pagination.sort,
+      this.queryParams = {
+        pageNumber: data.queryParams.pageNumber,
+        pageSize: data.queryParams.pageSize,
+        sort: data.queryParams.sort,
+        search: data.queryParams.search,
       };
       this.isLoading = data.isLoading;
       this.isSubmitting = data.isSubmitting;
@@ -201,8 +201,8 @@ export class DocumentManagementComponent implements OnInit {
    * @param event - The PageEvent object containing information about the page event.
    */
   handlePageEvent(event: PageEvent) {
-    this.pagination = {
-      ...this.pagination,
+    this.queryParams = {
+      ...this.queryParams,
       pageNumber: event.pageIndex.toString(),
       pageSize: event.pageSize.toString(),
     };
@@ -250,7 +250,7 @@ export class DocumentManagementComponent implements OnInit {
    * Dispatches an action to fetch documents data based on the current pagination and sorting options.
    */
   private dispatchGetDocumentsWithQueryAction() {
-    this.store.dispatch(documentActions.getDocumentsWithQuery({ pagination: this.pagination }));
+    this.store.dispatch(documentActions.getDocumentsWithQuery({ queryParams: this.queryParams }));
   }
 
   /**
@@ -264,8 +264,8 @@ export class DocumentManagementComponent implements OnInit {
       sort = sortState.active + ',' + sortState.direction;
     }
 
-    this.pagination = {
-      ...this.pagination,
+    this.queryParams = {
+      ...this.queryParams,
       sort: sort,
     };
 

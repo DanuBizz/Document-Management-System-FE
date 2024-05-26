@@ -4,7 +4,7 @@ import { delay, map, Observable } from 'rxjs';
 import { CategoryResponseInterface } from '../../admin-view/type/category-response.interface';
 import { environment } from '../../../environments/environment';
 import { CategoryRequestInterface } from '../../admin-view/type/category-request.interface';
-import { PaginationQueryParamsInterface } from '../type/pagination-query-params.interface';
+import { QueryParamsInterface } from '../type/query-params.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -25,20 +25,20 @@ export class CategoryService {
   }
 
   /**
-   * Retrieves categories from the server based on pagination parameters.
+   * Retrieves categories from the server based on queryParams parameters.
    *
    * @returns Observable emitting documents array and total number of elements.
-   * @param pagination includes the page number, page size, and sort order.
+   * @param queryParams includes the page number, page size, and sort order.
    */
   fetchCategoriesWithQuery(
-    pagination: PaginationQueryParamsInterface
+    queryParams: QueryParamsInterface
   ): Observable<{ categories: CategoryResponseInterface[]; totalElements: string }> {
     return this.http
       .get<{ content: CategoryResponseInterface[]; totalElements: string }>(this.baseUrl, {
         params: {
-          page: pagination.pageNumber,
-          size: pagination.pageSize,
-          sort: pagination.sort,
+          page: queryParams.pageNumber,
+          size: queryParams.pageSize,
+          sort: queryParams.sort,
         },
       })
       .pipe(

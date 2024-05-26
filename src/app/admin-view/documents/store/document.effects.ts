@@ -5,7 +5,7 @@ import { catchError } from 'rxjs/operators';
 import { HttpErrorResponse } from '@angular/common/http';
 import { documentActions } from './document.actions';
 import { Store } from '@ngrx/store';
-import { selectDocumentPagination } from './document.reducers';
+import { selectDocumentQueryParams } from './document.reducers';
 import { DocumentService } from '../../../shared/service/document.service';
 
 export const getDocumentsWithQuery = createEffect(
@@ -14,9 +14,9 @@ export const getDocumentsWithQuery = createEffect(
     return actions$.pipe(
       // Listening for actions of type
       ofType(documentActions.getDocumentsWithQuery),
-      switchMap(({ pagination }) => {
+      switchMap(({ queryParams }) => {
         // Calling the service method to fetch documents
-        return documentService.fetchDocumentsWithAssociatedVersionsWithQuery(pagination).pipe(
+        return documentService.fetchDocumentsWithAssociatedVersionsWithQuery(queryParams).pipe(
           map(documents =>
             // Handling the response and dispatching action when successful
             documentActions.getDocumentsWithQuerySuccess({
@@ -92,9 +92,9 @@ export const refreshGetDocumentWithQueryEffect = createEffect(
     return actions$.pipe(
       ofType(documentActions.createDocumentVersionSuccess, documentActions.changeDocumentVisibilitySuccess),
       mergeMap(() => {
-        return store.select(selectDocumentPagination).pipe(
+        return store.select(selectDocumentQueryParams).pipe(
           take(1),
-          map(pagination => documentActions.getDocumentsWithQuery({ pagination }))
+          map(queryParams => documentActions.getDocumentsWithQuery({ queryParams: queryParams }))
         );
       })
     );
