@@ -23,10 +23,18 @@
       <mat-divider></mat-divider>
 
       <!-- Link to the 'login' route -->
-      <a mat-list-item routerLink="login">
-        <mat-icon>login</mat-icon>
-        <span> Login</span>
-      </a>
+      <ng-container *ngIf="isLoggedIn; else loggedOut">
+        <a mat-list-item (click)="logout()">
+          <mat-icon>logout</mat-icon>
+          <span>Logout</span>
+        </a>
+      </ng-container>
+      <ng-template #loggedOut>
+        <a mat-list-item routerLink="login">
+          <mat-icon>login</mat-icon>
+          <span>Login</span>
+        </a>
+      </ng-template>
 
       <mat-divider></mat-divider>
 
@@ -69,10 +77,18 @@
         </a>
 
         <!-- Link to the 'login' route -->
-        <a class="menu-item toolbar-button" mat-button routerLink="login" routerLinkActive="menu-item-active">
-          <span class="icon-with-text"><mat-icon>login</mat-icon></span>
-          <span class="button-description">Login</span>
-        </a>
+        <ng-container *ngIf="isLoggedIn ; else loggedOutToolbar">
+          <a class="menu-item toolbar-button" mat-button (click)="logout()">
+            <span class="icon-with-text"><mat-icon>logout</mat-icon></span>
+            <span class="button-description">Logout</span>
+          </a>
+        </ng-container>
+        <ng-template #loggedOutToolbar>
+          <a class="menu-item toolbar-button" mat-button routerLink="login" routerLinkActive="menu-item-active">
+            <span class="icon-with-text"><mat-icon>login</mat-icon></span>
+            <span class="button-description">Login</span>
+          </a>
+        </ng-template>
       </div>
     </mat-toolbar>
 
@@ -111,9 +127,16 @@
         </a>
 
         <!-- Link to the '/login' route -->
-        <a class="menu-item" mat-button routerLink="/login" routerLinkActive="menu-item-active">
-          <mat-icon>login</mat-icon>
-        </a>
+        <ng-container *ngIf="isLoggedIn ; else loggedOutMobile">
+          <a class="menu-item" mat-button (click)="logout()">
+            <mat-icon>logout</mat-icon>
+          </a>
+        </ng-container>
+        <ng-template #loggedOutMobile>
+          <a class="menu-item" mat-button routerLink="/login" routerLinkActive="menu-item-active">
+            <mat-icon>login</mat-icon>
+          </a>
+        </ng-template>
       </div>
     </mat-toolbar>
   </div>

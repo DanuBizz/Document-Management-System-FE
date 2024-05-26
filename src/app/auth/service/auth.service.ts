@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpResponse, HttpStatusCode } from '@angular/common/http';
+import { HttpClient, HttpStatusCode } from '@angular/common/http';
 import { CurrentUserInterface } from '../../shared/type/current-user.interface';
-import { map, Observable } from 'rxjs';
-import { AuthResponseInterface } from '../type/auth-response.interface';
+import { BehaviorSubject, map, Observable } from 'rxjs';
 import { LoginRequestInterface } from '../type/login-request.interface';
 import { environment } from '../../../environments/environment';
 
@@ -11,14 +10,16 @@ import { environment } from '../../../environments/environment';
 })
 //AuthService provides authentication-related functionalities.
 export class AuthService {
-  testApiUrl = 'https://api.realworld.io/api';
   authUrl = 'http://localhost:8080/usercontrol'
-
+  private isLoggedInSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  isLoggedIn$: Observable<boolean> = this.isLoggedInSubject.asObservable();
   /**
    * @param http HttpClient instance for making HTTP requests
    */
   constructor(private http: HttpClient) {}
-
+  updateLoggedInStatus(isLoggedIn: boolean): void {
+    this.isLoggedInSubject.next(isLoggedIn);
+  }
   /**
    * Performs user login.
    * @param data LoginRequestInterface containing user credentials
@@ -40,5 +41,17 @@ export class AuthService {
   getCurrentUser(encodedUsername: string): Observable<CurrentUserInterface> {
     const url = environment.apiUrl + `/users/user/coded/${encodedUsername}`;
     return this.http.get<CurrentUserInterface>(url);
+  }
+
+  logout(): Observable<{ message: string }> {
+    const url = `${this.authUrl}/logout`;
+    console.log('Logging out...');
+    return this.http.get<{ message: string }>(url, {}).pipe(
+      map(response => {
+        localStorage.removeItem('accessToken');
+        console.log('Response from logout:', response);
+        return response;
+      })
+    );
   }
 }

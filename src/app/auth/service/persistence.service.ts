@@ -32,4 +32,16 @@ export class PersistenceService {
       return null;
     }
   }
+
+  /**
+   * Removes data from local storage.
+   * @param key The key under which the data is stored
+   */
+  remove(key: string): void {
+    try {
+      localStorage.removeItem(key);
+    } catch (e) {
+      console.error('Error removing from local storage', e);
+    }
+  }
 }

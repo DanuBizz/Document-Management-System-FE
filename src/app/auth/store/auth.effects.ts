@@ -2,10 +2,10 @@ import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { inject } from '@angular/core';
 import { AuthService } from '../service/auth.service';
 import { authActions } from './auth.actions';
-import { filter, map, of, switchMap } from 'rxjs';
+import { map, of, switchMap } from 'rxjs';
 import { CurrentUserInterface } from '../../shared/type/current-user.interface';
 import { catchError, tap } from 'rxjs/operators';
-import { HttpErrorResponse, HttpResponse, HttpStatusCode } from '@angular/common/http';
+import { HttpErrorResponse } from '@angular/common/http';
 import { PersistenceService } from '../service/persistence.service';
 import { Router } from '@angular/router';
 
@@ -53,7 +53,7 @@ export const redirectAfterLoginEffect = createEffect(
         if (currentUser.isAdmin) {
           router.navigateByUrl('/admin/document');
         } else {
-          router.navigateByUrl('/user/document');
+          router.navigateByUrl('/user');
         }
       })
     );
