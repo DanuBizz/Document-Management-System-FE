@@ -23,7 +23,7 @@
       <mat-divider></mat-divider>
 
       <!-- Link to the 'login' route -->
-      <ng-container *ngIf="isLoggedIn; else loggedOut">
+      <ng-container *ngIf="currentUser; else loggedOut">
         <button mat-list-item (click)="logout()">
           <mat-icon>logout</mat-icon>
           <span>Logout</span>
@@ -77,7 +77,7 @@
         </a>
 
         <!-- Link to the 'login' route -->
-        <ng-container *ngIf="isLoggedIn; else loggedOutToolbar">
+        <ng-container *ngIf="currentUser; else loggedOutToolbar">
           <button class="menu-item toolbar-button" mat-button (click)="logout()" aria-label="Logout">
             <span class="icon-with-text"><mat-icon>logout</mat-icon></span>
             <span class="button-description">Logout</span>
@@ -127,7 +127,7 @@
         </a>
 
         <!-- Link to the '/login' route -->
-        <ng-container *ngIf="isLoggedIn; else loggedOutMobile">
+        <ng-container *ngIf="currentUser; else loggedOutMobile">
           <button class="menu-item" mat-button (click)="logout()">
             <mat-icon>logout</mat-icon>
           </button>

@@ -13,7 +13,6 @@ import { Store } from '@ngrx/store';
 import { combineLatest } from 'rxjs';
 import { selectIsSubmitting, selectValidationErrors } from '../../store/auth.reducers';
 import { BackendErrorMessagesComponent } from '../../../shared/component/backend-error-messages/backend-error-messages.component';
-import { AuthService } from '../../service/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -55,8 +54,7 @@ export class LoginComponent {
    */
   constructor(
     private fb: FormBuilder,
-    private store: Store,
-    private authService: AuthService
+    private store: Store
   ) {
     // Initialize loginForm with default values and validators
     this.loginForm = this.fb.group({
@@ -74,7 +72,6 @@ export class LoginComponent {
     const request: LoginRequestInterface = {
       user: this.loginForm.getRawValue(),
     };
-    this.authService.updateLoggedInStatus(true);
     // Dispatching login action with the request
     this.store.dispatch(authActions.login({ request }));
   }

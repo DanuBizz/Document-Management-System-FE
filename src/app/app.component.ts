@@ -9,6 +9,9 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatListItem, MatNavList } from '@angular/material/list';
 import { MatDivider } from '@angular/material/divider';
 import { AuthService } from './auth/service/auth.service';
+import { Store } from '@ngrx/store';
+import { selectCurrentUser } from './auth/store/auth.reducers';
+import { CurrentUserInterface } from './shared/type/current-user.interface';
 
 @Component({
   selector: 'app-root',
@@ -31,21 +34,27 @@ import { AuthService } from './auth/service/auth.service';
   styleUrl: './app.component.scss',
 })
 export class AppComponent implements OnInit {
-  isLoggedIn: boolean = false;
+  currentUser: CurrentUserInterface | undefined;
 
   constructor(
     private authService: AuthService,
-    private router: Router
+    private router: Router,
+    private store: Store
   ) {}
 
   ngOnInit(): void {
-    this.authService.isLoggedIn$.subscribe(isLoggedIn => {
-      this.isLoggedIn = isLoggedIn;
-    });
+    this.store
+      .select(selectCurrentUser)
+      .pipe()
+      .subscribe(user => {
+        if (user) {
+          this.currentUser = user;
+        }
+      });
   }
   logout(): void {
     this.authService.logout().subscribe(() => {
-      this.authService.updateLoggedInStatus(false);
+      this.currentUser = undefined;
       this.router.navigate(['/login']);
     });
   }

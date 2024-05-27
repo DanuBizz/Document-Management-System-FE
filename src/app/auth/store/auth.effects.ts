@@ -23,10 +23,8 @@ export const loginEffect = createEffect(
         persistenceService.set('accessToken', btoa(request.user.username + ':' + request.user.password));
         return authService.login(request).pipe(
           switchMap(() => {
-            console.log('Login successful, now fetching current user...');
             return authService.getCurrentUser(encodedUsername).pipe(
               map((currentUser: CurrentUserInterface) => {
-                console.log('Current user:', currentUser);
                 return authActions.loginSuccess({ currentUser });
               }),
               catchError((errorResponse: HttpErrorResponse) => {
