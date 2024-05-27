@@ -2,6 +2,7 @@ import { CategoryStateInterface } from '../../type/category-state.interface';
 import { createFeature, createReducer, on } from '@ngrx/store';
 import { categoryActions } from './category.actions';
 import { PaginationConfigService } from '../../../shared/service/pagination-config.service';
+import { routerNavigatedAction } from '@ngrx/router-store';
 
 const paginationConfigService = new PaginationConfigService();
 
@@ -133,15 +134,15 @@ export const categoriesFeature = createFeature({
         isSubmitting: false,
         error: action.error,
       })
-    )
+    ),
 
     // Handling router navigated action
-    /*
-    on(routerNavigatedAction, state => ({
-      ...state,
-      data: [],
-    }))
-      */
+    on(routerNavigatedAction, (state, action): CategoryStateInterface => {
+      if (action.payload.routerState.url === '/login') {
+        return initialState;
+      }
+      return state;
+    })
   ),
 });
 

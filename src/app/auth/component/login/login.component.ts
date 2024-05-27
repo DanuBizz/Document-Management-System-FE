@@ -13,6 +13,7 @@ import { Store } from '@ngrx/store';
 import { combineLatest } from 'rxjs';
 import { selectIsSubmitting, selectValidationErrors } from '../../store/auth.reducers';
 import { BackendErrorMessagesComponent } from '../../../shared/component/backend-error-messages/backend-error-messages.component';
+import { PersistenceService } from '../../service/persistence.service';
 
 @Component({
   selector: 'app-login',
@@ -57,16 +58,20 @@ export class LoginComponent {
   /**
    * @param fb FormBuilder instance for creating form controls
    * @param store Store instance for dispatching actions and accessing store data
+   * @param persistenceService
    */
   constructor(
     private fb: FormBuilder,
-    private store: Store
+    private store: Store,
+    private persistenceService: PersistenceService
   ) {
     // Initialize loginForm with default values and validators
     this.loginForm = this.fb.group({
       username: [this.testAdminName, [Validators.required]],
       password: [this.testAdminPassword, [Validators.required]],
     });
+
+    this.persistenceService.remove('accessToken');
   }
 
   /**

@@ -2,7 +2,7 @@ import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { inject } from '@angular/core';
 import { AuthService } from '../service/auth.service';
 import { authActions } from './auth.actions';
-import { map, of, switchMap } from 'rxjs';
+import { delay, map, of, switchMap } from 'rxjs';
 import { CurrentUserInterface } from '../../shared/type/current-user.interface';
 import { catchError, tap } from 'rxjs/operators';
 import { HttpErrorResponse } from '@angular/common/http';
@@ -66,16 +66,22 @@ export const redirectAfterLoginEffect = createEffect(
  * occurs during the request, it also dispatches getCurrentUserFailure action.
  */
 export const getCurrentUserEffect = createEffect(
-  (actions$ = inject(Actions), authService = inject(AuthService), persistanceService = inject(PersistenceService)) => {
+  (actions$ = inject(Actions), authService = inject(AuthService), persistenceService = inject(PersistenceService)) => {
     return actions$.pipe(
       ofType(authActions.getCurrentUser),
-      switchMap(({ encodedUsername }) => {
-        const token = persistanceService.get('accessToken');
-        if (!token) {
+      switchMap(() => {
+        const encodedToken = persistenceService.get('accessToken') as string;
+        if (!encodedToken) {
           return of(authActions.getCurrentUserFailure());
         }
+        const decodedToken = atob(encodedToken);
+        const [username] = decodedToken.split(':');
+        const encodedUsername = btoa(username);
+
         return authService.getCurrentUser(encodedUsername).pipe(
-          map((currentUser: CurrentUserInterface) => authActions.getCurrentUserSuccess({ currentUser })),
+          map((currentUser: CurrentUserInterface) => {
+            return authActions.getCurrentUserSuccess({ currentUser });
+          }),
           catchError(() => of(authActions.getCurrentUserFailure()))
         );
       })
@@ -95,12 +101,8 @@ export const logoutEffect = createEffect(
       ofType(authActions.logout),
       switchMap(() => {
         return authService.logout().pipe(
-          switchMap(() => {
-            return of(authActions.logoutSuccess());
-          }),
-          catchError(() => {
-            return of(authActions.logoutFailure());
-          })
+          switchMap(() => of(authActions.logoutSuccess())),
+          catchError(() => of(authActions.logoutFailure()))
         );
       })
     );
@@ -115,6 +117,7 @@ export const redirectAfterLogoutEffect = createEffect(
   (actions$ = inject(Actions), router = inject(Router)) => {
     return actions$.pipe(
       ofType(authActions.logoutSuccess, authActions.logoutFailure),
+      delay(100),
       tap(() => {
         router.navigateByUrl('/login');
       })

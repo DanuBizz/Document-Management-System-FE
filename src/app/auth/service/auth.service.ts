@@ -27,10 +27,9 @@ export class AuthService {
    * @returns Observable of CurrentUserInterface
    */
   login(data: LoginRequestInterface): Observable<HttpStatusCode> {
-    const url = this.authUrl;
-
-    return this.http.post<HttpStatusCode>(url, data).pipe(
+    return this.http.post<HttpStatusCode>(this.authUrl, data).pipe(
       map(response => {
+        console.log(response);
         return response;
       })
     );

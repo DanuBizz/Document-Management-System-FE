@@ -1,7 +1,7 @@
 import { createFeature, createReducer, on } from '@ngrx/store';
 import { AuthStateInterface } from '../type/auth-state.interface';
 import { authActions } from './auth.actions';
-import { routerNavigationAction } from '@ngrx/router-store';
+import { routerNavigatedAction, routerNavigationAction } from '@ngrx/router-store';
 
 export const initialState: AuthStateInterface = {
   isSubmitting: false,
@@ -89,7 +89,14 @@ export const authFeature = createFeature({
         ...state,
         validationErrors: null,
       })
-    )
+    ),
+
+    on(routerNavigatedAction, (state, action): AuthStateInterface => {
+      if (action.payload.routerState.url === '/login') {
+        return initialState;
+      }
+      return state;
+    })
   ),
 });
 

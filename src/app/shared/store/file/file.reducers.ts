@@ -1,6 +1,7 @@
 import { createFeature, createReducer, on } from '@ngrx/store';
 import { fileActions } from './file.actions';
 import { FileStateInterface } from '../../type/file-state.interface';
+import { routerNavigatedAction } from '@ngrx/router-store';
 
 export const initialState: FileStateInterface = {
   data: null,
@@ -34,10 +35,14 @@ export const fileFeature = createFeature({
         isLoading: false,
         error: action.error,
       })
-    )
-    /*
-    on(routerNavigatedAction, () => initialState)
-    */
+    ),
+
+    on(routerNavigatedAction, (state, action): FileStateInterface => {
+      if (action.payload.routerState.url === '/login') {
+        return initialState;
+      }
+      return state;
+    })
   ),
 });
 

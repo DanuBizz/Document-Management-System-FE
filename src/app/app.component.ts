@@ -62,6 +62,8 @@ export class AppComponent implements OnInit {
           this.isAdmin = user.isAdmin;
         }
       });
+
+    this.store.dispatch(authActions.getCurrentUser());
   }
 
   logout(): void {
@@ -77,7 +79,8 @@ export class AppComponent implements OnInit {
     const isLoginPage = this.currentUrl === '/login';
     const isHomePage = this.currentUrl === '/';
     const isPageNotFound = this.currentUrl.endsWith('page-not-found');
+    const isPageNotPermitted = this.currentUrl.endsWith('page-not-permitted');
 
-    return isLoginPage || isHomePage || isPageNotFound;
+    return isLoginPage || isHomePage || isPageNotFound || isPageNotPermitted;
   }
 }

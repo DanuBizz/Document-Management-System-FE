@@ -11,7 +11,6 @@ export const authInterceptor: HttpInterceptorFn = (request, next) => {
   const persistenceService = inject(PersistenceService);
   // Get access token from PersistenceService
   const token = persistenceService.get('accessToken');
-  console.log('token', token);
   // Clone the request and set authorization header with token if available
   request = request.clone({
     setHeaders: {
