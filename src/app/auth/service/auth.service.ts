@@ -10,7 +10,7 @@ import { environment } from '../../../environments/environment';
 })
 //AuthService provides authentication-related functionalities.
 export class AuthService {
-  authUrl = 'http://localhost:8080/usercontrol';
+  authUrl = environment.apiUrl + '/usercontrol';
   /**
    * @param http HttpClient instance for making HTTP requests
    */
