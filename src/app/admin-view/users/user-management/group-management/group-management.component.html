@@ -6,13 +6,10 @@
       <app-fab-button
         icon="add"
         tooltip="Neue Gruppe erstellen"
-        [disabled]="checkIsLoadingIsSubmitting() || !this.groupControl.valid"
+        [disabled]="checkIsLoadingIsSubmitting() || !this.groupControl.valid || this.groupControl.value.length < 1"
         (OnClick)="createNewGroup()"
         matSuffix>
       </app-fab-button>
-      @if (groupControl.hasError('required')) {
-        <mat-error>Name ist <strong>erforderlich</strong></mat-error>
-      }
       @if (groupControl.hasError('duplicateName')) {
         <mat-error>Name existiert <strong>bereits</strong></mat-error>
       }
