@@ -53,9 +53,10 @@ export const groupFeature = createFeature({
     // GET WITH QUERY
     on(
       groupActions.getGroupsWithQuery,
-      (state): GroupStateInterface => ({
+      (state, action): GroupStateInterface => ({
         ...state,
         isLoading: true,
+        queryParams: action.queryParams,
       })
     ),
     on(

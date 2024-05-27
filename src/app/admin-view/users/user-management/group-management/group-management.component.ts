@@ -17,7 +17,7 @@ import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatProgressBar } from '@angular/material/progress-bar';
 import { MatSlideToggle } from '@angular/material/slide-toggle';
 import { MatSortModule, Sort } from '@angular/material/sort';
-import { FormControl, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormControl, FormsModule, ReactiveFormsModule, ValidatorFn } from '@angular/forms';
 import { GroupResponseInterface } from '../../../type/group-response-interface';
 import { combineLatest, debounceTime } from 'rxjs';
 import {
@@ -116,7 +116,7 @@ export class GroupManagementComponent implements OnInit {
   constructor(
     private store: Store,
     public paginationConfigService: PaginationConfigService,
-    private dispatchActionService: DispatchActionService,
+    private dispatchActionService: DispatchActionService
   ) {}
 
   ngOnInit(): void {
@@ -163,7 +163,7 @@ export class GroupManagementComponent implements OnInit {
    * Initializes the form with form controls and validators.
    */
   initializeForm() {
-    this.groupControl = new FormControl('', [Validators.required, this.validateDocumentCategoryName.bind(this)]);
+    this.groupControl = new FormControl('', [this.validateDocumentCategoryName.bind(this) as ValidatorFn]);
 
     // removes empty space from the beginning of the name
     this.groupControl.valueChanges.subscribe(value => {
@@ -250,6 +250,8 @@ export class GroupManagementComponent implements OnInit {
   createNewGroup() {
     if (this.groupControl.valid) {
       this.store.dispatch(groupActions.createGroup({ group: this.groupControl.value }));
+
+      this.groupControl.setValue('');
     }
   }
 
