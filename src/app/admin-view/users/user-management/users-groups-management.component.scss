@@ -1,0 +1,11 @@
+.centered-container {
+  display: flex;
+  align-items: center; /* Vertikal zentrieren */
+  justify-content: center; /* Horizontal zentrieren */
+}
+
+@media (max-width: 568px) {
+  .mobile-title {
+    display: none;
+  }
+}

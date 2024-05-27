@@ -1,5 +1,6 @@
-<ul class="text-danger">
-  <li *ngFor="let errorMessage of errorMessages">
+<div class="alert alert-danger d-flex align-items-center" role="alert">
+  <span *ngFor="let errorMessage of errorMessages">
+    <mat-icon class="table-icon-hint mx-2">warning</mat-icon>
     {{ errorMessage }}
-  </li>
-</ul>
+  </span>
+</div>

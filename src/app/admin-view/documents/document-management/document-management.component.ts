@@ -6,7 +6,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSortModule, Sort } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatButtonModule } from '@angular/material/button';
-import { combineLatest, filter, first } from 'rxjs';
+import { combineLatest, debounceTime, filter, first } from 'rxjs';
 import { DocumentService } from '../../../shared/service/document.service';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
@@ -15,27 +15,30 @@ import { MatCheckbox } from '@angular/material/checkbox';
 import { FabButtonComponent } from '../../../shared/component/fab-button/fab-button.component';
 import { Store } from '@ngrx/store';
 import {
+  selectDocumentAreLoaded,
   selectDocumentData,
   selectDocumentError,
   selectDocumentIsLoading,
   selectDocumentIsSubmitting,
   selectDocumentPageSizeOptions,
-  selectDocumentPagination,
+  selectDocumentQueryParams,
   selectDocumentTotalElements,
 } from '../store/document.reducers';
 import { documentActions } from '../store/document.actions';
 import { MatProgressBar } from '@angular/material/progress-bar';
 import { MatDialog } from '@angular/material/dialog';
 import { openCreateDocumentDialog } from '../create-document-dialog/document-dialog.config';
-import { categoryActions } from '../../categories/store/category.actions';
 
 import { DocumentResponseInterface } from '../../type/document-response.interface';
 import { DocumentVersionsResponseInterface } from '../../type/document-versions-response.interface';
-import { PaginationQueryParamsInterface } from '../../../shared/type/pagination-query-params.interface';
+import { QueryParamsInterface } from '../../../shared/type/query-params.interface';
 import { MatDivider } from '@angular/material/divider';
 import { fileActions } from '../../../shared/store/file/file.actions';
 import { openDisplayDocumentDialog } from '../../../shared/component/display-document-dialog/display-document-dialog.config';
 import { selectFileData } from '../../../shared/store/file/file.reducers';
+import { MatBadge } from '@angular/material/badge';
+import { DispatchActionService } from '../../../shared/service/dispatch-action.service';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-document-management',
@@ -54,6 +57,8 @@ import { selectFileData } from '../../../shared/store/file/file.reducers';
     FabButtonComponent,
     MatProgressBar,
     MatDivider,
+    MatBadge,
+    ReactiveFormsModule,
   ],
   providers: [DocumentService],
   templateUrl: './document-management.component.html',
@@ -69,12 +74,12 @@ export class DocumentManagementComponent implements OnInit {
     error: this.store.select(selectDocumentError),
     totalElements: this.store.select(selectDocumentTotalElements),
     pageSizeOptions: this.store.select(selectDocumentPageSizeOptions),
-    pagination: this.store.select(selectDocumentPagination),
+    queryParams: this.store.select(selectDocumentQueryParams),
     isSubmitting: this.store.select(selectDocumentIsSubmitting),
   });
 
   // Pagination and sorting properties for the component ts file
-  pagination!: PaginationQueryParamsInterface;
+  queryParams!: QueryParamsInterface;
 
   // Booleans indicating whether data is currently being fetched or submitted to the database
   isSubmitting: boolean = false;
@@ -101,30 +106,50 @@ export class DocumentManagementComponent implements OnInit {
   // tooltip for toggle visibility
   tooltipVisibilityButton = '';
 
+  // Maximum number of users to display in the list
+  maxVisibleCategories = 4;
+
+  // Search control for the search input field
+  searchControl: FormControl = new FormControl('');
+
   /**
    * @param store - The Redux store instance injected via dependency injection.
    * @param dialog - The MatDialog service for opening dialogs.
+   * @param dispatchActionService - Dispatches an action only if needed, based on the current state of areLoaded
    */
   constructor(
     private store: Store,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private dispatchActionService: DispatchActionService
   ) {}
 
   ngOnInit(): void {
     this.data$.subscribe(data => {
-      this.pagination = {
-        pageNumber: data.pagination.pageNumber,
-        pageSize: data.pagination.pageSize,
-        sort: data.pagination.sort,
+      this.queryParams = {
+        pageNumber: data.queryParams.pageNumber,
+        pageSize: data.queryParams.pageSize,
+        sort: data.queryParams.sort,
+        search: data.queryParams.search,
       };
       this.isLoading = data.isLoading;
       this.isSubmitting = data.isSubmitting;
     });
 
-    this.dispatchGetDocumentsWithQueryAction();
+    // Using the DispatchActionService to check if the data are loaded.
+    // If not loaded, it dispatches the action to get the data with a query.
+    this.dispatchActionService.checkAndDispatchAction(this.store.select(selectDocumentAreLoaded), () =>
+      this.dispatchGetDocumentsWithQueryAction()
+    );
 
-    // Load all categories on initialization
-    this.store.dispatch(categoryActions.getAllCategories());
+    // sets initial the store value of search
+    this.searchControl.setValue(this.queryParams.search);
+
+    // Subscribe to the search control value changes and debounce them to prevent too many requests
+    this.searchControl.valueChanges
+      .pipe(debounceTime(700)) //
+      .subscribe(value => {
+        this.searchDocuments(value);
+      });
   }
 
   /**
@@ -191,8 +216,8 @@ export class DocumentManagementComponent implements OnInit {
    * @param event - The PageEvent object containing information about the page event.
    */
   handlePageEvent(event: PageEvent) {
-    this.pagination = {
-      ...this.pagination,
+    this.queryParams = {
+      ...this.queryParams,
       pageNumber: event.pageIndex.toString(),
       pageSize: event.pageSize.toString(),
     };
@@ -240,7 +265,7 @@ export class DocumentManagementComponent implements OnInit {
    * Dispatches an action to fetch documents data based on the current pagination and sorting options.
    */
   private dispatchGetDocumentsWithQueryAction() {
-    this.store.dispatch(documentActions.getDocumentsWithQuery({ pagination: this.pagination }));
+    this.store.dispatch(documentActions.getDocumentsWithQuery({ queryParams: this.queryParams }));
   }
 
   /**
@@ -254,8 +279,8 @@ export class DocumentManagementComponent implements OnInit {
       sort = sortState.active + ',' + sortState.direction;
     }
 
-    this.pagination = {
-      ...this.pagination,
+    this.queryParams = {
+      ...this.queryParams,
       sort: sort,
     };
 
@@ -267,10 +292,16 @@ export class DocumentManagementComponent implements OnInit {
    *
    * @return A string containing the sorted category names joined by commas.
    * @param categoryNames
+   * @param trunc truncate the list if too long
+   * @param maxUsersVisible length to truncate if list is too long
    */
-  sortAndJoinCategoryNames(categoryNames: string[]): string {
-    const sortedCategoryNames = categoryNames.slice().sort();
-    return sortedCategoryNames.join(', ');
+  sortAndJoinCategoryNames(categoryNames: string[], trunc: boolean, maxUsersVisible: number): string {
+    const sortedNames = categoryNames.slice().sort().join(', ');
+    if (trunc) {
+      const truncatedSortedNames = categoryNames.slice().sort().slice(0, maxUsersVisible).join(', ');
+      return truncatedSortedNames + '...';
+    }
+    return sortedNames;
   }
 
   checkIsLoadingIsSubmitting(): boolean {
@@ -300,5 +331,14 @@ export class DocumentManagementComponent implements OnInit {
       .subscribe(() => {
         openDisplayDocumentDialog(this.dialog);
       });
+  }
+
+  searchDocuments(search: string) {
+    this.queryParams = {
+      ...this.queryParams,
+      search: search.trim(),
+    };
+
+    this.dispatchGetDocumentsWithQueryAction();
   }
 }

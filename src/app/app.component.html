@@ -1,42 +1,56 @@
 <mat-sidenav-container fullscreen>
   <mat-sidenav #sidenav>
     <mat-nav-list (click)="sidenav.close()">
-      <a mat-list-item routerLink="/">
-        <mat-icon>contact_support</mat-icon>
-        <span> Kontakt</span>
-      </a>
-
-      <mat-divider></mat-divider>
-
-      <a mat-list-item routerLink="">
-        <mat-icon>info</mat-icon>
-        <span> Impressum</span>
-      </a>
-
-      <mat-divider></mat-divider>
-
-      <a mat-list-item routerLink="">
-        <mat-icon>drag_indicator</mat-icon>
-        <span> Datenschutz</span>
-      </a>
-
-      <mat-divider></mat-divider>
-
       <!-- Link to the 'login' route -->
       <a mat-list-item routerLink="login">
-        <mat-icon>login</mat-icon>
-        <span> Login</span>
+        <div class="d-inline-flex">
+          <mat-icon>login</mat-icon>
+          <span class="mx-1">Login</span>
+        </div>
+      </a>
+
+      <mat-divider></mat-divider>
+
+      <a mat-list-item routerLink="/">
+        <div class="d-inline-flex">
+          <mat-icon>alternate_email</mat-icon>
+          <span class="mx-1">Kontakt</span>
+        </div>
+      </a>
+
+      <mat-divider></mat-divider>
+
+      <a mat-list-item routerLink="">
+        <div class="d-inline-flex">
+          <mat-icon>account_balance</mat-icon>
+          <span class="mx-1">Impressum</span>
+        </div>
+      </a>
+
+      <mat-divider></mat-divider>
+
+      <a mat-list-item routerLink="">
+        <div class="d-inline-flex">
+          <mat-icon>security</mat-icon>
+          <span class="mx-1">Datenschutz</span>
+        </div>
       </a>
 
       <mat-divider></mat-divider>
 
       <!-- Link to the 'login' route -->
       <a mat-list-item routerLink="user">
-        <mat-icon>library_books</mat-icon>
-        <span> User</span>
+        <div class="d-inline-flex">
+          <mat-icon>library_books</mat-icon>
+          <span class="mx-1">User</span>
+        </div>
       </a>
 
       <mat-divider></mat-divider>
+
+      <a mat-list-item class="logo-item">
+        <div class="side-nav-logo"></div>
+      </a>
     </mat-nav-list>
   </mat-sidenav>
 
@@ -48,6 +62,8 @@
         <span class="icon-with-text"><mat-icon>menu</mat-icon></span>
         <span class="button-description">Menu</span>
       </button>
+
+      <div class="nav-bar-logo mx-2"></div>
 
       <div class="toolbar-tools">
         <!-- Link to the 'admin/document' route -->
@@ -108,11 +124,6 @@
         <!-- Link to the 'admin/user' route -->
         <a class="menu-item" mat-button routerLink="admin/user" routerLinkActive="menu-item-active">
           <span class="icon-with-text"><mat-icon>group</mat-icon></span>
-        </a>
-
-        <!-- Link to the '/login' route -->
-        <a class="menu-item" mat-button routerLink="/login" routerLinkActive="menu-item-active">
-          <mat-icon>login</mat-icon>
         </a>
       </div>
     </mat-toolbar>

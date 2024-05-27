@@ -4,7 +4,7 @@ import { CategoryService } from './category.service';
 import { CategoryResponseInterface } from '../../admin-view/type/category-response.interface';
 import { environment } from '../../../environments/environment';
 import { CategoryRequestInterface } from '../../admin-view/type/category-request.interface';
-import { PaginationQueryParamsInterface } from '../type/pagination-query-params.interface';
+import { QueryParamsInterface } from '../type/query-params.interface';
 
 describe('CategoryService', () => {
   let service: CategoryService;
@@ -16,7 +16,7 @@ describe('CategoryService', () => {
     { id: 2, name: 'Category 2', userNames: ['user1', 'user2'], userIds: [1, 2] },
   ];
 
-  const pagination: PaginationQueryParamsInterface = {
+  const pagination: QueryParamsInterface = {
     pageNumber: '0',
     pageSize: '5',
     sort: '',

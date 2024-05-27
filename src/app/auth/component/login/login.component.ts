@@ -37,6 +37,8 @@ import { BackendErrorMessagesComponent } from '../../../shared/component/backend
 export class LoginComponent {
   title = 'Anmelden';
 
+  passwordFieldType: string = 'password';
+
   // FormGroup for handling login form
   loginForm: FormGroup;
 
@@ -73,5 +75,9 @@ export class LoginComponent {
 
     // Dispatching login action with the request
     this.store.dispatch(authActions.login({ request }));
+  }
+
+  togglePasswordVisibility() {
+    this.passwordFieldType = this.passwordFieldType === 'password' ? 'text' : 'password';
   }
 }

@@ -1,14 +1,15 @@
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { inject } from '@angular/core';
 import { map, mergeMap, of, switchMap } from 'rxjs';
-import { catchError, tap } from 'rxjs/operators';
+import { catchError } from 'rxjs/operators';
 import { HttpErrorResponse } from '@angular/common/http';
 import { userActions } from './user.actions';
-import { UserResponseInterface } from '../../type/user-response.interface';
-import { UserService } from '../../../shared/service/user.service';
-import { SnackbarService } from '../../../shared/service/snackbar.service';
+import { UserResponseInterface } from '../../../type/user-response.interface';
+import { UserService } from '../../../../shared/service/user.service';
 import { Store } from '@ngrx/store';
-import { selectUserError, selectUserPagination } from './user.reducers';
+import { selectUserQueryParams } from './user.reducers';
+import { selectGroupQueryParams } from '../group/group.reducers';
+import { groupActions } from '../group/group.actions';
 
 export const getAllUsersEffect = createEffect(
   // Injecting dependencies
@@ -40,9 +41,9 @@ export const getUsersWithQuery = createEffect(
     return actions$.pipe(
       // Listening for actions of type
       ofType(userActions.getUsersWithQuery),
-      switchMap(({ pagination }) => {
+      switchMap(({ queryParams }) => {
         // Calling the service method
-        return userService.fetchUsersWitQuery(pagination).pipe(
+        return userService.fetchUsersWitQuery(queryParams).pipe(
           map(users =>
             // Handling the response and dispatching action when successful
             userActions.getUsersWithQuerySuccess({
@@ -85,54 +86,65 @@ export const changeUserRoleEffect = createEffect(
   { functional: true }
 );
 
-/**
- * Effect for displaying a snackbar notification and dispatch new action.
- * Upon receiving such a success-action, it displays a snackbar notification containing the success message
- * using the provided SnackbarService. It then retrieves the current query parameters from the store
- * and dispatches the 'get' action to fetch updated data.
- */
-export const openSnackbarSuccessEffect = createEffect(
-  (actions$ = inject(Actions), snackbarService = inject(SnackbarService)) => {
-    return actions$.pipe(
-      ofType(userActions.changeUserRoleSuccess),
-      tap(({ message }) => {
-        snackbarService.openSnackBar(message);
-      })
-    );
-  },
-  { functional: true, dispatch: false }
-);
-
-export const openSnackbarErrorEffect = createEffect(
+export const changeUserGroupsEffect = createEffect(
   // Injecting dependencies
-  (actions$ = inject(Actions), snackbarService = inject(SnackbarService), store = inject(Store)) => {
+  (actions$ = inject(Actions), userService = inject(UserService)) => {
     return actions$.pipe(
       // Listening for actions of type
-      ofType(userActions.getAllUsersFailure, userActions.getUsersWithQueryFailure, userActions.changeUserRoleFailure),
-      tap(() => {
-        // Subscribing to selectError selector to get the error from the store
-        store.select(selectUserError).subscribe(error => {
-          // Opening a snackbar to display the error message
-          snackbarService.openSnackBar('Fehler bei Übermittlung der User. \nError: ' + JSON.stringify(error));
-        });
+      ofType(userActions.changeUserGroups),
+      switchMap(({ id, groupIds }) => {
+        // Calling the service method
+        return userService.updateUserGroups(id, groupIds).pipe(
+          map(() =>
+            // Handling the response and dispatching action when successful
+            userActions.changeUserGroupsSuccess()
+          ),
+          catchError((errorResponse: HttpErrorResponse) => {
+            // Handling errors and dispatching action when fetching fails
+            return of(userActions.changeUserGroupsFailure(errorResponse.error));
+          })
+        );
       })
     );
   },
-  { functional: true, dispatch: false } // indicates not to dispatch any actions
+  { functional: true }
 );
 
 /**
  * Effect for dispatching a new action to refresh the table data
  * Upon receiving such an action, it dispatches the 'get' action to fetch updated data.
  */
-export const refreshGetUserWithQuery = createEffect(
+export const refreshUserTableData = createEffect(
   (actions$ = inject(Actions), store = inject(Store)) => {
     return actions$.pipe(
-      ofType(userActions.changeUserRoleSuccess, userActions.changeUserRoleFailure),
+      ofType(
+        userActions.changeUserRoleSuccess,
+        userActions.changeUserRoleFailure,
+        userActions.changeUserGroupsSuccess,
+        userActions.changeUserGroupsFailure
+      ),
       mergeMap(() => {
         return store
-          .select(selectUserPagination)
-          .pipe(map(pagination => userActions.getUsersWithQuery({ pagination })));
+          .select(selectUserQueryParams)
+          .pipe(map(queryParams => userActions.getUsersWithQuery({ queryParams: queryParams })));
+      })
+    );
+  },
+  { functional: true, dispatch: true }
+);
+
+/**
+ * Effect for dispatching a new action to refresh the table data
+ * Upon receiving such an action, it dispatches the 'get' action to fetch updated data.
+ */
+export const refreshGroupTableData = createEffect(
+  (actions$ = inject(Actions), store = inject(Store)) => {
+    return actions$.pipe(
+      ofType(userActions.changeUserGroupsSuccess, userActions.changeUserGroupsFailure),
+      mergeMap(() => {
+        return store
+          .select(selectGroupQueryParams)
+          .pipe(map(queryParams => groupActions.getGroupsWithQuery({ queryParams: queryParams })));
       })
     );
   },

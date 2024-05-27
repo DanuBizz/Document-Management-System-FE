@@ -2,10 +2,10 @@ import { categoryReducer, initialState } from './category.reducers';
 import { categoryActions } from './category.actions';
 import { CategoryResponseInterface } from '../../type/category-response.interface';
 import { CategoryRequestInterface } from '../../type/category-request.interface';
-import { PaginationQueryParamsInterface } from '../../../shared/type/pagination-query-params.interface';
+import { QueryParamsInterface } from '../../../shared/type/query-params.interface';
 
 describe('CategoryReducers', () => {
-  const pagination: PaginationQueryParamsInterface = {
+  const pagination: QueryParamsInterface = {
     pageNumber: '0',
     pageSize: '5',
     sort: '',
@@ -73,7 +73,7 @@ describe('CategoryReducers', () => {
   });
 
   it('get category with query', () => {
-    const action = categoryActions.getCategoriesWithQuery({ pagination });
+    const action = categoryActions.getCategoriesWithQuery({ queryParams: pagination });
     const state = categoryReducer(initialState, action);
     const newState = {
       ...initialState,

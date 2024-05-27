@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { delay, map, Observable } from 'rxjs';
 import { CategoryResponseInterface } from '../../admin-view/type/category-response.interface';
 import { environment } from '../../../environments/environment';
 import { CategoryRequestInterface } from '../../admin-view/type/category-request.interface';
-import { PaginationQueryParamsInterface } from '../type/pagination-query-params.interface';
+import { QueryParamsInterface } from '../type/query-params.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -25,22 +25,22 @@ export class CategoryService {
   }
 
   /**
-   * Retrieves categories from the server based on pagination parameters.
+   * Retrieves categories from the server based on queryParams parameters.
    *
    * @returns Observable emitting documents array and total number of elements.
-   * @param pagination includes the page number, page size, and sort order.
+   * @param queryParams includes the page number, page size, sort order and search string.
    */
   fetchCategoriesWithQuery(
-    pagination: PaginationQueryParamsInterface
+    queryParams: QueryParamsInterface
   ): Observable<{ categories: CategoryResponseInterface[]; totalElements: string }> {
+    const params = new HttpParams()
+      .set('search', queryParams.search)
+      .set('page', queryParams.pageNumber)
+      .set('size', queryParams.pageSize)
+      .set('sort', queryParams.sort);
+
     return this.http
-      .get<{ content: CategoryResponseInterface[]; totalElements: string }>(this.baseUrl, {
-        params: {
-          page: pagination.pageNumber,
-          size: pagination.pageSize,
-          sort: pagination.sort,
-        },
-      })
+      .get<{ content: CategoryResponseInterface[]; totalElements: string }>(this.baseUrl + `/search`, { params })
       .pipe(
         delay(1000), // Simulate delay for demonstration purposes
         map(response => ({

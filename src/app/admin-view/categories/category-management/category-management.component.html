@@ -1,11 +1,11 @@
 <!-- Container to utilize data once data$ has been fetched -->
 <ng-container *ngIf="data$ | async as data">
-  <div class="container">
+  <div class="container-fluid">
     <!-- Title -->
     <h1 class="text-center mobile-title">{{ title }}</h1>
 
     <!-- Button area for category-->
-    <div class="d-flex justify-content-center mobile-without-title mb-4">
+    <div class="d-flex justify-content-center mobile-without-title my-2 mb-3">
       <!-- Button for creating a new category -->
       <app-fab-button
         icon="add"
@@ -13,6 +13,12 @@
         [disabled]="checkIsLoadingIsSubmitting()"
         (OnClick)="createNewCategory()"></app-fab-button>
     </div>
+
+    <mat-form-field appearance="outline" hideRequiredMarker="true">
+      <mat-label>Kategorie suchen</mat-label>
+      <input matInput [formControl]="searchControl" />
+      <mat-icon matSuffix>search</mat-icon>
+    </mat-form-field>
 
     <!-- Progress bar: displayed while data is being fetched -->
     <mat-progress-bar mode="indeterminate" *ngIf="checkIsLoadingIsSubmitting()" color="accent"></mat-progress-bar>
@@ -33,7 +39,7 @@
             <td mat-cell *matCellDef="let category" (click)="$event.stopPropagation()">
               <button
                 mat-icon-button
-                color="accent"
+                color="primary"
                 [disabled]="checkIsLoadingIsSubmitting()"
                 (click)="editCategoryUsers(category)">
                 <mat-icon>edit</mat-icon>
@@ -58,10 +64,15 @@
           </ng-container>
 
           <!-- Column header for Users -->
-          <ng-container matColumnDef="users">
-            <th mat-header-cell *matHeaderCellDef>Benutzer</th>
+          <ng-container matColumnDef="groups">
+            <th mat-header-cell *matHeaderCellDef>Gruppen</th>
             <td mat-cell *matCellDef="let category">
-              {{ sortAndJoinCategoryNames(category.userNames) }}
+              @if (category.groupNames.length <= maxUsersVisibleDesktop) {
+                {{ sortAndJoinNames(category.groupNames, false, 0) }}
+              } @else {
+                {{ sortAndJoinNames(category.groupNames, true, maxUsersVisibleDesktop) }}
+                <div matBadge="{{ category.groupNames.length }}" matBadgeOverlap="false"></div>
+              }
             </td>
           </ng-container>
 
@@ -86,7 +97,7 @@
             <td mat-cell *matCellDef="let category" (click)="$event.stopPropagation()">
               <button
                 mat-icon-button
-                color="accent"
+                color="primary"
                 [disabled]="checkIsLoadingIsSubmitting()"
                 (click)="editCategoryUsers(category)">
                 <mat-icon>edit</mat-icon>
@@ -114,8 +125,13 @@
 
           <!-- Expanded row column for user details -->
           <ng-container matColumnDef="expandedDetail">
-            <td mat-cell *matCellDef="let category" colspan="3">
-              {{ sortAndJoinCategoryNames(category.userNames) }}
+            <td mat-cell *matCellDef="let category" colspan="3" class="expandable-row">
+              @if (category.groupNames.length <= maxUsersVisibleMobile) {
+                {{ sortAndJoinNames(category.groupNames, false, 0) }}
+              } @else {
+                {{ sortAndJoinNames(category.groupNames, true, maxUsersVisibleMobile) }}
+                <div matBadge="{{ category.groupNames.length }}" matBadgeOverlap="false"></div>
+              }
             </td>
           </ng-container>
 
@@ -139,11 +155,12 @@
       <mat-paginator
         class="default-paginator-design"
         [length]="data.totalElements"
-        [pageSize]="pagination.pageSize"
+        [pageSize]="queryParams.pageSize"
         [pageSizeOptions]="data.pageSizeOptions"
-        [pageIndex]="pagination.pageNumber"
+        [pageIndex]="queryParams.pageNumber"
         (page)="handlePageEvent($event)"
         [showFirstLastButtons]="true"
+        [disabled]="checkIsLoadingIsSubmitting()"
         aria-label="Select page of documents">
       </mat-paginator>
     </div>

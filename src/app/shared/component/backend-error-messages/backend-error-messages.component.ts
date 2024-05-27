@@ -1,12 +1,13 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
 import { BackendErrorsInterface } from '../../type/backend-erros.interface';
+import { MatIcon } from '@angular/material/icon';
 
 @Component({
   selector: 'app-backend-error-messages',
   templateUrl: './backend-error-messages.component.html',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, MatIcon],
 })
 export class BackendErrorMessagesComponent implements OnInit {
   // Input property to receive backend errors

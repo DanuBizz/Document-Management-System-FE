@@ -12,15 +12,15 @@ import { MatFormFieldModule, MatLabel } from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
 import { MatOption, MatSelect } from '@angular/material/select';
 import { Store } from '@ngrx/store';
-import { selectUserAllData } from '../../users/store/user.reducers';
 import { Observable } from 'rxjs';
-import { UserResponseInterface } from '../../type/user-response.interface';
-import { userActions } from '../../users/store/user.actions';
 import { CommonModule } from '@angular/common';
 import { CategoryResponseInterface } from '../../type/category-response.interface';
 import { selectCategoryAllData } from '../store/category.reducers';
 import { categoryActions } from '../store/category.actions';
 import { CategoryRequestInterface } from '../../type/category-request.interface';
+import { selectGroupAllData } from '../../users/store/group/group.reducers';
+import { GroupResponseInterface } from '../../type/group-response-interface';
+import { groupActions } from '../../users/store/group/group.actions';
 
 @Component({
   selector: 'app-create-category-dialog',
@@ -47,7 +47,7 @@ export class CreateCategoryDialogComponent {
 
   // Form field name and categoryIds for the dialog, if category already exists
   formName: string = '';
-  formCategoryIds: number[] = [];
+  formCategoryGroupIds: number[] = [];
 
   // Flag to disable form field name as true if document is passed and not null
   isDisabled: boolean = false;
@@ -56,7 +56,7 @@ export class CreateCategoryDialogComponent {
   form!: FormGroup;
 
   // Observable for retrieving users from the store
-  users$: Observable<UserResponseInterface[]> = this.store.select(selectUserAllData);
+  groups$: Observable<GroupResponseInterface[]> = this.store.select(selectGroupAllData);
 
   // List of current categories to validate against duplicate names
   categories: CategoryResponseInterface[] = [];
@@ -76,7 +76,7 @@ export class CreateCategoryDialogComponent {
     // If category data exists, set formName and disable form fields
     if (this.category !== null) {
       this.formName = this.category.name;
-      this.formCategoryIds = this.category.userIds;
+      this.formCategoryGroupIds = this.category.groupIds;
       this.isDisabled = true;
       this.dialogTitle = 'Kategorie bearbeiten';
     }
@@ -84,12 +84,15 @@ export class CreateCategoryDialogComponent {
     this.initializeForm();
 
     // dispatch actions to get all users and categories
-    this.store.dispatch(userActions.getAllUsers());
     this.store.dispatch(categoryActions.getAllCategories());
+    this.store.dispatch(groupActions.getAllGroups());
 
-    this.store.select(selectCategoryAllData).subscribe(categories => {
-      this.categories = categories;
-    });
+    this.store
+      .select(selectCategoryAllData)
+      .pipe()
+      .subscribe(categories => {
+        this.categories = categories;
+      });
   }
 
   /**
@@ -102,7 +105,14 @@ export class CreateCategoryDialogComponent {
         { value: this.formName, disabled: this.isDisabled },
         this.isDisabled ? [] : [Validators.required, this.validateCategoryName.bind(this)],
       ],
-      userIds: [this.formCategoryIds, Validators.required],
+      groupIds: [this.formCategoryGroupIds, Validators.required],
+    });
+
+    // removes empty space from the beginning of the name
+    this.form.get('name')!.valueChanges.subscribe(value => {
+      if (typeof value === 'string' && value.startsWith(' ')) {
+        this.form.get('name')!.setValue(value.trim(), { emitEvent: false });
+      }
     });
   }
 

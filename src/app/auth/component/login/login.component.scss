@@ -9,13 +9,17 @@
   background-position: center;
   background-color: rgba(0, 0, 0, 0.5);
   background-blend-mode: multiply;
+  width: 100% !important;
+}
+
+.mat-mdc-card {
+  width: 500px;
+  margin: 0.5rem;
 }
 
 .form-sign-in {
-  max-width: 500px;
   padding: 2rem;
   border: none;
-  margin: 0.5rem;
   text-align: center;
 }
 
@@ -38,7 +42,7 @@ h1 {
     font-size: 2rem;
   }
 
-  .form-signup {
+  .form-sign-in {
     padding: 1.5rem;
   }
 
@@ -53,7 +57,7 @@ h1 {
     font-size: 2rem;
   }
 
-  .form-signup {
+  .form-sign-in {
     padding: 0 1.5rem;
   }
 

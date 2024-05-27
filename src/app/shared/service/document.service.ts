@@ -1,10 +1,10 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { delay, map, Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { DocumentRequestInterface } from '../../admin-view/type/document-request.interface';
 import { DocumentVersionsResponseInterface } from '../../admin-view/type/document-versions-response.interface';
-import { PaginationQueryParamsInterface } from '../type/pagination-query-params.interface';
+import { QueryParamsInterface } from '../type/query-params.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -15,25 +15,25 @@ export class DocumentService {
   constructor(private http: HttpClient) {}
 
   /**
-   * Retrieves documents and their associated versions from the server based on pagination parameters.
+   * Retrieves documents and their associated versions from the server based on queryParams parameters.
    *
    * @returns Observable emitting documents array and total number of elements.
-   * @param pagination includes the page number, page size, and sort order.
+   * @param queryParams includes the page number, page size, sort order and search string.
    */
   fetchDocumentsWithAssociatedVersionsWithQuery(
-    pagination: PaginationQueryParamsInterface
+    queryParams: QueryParamsInterface
   ): Observable<{ documents: DocumentVersionsResponseInterface[]; totalElements: string }> {
+    const params = new HttpParams()
+      .set('search', queryParams.search)
+      .set('page', queryParams.pageNumber)
+      .set('size', queryParams.pageSize)
+      .set('sort', queryParams.sort);
+
     return this.http
-      .get<{ content: DocumentVersionsResponseInterface[]; totalElements: string }>(
-        this.baseUrl + '/latest-with-associated-versions',
-        {
-          params: {
-            page: pagination.pageNumber,
-            size: pagination.pageSize,
-            sort: pagination.sort,
-          },
-        }
-      )
+      .get<{
+        content: DocumentVersionsResponseInterface[];
+        totalElements: string;
+      }>(this.baseUrl + '/latest-with-associated-versions', { params })
       .pipe(
         delay(1000), // Simulate delay for demonstration purposes
         map(response => ({
@@ -46,11 +46,10 @@ export class DocumentService {
   /**
    * Method to create a new document.
    * Creates a form data to transfer a file into a POST request.
-   * Upon successful creation, returns an observable containing a success message.
    * @param newDocumentVersion The data of the new category to be created.
-   * @returns An observable containing a success message upon successful creation.
+   * @returns An boolean if email has sent or not
    */
-  createDocVersion(newDocumentVersion: DocumentRequestInterface): Observable<{ message: string }> {
+  createDocVersion(newDocumentVersion: DocumentRequestInterface): Observable<{ emailSent: boolean }> {
     const formData = new FormData();
     formData.append('file', newDocumentVersion.file);
     formData.append('name', newDocumentVersion.name);
@@ -60,8 +59,8 @@ export class DocumentService {
     });
 
     return this.http
-      .post<{ message: string }>(this.baseUrl, formData)
-      .pipe(map(() => ({ message: 'Erfolgreich hochgeladen' })));
+      .post<{ emailSent: boolean }>(this.baseUrl, formData)
+      .pipe(map(response => ({ emailSent: response.emailSent })));
   }
 
   /**
@@ -69,9 +68,7 @@ export class DocumentService {
    * @param id The ID of the document whose visibility should be updated.
    * @return An Observable that emits a success message upon successful update.
    */
-  updateDocumentVisibility(id: number): Observable<{ message: string }> {
-    return this.http
-      .put<{ message: string }>(this.baseUrl + `/${id}/toggle-visibility`, null)
-      .pipe(map(() => ({ message: 'Erfolgreich geändert' })));
+  updateDocumentVisibility(id: number) {
+    return this.http.put(this.baseUrl + `/${id}/toggle-visibility`, null);
   }
 }

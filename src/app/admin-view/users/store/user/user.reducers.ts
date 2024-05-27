@@ -1,7 +1,7 @@
-import { UserStateInterface } from '../../type/user-state.interface';
+import { UserStateInterface } from '../../../type/user-state.interface';
 import { createFeature, createReducer, on } from '@ngrx/store';
 import { userActions } from './user.actions';
-import { PaginationConfigService } from '../../../shared/service/pagination-config.service';
+import { PaginationConfigService } from '../../../../shared/service/pagination-config.service';
 
 const paginationConfigService = new PaginationConfigService();
 
@@ -13,11 +13,13 @@ export const initialState: UserStateInterface = {
   allData: [],
   tableData: [],
   totalElements: '0',
-  pagination: {
+  queryParams: {
     pageNumber: paginationConfigService.getInitialPageIndex(),
     pageSize: paginationConfigService.getInitialPageSize(),
     sort: paginationConfigService.getInitialSort(),
+    search: '',
   },
+  areLoaded: false,
 };
 
 export const userFeature = createFeature({
@@ -48,13 +50,13 @@ export const userFeature = createFeature({
         error: action.error,
       })
     ),
-
+    // GET WITH QUERY
     on(
       userActions.getUsersWithQuery,
       (state, action): UserStateInterface => ({
         ...state,
         isLoading: true,
-        pagination: action.pagination,
+        queryParams: action.queryParams,
       })
     ),
     on(
@@ -64,6 +66,7 @@ export const userFeature = createFeature({
         isLoading: false,
         tableData: users,
         totalElements: totalElements,
+        areLoaded: true,
       })
     ),
     on(
@@ -72,8 +75,11 @@ export const userFeature = createFeature({
         ...state,
         isLoading: false,
         error: action.error,
+        areLoaded: false,
       })
     ),
+
+    // CHANGE ROLE
 
     on(
       userActions.changeUserRole,
@@ -91,6 +97,31 @@ export const userFeature = createFeature({
     ),
     on(
       userActions.changeUserRoleFailure,
+      (state, action): UserStateInterface => ({
+        ...state,
+        isSubmitting: false,
+        error: action.error,
+      })
+    ),
+
+    // CHANGE USER GROUP
+
+    on(
+      userActions.changeUserGroups,
+      (state): UserStateInterface => ({
+        ...state,
+        isSubmitting: true,
+      })
+    ),
+    on(
+      userActions.changeUserGroupsSuccess,
+      (state): UserStateInterface => ({
+        ...state,
+        isSubmitting: false,
+      })
+    ),
+    on(
+      userActions.changeUserGroupsFailure,
       (state, action): UserStateInterface => ({
         ...state,
         isSubmitting: false,
@@ -115,5 +146,6 @@ export const {
   selectTableData: selectUserTableData,
   selectAllData: selectUserAllData,
   selectTotalElements: selectTotalUserElements,
-  selectPagination: selectUserPagination,
+  selectQueryParams: selectUserQueryParams,
+  selectAreLoaded: selectUserAreLoaded,
 } = userFeature;

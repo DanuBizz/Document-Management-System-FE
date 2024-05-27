@@ -30,6 +30,37 @@
   text-align: center;
 }
 
+.nav-bar-logo {
+  height: 70%;
+  flex: 1;
+  background-image: url('/assets/img/logo.png');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: left;
+}
+
+.logo-item {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+}
+
+.side-nav-logo {
+  height: 100px;
+  width: 100%;
+  background-image: url('/assets/img/logo.png');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.center-flex {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
 .icon-with-text {
   display: flex;
   flex-direction: column;

@@ -1,7 +1,7 @@
 import { Routes } from '@angular/router';
 import { CategoryManagementComponent } from './categories/category-management/category-management.component';
 import { DocumentManagementComponent } from './documents/document-management/document-management.component';
-import { UserManagementComponent } from './users/user-management/user-management.component';
+import { UsersGroupsManagementComponent } from './users/user-management/users-groups-management.component';
 
 export const ADMIN_ROUTES: Routes = [
   {
@@ -22,6 +22,6 @@ export const ADMIN_ROUTES: Routes = [
   {
     path: 'user',
     title: 'User Management',
-    component: UserManagementComponent,
+    component: UsersGroupsManagementComponent,
   },
 ];

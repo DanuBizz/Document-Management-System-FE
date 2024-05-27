@@ -1,14 +1,13 @@
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { inject } from '@angular/core';
 import { map, mergeMap, of, switchMap } from 'rxjs';
-import { catchError, tap } from 'rxjs/operators';
+import { catchError } from 'rxjs/operators';
 import { CategoryService } from '../../../shared/service/category.service';
 import { categoryActions } from './category.actions';
 import { CategoryResponseInterface } from '../../type/category-response.interface';
 import { HttpErrorResponse } from '@angular/common/http';
-import { SnackbarService } from '../../../shared/service/snackbar.service';
 import { Store } from '@ngrx/store';
-import { selectCategoryError, selectCategoryPagination } from './category.reducers';
+import { selectCategoryQueryParams } from './category.reducers';
 
 export const getAllCategoriesEffect = createEffect(
   // Injecting dependencies
@@ -40,9 +39,9 @@ export const getCategoryWithQueryEffect = createEffect(
     return actions$.pipe(
       // Listening for actions of type
       ofType(categoryActions.getCategoriesWithQuery),
-      switchMap(({ pagination }) => {
+      switchMap(({ queryParams }) => {
         // Calling the service method to fetch documents
-        return categoryService.fetchCategoriesWithQuery(pagination).pipe(
+        return categoryService.fetchCategoriesWithQuery(queryParams).pipe(
           map(categories =>
             // Handling the response and dispatching action when successful
             categoryActions.getCategoriesWithQuerySuccess({
@@ -113,45 +112,6 @@ export const updateCategoryEffect = createEffect(
   { functional: true }
 );
 
-export const openSnackbarErrorEffect = createEffect(
-  // Injecting dependencies
-  (actions$ = inject(Actions), snackbarService = inject(SnackbarService), store = inject(Store)) => {
-    return actions$.pipe(
-      // Listening for actions of type 'getAllCategoriesFailure'
-      ofType(
-        categoryActions.getAllCategoriesFailure,
-        categoryActions.getCategoriesWithQueryFailure,
-        categoryActions.createCategoryFailure,
-        categoryActions.updateCategoryFailure
-      ),
-      tap(() => {
-        // Subscribing to selectError selector to get the error from the store
-        store.select(selectCategoryError).subscribe(error => {
-          // Opening a snackbar to display the error message
-          snackbarService.openSnackBar('Fehler beim Übermitteln der Kategorien. \nError: ' + JSON.stringify(error));
-        });
-      })
-    );
-  },
-  { functional: true, dispatch: false } // indicates not to dispatch any actions
-);
-
-/**
- * Effect for displaying a snackbar notification.
- * Upon receiving such an action, it displays a snackbar notification containing the success message
- */
-export const openSnackbarSuccessEffect = createEffect(
-  (actions$ = inject(Actions), snackbarService = inject(SnackbarService)) => {
-    return actions$.pipe(
-      ofType(categoryActions.createCategorySuccess, categoryActions.updateCategorySuccess),
-      tap(({ message }) => {
-        snackbarService.openSnackBar(message);
-      })
-    );
-  },
-  { functional: true, dispatch: false }
-);
-
 /**
  * dispatches the actions to fetch updated category data.
  */
@@ -159,13 +119,14 @@ export const refreshGetCategoriesEffect = createEffect(
   (actions$ = inject(Actions), store = inject(Store)) => {
     return actions$.pipe(
       ofType(categoryActions.createCategorySuccess, categoryActions.updateCategorySuccess),
-      mergeMap(() => {
-        return store.select(selectCategoryPagination).pipe(
-          mergeMap(pagination => {
-            return [categoryActions.getCategoriesWithQuery({ pagination }), categoryActions.getAllCategories()];
+      switchMap(() =>
+        store.select(selectCategoryQueryParams).pipe(
+          mergeMap(queryParams => {
+            const action = categoryActions.getCategoriesWithQuery({ queryParams: queryParams });
+            return of(action);
           })
-        );
-      })
+        )
+      )
     );
   },
   { functional: true, dispatch: true }
