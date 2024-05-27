@@ -9,6 +9,20 @@
         </div>
       </a>
 
+      <!-- Link to the 'login' route -->
+      <ng-container *ngIf="currentUser; else loggedOut">
+        <button mat-list-item (click)="logout()">
+          <mat-icon>logout</mat-icon>
+          <span>Logout</span>
+        </button>
+      </ng-container>
+      <ng-template #loggedOut>
+        <a mat-list-item routerLink="login">
+          <mat-icon>login</mat-icon>
+          <span>Login</span>
+        </a>
+      </ng-template>
+
       <mat-divider></mat-divider>
 
       <a mat-list-item routerLink="/">

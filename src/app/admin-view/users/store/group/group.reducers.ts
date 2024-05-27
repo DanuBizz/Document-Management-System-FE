@@ -66,6 +66,7 @@ export const groupFeature = createFeature({
         isLoading: false,
         tableData: action.groups,
         totalElements: action.totalElements,
+        areLoaded: true,
       })
     ),
     on(
@@ -74,6 +75,7 @@ export const groupFeature = createFeature({
         ...state,
         isLoading: false,
         error: action.error,
+        areLoaded: false,
       })
     ),
     // CREATE GROUP

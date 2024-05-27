@@ -58,8 +58,8 @@ export class LoginComponent {
   ) {
     // Initialize loginForm with default values and validators
     this.loginForm = this.fb.group({
-      email: ['karl.franz.bertl.sayajin@kamehameha.at', [Validators.required]],
-      password: ['karl.franz.bertl.sayajin123456789', [Validators.required]],
+      username: ['Admin', [Validators.required]],
+      password: ['password', [Validators.required]],
     });
   }
 
@@ -72,7 +72,6 @@ export class LoginComponent {
     const request: LoginRequestInterface = {
       user: this.loginForm.getRawValue(),
     };
-
     // Dispatching login action with the request
     this.store.dispatch(authActions.login({ request }));
   }

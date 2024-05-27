@@ -15,17 +15,22 @@ import { Router } from '@angular/router';
  * loginSuccess action. If login fails, it dispatches loginFailure action.
  */
 export const loginEffect = createEffect(
-  (actions$ = inject(Actions), authService = inject(AuthService), persistanceService = inject(PersistenceService)) => {
+  (actions$ = inject(Actions), authService = inject(AuthService), persistenceService = inject(PersistenceService)) => {
     return actions$.pipe(
       ofType(authActions.login),
       switchMap(({ request }) => {
+        const encodedUsername = btoa(request.user.username);
+        persistenceService.set('accessToken', btoa(request.user.username + ':' + request.user.password));
         return authService.login(request).pipe(
-          map((currentUser: CurrentUserInterface) => {
-            persistanceService.set('accessToken', currentUser.token);
-            return authActions.loginSuccess({ currentUser });
-          }),
-          catchError((errorResponse: HttpErrorResponse) => {
-            return of(authActions.loginFailure({ errors: errorResponse.error.errors }));
+          switchMap(() => {
+            return authService.getCurrentUser(encodedUsername).pipe(
+              map((currentUser: CurrentUserInterface) => {
+                return authActions.loginSuccess({ currentUser });
+              }),
+              catchError((errorResponse: HttpErrorResponse) => {
+                return of(authActions.loginFailure({ errors: errorResponse.error.errors }));
+              })
+            );
           })
         );
       })
@@ -41,8 +46,12 @@ export const redirectAfterLoginEffect = createEffect(
   (actions$ = inject(Actions), router = inject(Router)) => {
     return actions$.pipe(
       ofType(authActions.loginSuccess),
-      tap(() => {
-        router.navigateByUrl('/admin/document');
+      tap(({ currentUser }) => {
+        if (currentUser.isAdmin) {
+          router.navigateByUrl('/admin/document');
+        } else {
+          router.navigateByUrl('/user');
+        }
       })
     );
   },
@@ -59,18 +68,14 @@ export const getCurrentUserEffect = createEffect(
   (actions$ = inject(Actions), authService = inject(AuthService), persistanceService = inject(PersistenceService)) => {
     return actions$.pipe(
       ofType(authActions.getCurrentUser),
-      switchMap(() => {
+      switchMap(({ encodedUsername }) => {
         const token = persistanceService.get('accessToken');
         if (!token) {
           return of(authActions.getCurrentUserFailure());
         }
-        return authService.getCurrentUser().pipe(
-          map((currentUser: CurrentUserInterface) => {
-            return authActions.getCurrentUserSuccess({ currentUser });
-          }),
-          catchError(() => {
-            return of(authActions.getCurrentUserFailure());
-          })
+        return authService.getCurrentUser(encodedUsername).pipe(
+          map((currentUser: CurrentUserInterface) => authActions.getCurrentUserSuccess({ currentUser })),
+          catchError(() => of(authActions.getCurrentUserFailure()))
         );
       })
     );
