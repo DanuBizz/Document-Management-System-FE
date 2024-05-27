@@ -1,0 +1,19 @@
+.not-found {
+  max-width: 300px;
+  min-height: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  border-radius: 8px;
+}
+
+.error-image {
+  width: 280px;
+  height: 250px;
+  background-image: url('/assets/img/http-error-404-not-found.png');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: left;
+  border-radius: 8px;
+}

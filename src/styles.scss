@@ -11,7 +11,7 @@ $mat-primary: (
   200: #ffcc80,
   300: #ffb74d,
   400: #ffa726,
-  500: #ffa451,
+  500: #e48e48,
   600: #ff9100,
   700: #ff6d00,
   800: #ff5700,
@@ -92,7 +92,7 @@ $primary: mat.define-palette($mat-primary, 500);
 
 $accent: mat.define-palette($mat-accent, A200, A100, A400);
 
-$theme: mat.define-light-theme(
+$theme: mat.define-dark-theme(
   (
     color: (
       primary: $primary,
@@ -130,6 +130,12 @@ body {
   height: auto !important;
   width: 100px !important;
   padding: 0.5rem 1rem !important;
+  margin: 0 0.5rem !important;
+}
+
+// changes the size of the mat-button touch-field
+.mat-mdc-button .mat-mdc-button-touch-target {
+  max-height: 100% !important;
 }
 
 .mat-toolbar-single-row {
@@ -146,13 +152,8 @@ body {
   background-color: map-get($mat-accent, 600) !important;
 }
 
-.custom-snackbar {
-  white-space: pre-line;
-  text-align: center;
-}
-
-.inner-table {
-  background-color: map-get($mat-primary, 50) !important;
+.expandable-row {
+  background-color: map-get($mat-accent, 900) !important;
 }
 
 .mdc-text-field {
@@ -179,6 +180,22 @@ mat-form-field {
   white-space: normal !important;
 }
 
+.custom-select-groups .mat-mdc-select-value-text {
+  white-space: nowrap !important;
+}
+
+.custom-select-groups .mdc-text-field--outlined .mat-mdc-form-field-infix,
+.mdc-text-field--no-label .mat-mdc-form-field-infix {
+  padding-top: 10px !important;
+  padding-bottom: 10px !important;
+}
+
+.custom-select-groups .mat-mdc-form-field-infix {
+  min-height: auto !important;
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+}
+
 .table-icon-hint {
   height: 15px !important;
   width: 15px !important;
@@ -192,7 +209,7 @@ mat-form-field {
 
 .mat-column-id {
   border-right: 1px solid black;
-  width: 70px !important;
+  width: 70px;
 }
 
 .mobile-table {
@@ -207,4 +224,53 @@ mat-form-field {
   .desktop-table {
     display: none;
   }
+}
+
+@media (min-width: 1444px) {
+  .container-fluid {
+    width: 90% !important;
+  }
+}
+
+.mat-badge.mat-badge {
+  display: inline-block;
+  margin-bottom: 6px;
+}
+
+// changing the background color of the snackbar notifications
+.mat-mdc-snack-bar-container .mdc-snackbar__surface {
+  background-color: transparent !important;
+  box-shadow: none !important;
+}
+
+.mdc-snackbar__label {
+  padding: 0 1rem !important;
+}
+
+.custom-message-box {
+  background-color: map-get($mat-accent, 900) !important;
+  color: $light-primary-text !important;
+  padding: 0.1rem 1rem;
+  border-radius: 0.5rem;
+  box-shadow: 1px 1px 5px 0 rgba(0, 0, 0, 0.75);
+}
+
+.custom-snackbar {
+  position: fixed !important;
+  bottom: 35px !important;
+  right: 0 !important;
+  left: auto !important;
+  padding-bottom: 0 !important;
+}
+
+// form field bottom space/element
+.mat-mdc-form-field-subscript-wrapper,
+.mat-mdc-form-field-bottom-align::before {
+  height: 0.5rem !important;
+}
+
+// form field bottom space/element within the user-table
+.without-bottom-space .mat-mdc-form-field-subscript-wrapper,
+.without-bottom-space .mat-mdc-form-field-bottom-align::before {
+  height: 0 !important;
 }

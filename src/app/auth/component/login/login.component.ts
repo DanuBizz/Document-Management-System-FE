@@ -38,6 +38,8 @@ import { AuthService } from '../../service/auth.service';
 export class LoginComponent {
   title = 'Anmelden';
 
+  passwordFieldType: string = 'password';
+
   // FormGroup for handling login form
   loginForm: FormGroup;
 
@@ -75,5 +77,9 @@ export class LoginComponent {
     this.authService.updateLoggedInStatus(true);
     // Dispatching login action with the request
     this.store.dispatch(authActions.login({ request }));
+  }
+
+  togglePasswordVisibility() {
+    this.passwordFieldType = this.passwordFieldType === 'password' ? 'text' : 'password';
   }
 }

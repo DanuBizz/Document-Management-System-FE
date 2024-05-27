@@ -7,20 +7,21 @@ import { MatSortModule, Sort } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSelectModule } from '@angular/material/select';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { FabButtonComponent } from '../../../shared/component/fab-button/fab-button.component';
 import { MatTooltip } from '@angular/material/tooltip';
 import { MatCheckbox } from '@angular/material/checkbox';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { CategoryService } from '../../../shared/service/category.service';
-import { combineLatest, filter } from 'rxjs';
+import { combineLatest, debounceTime, filter } from 'rxjs';
 import { Store } from '@ngrx/store';
 import {
+  selectCategoryAreLoaded,
   selectCategoryError,
   selectCategoryIsLoading,
   selectCategoryIsSubmitting,
   selectCategoryPageSizeOptions,
-  selectCategoryPagination,
+  selectCategoryQueryParams,
   selectCategoryTableData,
   selectCategoryTotalElements,
 } from '../store/category.reducers';
@@ -29,8 +30,10 @@ import { openCreateCategoryDialog } from '../create-category-dialog/category-dia
 import { MatDialog } from '@angular/material/dialog';
 import { categoryActions } from '../store/category.actions';
 import { CategoryRequestInterface } from '../../type/category-request.interface';
-import { PaginationQueryParamsInterface } from '../../../shared/type/pagination-query-params.interface';
+import { QueryParamsInterface } from '../../../shared/type/query-params.interface';
 import { CategoryResponseInterface } from '../../type/category-response.interface';
+import { MatBadge } from '@angular/material/badge';
+import { DispatchActionService } from '../../../shared/service/dispatch-action.service';
 
 @Component({
   selector: 'app-category-management',
@@ -50,6 +53,7 @@ import { CategoryResponseInterface } from '../../type/category-response.interfac
     MatCheckbox,
     MatPaginator,
     MatProgressBar,
+    MatBadge,
   ],
   providers: [CategoryService],
   templateUrl: './category-management.component.html',
@@ -65,19 +69,20 @@ export class CategoryManagementComponent implements OnInit {
     error: this.store.select(selectCategoryError),
     totalElements: this.store.select(selectCategoryTotalElements),
     pageSizeOptions: this.store.select(selectCategoryPageSizeOptions),
-    pagination: this.store.select(selectCategoryPagination),
+    queryParams: this.store.select(selectCategoryQueryParams),
     isSubmitting: this.store.select(selectCategoryIsSubmitting),
+    areLoaded: this.store.select(selectCategoryAreLoaded),
   });
 
   // Pagination and sorting properties for the component ts file
-  pagination!: PaginationQueryParamsInterface;
+  queryParams!: QueryParamsInterface;
 
   // Booleans indicating whether data is currently being fetched or submitted to the database
   isLoading: boolean = false;
   isSubmitting: boolean = false;
 
   // Columns to display in the table
-  displayedColumnsDesktop: string[] = ['edit', 'id', 'name', 'users'];
+  displayedColumnsDesktop: string[] = ['edit', 'id', 'name', 'groups'];
 
   // Columns to display in the table
   displayedColumnsMobile: string[] = ['edit', 'id', 'name'];
@@ -85,28 +90,52 @@ export class CategoryManagementComponent implements OnInit {
   // Currently expanded user
   expandedCategory: CategoryResponseInterface | null = null;
 
+  // Maximum number of users to display in the list
+  maxUsersVisibleDesktop = 9;
+  maxUsersVisibleMobile = 5;
+
+  // Search control for the search input field
+  searchControl: FormControl = new FormControl('');
+
   /**
    * @param store - The Redux store instance injected via dependency injection.
    * @param dialog - The MatDialog service for opening dialogs.
+   * @param dispatchActionService - Dispatches an action only if needed, based on the current state of areLoaded
    */
   constructor(
     private store: Store,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private dispatchActionService: DispatchActionService
   ) {}
 
   ngOnInit(): void {
     this.data$.subscribe(data => {
-      this.pagination = {
-        pageNumber: data.pagination.pageNumber,
-        pageSize: data.pagination.pageSize,
-        sort: data.pagination.sort,
+      this.queryParams = {
+        pageNumber: data.queryParams.pageNumber,
+        pageSize: data.queryParams.pageSize,
+        sort: data.queryParams.sort,
+        search: data.queryParams.search,
       };
 
       this.isLoading = data.isLoading;
       this.isSubmitting = data.isSubmitting;
     });
 
-    this.dispatchGetCategoriesWithQueryAction();
+    // Using the DispatchActionService to check if the data are loaded.
+    // If not loaded, it dispatches the action to get the data with a query.
+    this.dispatchActionService.checkAndDispatchAction(this.store.select(selectCategoryAreLoaded), () =>
+      this.dispatchGetCategoriesWithQueryAction()
+    );
+
+    // sets initial the store value of search
+    this.searchControl.setValue(this.queryParams.search);
+
+    // Subscribe to the search control value changes and debounce them to prevent too many requests
+    this.searchControl.valueChanges
+      .pipe(debounceTime(700)) //
+      .subscribe(value => {
+        this.searchCategories(value);
+      });
   }
 
   /**
@@ -142,8 +171,8 @@ export class CategoryManagementComponent implements OnInit {
    * @param event - The PageEvent object containing information about the page event.
    */
   handlePageEvent(event: PageEvent) {
-    this.pagination = {
-      ...this.pagination,
+    this.queryParams = {
+      ...this.queryParams,
       pageNumber: event.pageIndex.toString(),
       pageSize: event.pageSize.toString(),
     };
@@ -155,7 +184,7 @@ export class CategoryManagementComponent implements OnInit {
    * Dispatches an action to fetch categories data based on the current pagination and sorting options.
    */
   private dispatchGetCategoriesWithQueryAction() {
-    this.store.dispatch(categoryActions.getCategoriesWithQuery({ pagination: this.pagination }));
+    this.store.dispatch(categoryActions.getCategoriesWithQuery({ queryParams: this.queryParams }));
   }
 
   /**
@@ -169,8 +198,8 @@ export class CategoryManagementComponent implements OnInit {
       sort = sortState.active + ',' + sortState.direction;
     }
 
-    this.pagination = {
-      ...this.pagination,
+    this.queryParams = {
+      ...this.queryParams,
       sort: sort,
     };
 
@@ -178,14 +207,20 @@ export class CategoryManagementComponent implements OnInit {
   }
 
   /**
-   * Sorts an array of category names alphabetically and joins them into a single string.
+   * Sorts an array of names alphabetically and joins them into a single string.
    *
-   * @param userNames An array of category names to be sorted and joined.
+   * @param names An array of category names to be sorted and joined.
+   * @param trunc A boolean indicating whether the string should be truncated, when the list is too long.
+   * @param maxGroupsVisible truncate the list up to this number of users.
    * @return A string containing the sorted category names joined by commas.
    */
-  sortAndJoinCategoryNames(userNames: string[]): string {
-    const sortedCategoryNames = userNames.slice().sort();
-    return sortedCategoryNames.join(', ');
+  sortAndJoinNames(names: string[], trunc: boolean, maxGroupsVisible: number): string {
+    const sortedNames = names.slice().sort().join(', ');
+    if (trunc) {
+      const truncatedSortedNames = names.slice().sort().slice(0, maxGroupsVisible).join(', ');
+      return truncatedSortedNames + '...';
+    }
+    return sortedNames;
   }
 
   /**
@@ -202,5 +237,14 @@ export class CategoryManagementComponent implements OnInit {
 
   checkIsLoadingIsSubmitting(): boolean {
     return this.isLoading || this.isSubmitting;
+  }
+
+  searchCategories(search: string) {
+    this.queryParams = {
+      ...this.queryParams,
+      search: search.trim(),
+    };
+
+    this.dispatchGetCategoriesWithQueryAction();
   }
 }

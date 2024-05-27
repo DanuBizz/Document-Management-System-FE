@@ -2,10 +2,10 @@ import { documentReducer, initialState } from './document.reducers';
 import { documentActions } from './document.actions';
 import { DocumentRequestInterface } from '../../type/document-request.interface';
 import { DocumentVersionsResponseInterface } from '../../type/document-versions-response.interface';
-import { PaginationQueryParamsInterface } from '../../../shared/type/pagination-query-params.interface';
+import { QueryParamsInterface } from '../../../shared/type/query-params.interface';
 
 describe('DocumentReducers', () => {
-  const pagination: PaginationQueryParamsInterface = {
+  const pagination: QueryParamsInterface = {
     pageNumber: '0',
     pageSize: '5',
     sort: '',
@@ -22,12 +22,12 @@ describe('DocumentReducers', () => {
   });
 
   it('should change the state for get documents with query', () => {
-    const action = documentActions.getDocumentsWithQuery({ pagination });
+    const action = documentActions.getDocumentsWithQuery({ queryParams: pagination });
     const state = documentReducer(initialState, action);
     const newState = {
       ...initialState,
       isLoading: true,
-      pagination: action.pagination,
+      pagination: action.queryParams,
     };
 
     expect(state).toEqual(newState);

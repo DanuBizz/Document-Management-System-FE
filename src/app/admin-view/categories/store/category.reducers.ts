@@ -14,11 +14,13 @@ export const initialState: CategoryStateInterface = {
   allData: [],
   totalElements: '0',
   pageSizeOptions: paginationConfigService.getPageSizeOptions(),
-  pagination: {
+  queryParams: {
     pageNumber: paginationConfigService.getInitialPageIndex(),
     pageSize: paginationConfigService.getInitialPageSize(),
     sort: paginationConfigService.getInitialSort(),
+    search: '',
   },
+  areLoaded: false,
 };
 
 export const categoriesFeature = createFeature({
@@ -60,7 +62,7 @@ export const categoriesFeature = createFeature({
       (state, action): CategoryStateInterface => ({
         ...state,
         isLoading: true,
-        pagination: action.pagination,
+        queryParams: action.queryParams,
       })
     ),
     on(
@@ -70,6 +72,7 @@ export const categoriesFeature = createFeature({
         isLoading: false,
         tableData: categories,
         totalElements: totalElements,
+        areLoaded: true,
       })
     ),
     on(
@@ -78,6 +81,7 @@ export const categoriesFeature = createFeature({
         ...state,
         isLoading: false,
         error: action.error,
+        areLoaded: false,
       })
     ),
 
@@ -152,5 +156,6 @@ export const {
   selectAllData: selectCategoryAllData,
   selectTotalElements: selectCategoryTotalElements,
   selectPageSizeOptions: selectCategoryPageSizeOptions,
-  selectPagination: selectCategoryPagination,
+  selectQueryParams: selectCategoryQueryParams,
+  selectAreLoaded: selectCategoryAreLoaded,
 } = categoriesFeature;

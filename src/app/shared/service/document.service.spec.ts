@@ -4,7 +4,7 @@ import { DocumentService } from './document.service';
 import { environment } from '../../../environments/environment';
 import { DocumentVersionsResponseInterface } from '../../admin-view/type/document-versions-response.interface';
 import { DocumentRequestInterface } from '../../admin-view/type/document-request.interface';
-import { PaginationQueryParamsInterface } from '../type/pagination-query-params.interface';
+import { QueryParamsInterface } from '../type/query-params.interface';
 
 describe('DocumentService', () => {
   let service: DocumentService;
@@ -54,7 +54,7 @@ describe('DocumentService', () => {
       },
     ];
     const dummyTotalElements = '2';
-    const pagination: PaginationQueryParamsInterface = {
+    const pagination: QueryParamsInterface = {
       pageNumber: '0',
       pageSize: '5',
       sort: '',

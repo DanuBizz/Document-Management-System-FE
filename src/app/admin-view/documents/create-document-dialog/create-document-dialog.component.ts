@@ -30,6 +30,7 @@ import { docCategoryActions } from '../../../shared/store/doc-category/doc-categ
 import { selectDocCategoryData } from '../../../shared/store/doc-category/doc-category.reducers';
 import { DocumentRequestInterface } from '../../type/document-request.interface';
 import { FabButtonComponent } from '../../../shared/component/fab-button/fab-button.component';
+import { categoryActions } from '../../categories/store/category.actions';
 
 @Component({
   selector: 'app-create-document-dialog',
@@ -74,7 +75,7 @@ export class CreateDocumentDialogComponent implements OnInit {
   maxMB = 2;
 
   // allowed file types
-  allowedTypes = ['pdf', 'jpg'];
+  allowedTypes = ['pdf'];
 
   /**
    * @param fb - The FormBuilder service for creating form controls and groups.
@@ -101,9 +102,15 @@ export class CreateDocumentDialogComponent implements OnInit {
 
     this.store.dispatch(docCategoryActions.getAllDocumentCategories());
 
-    this.store.select(selectDocCategoryData).subscribe(docCategories => {
-      this.documentCategories = docCategories;
-    });
+    this.store
+      .select(selectDocCategoryData)
+      .pipe()
+      .subscribe(docCategories => {
+        this.documentCategories = docCategories;
+      });
+
+    // Load all categories on initialization
+    this.store.dispatch(categoryActions.getAllCategories());
   }
 
   /**
@@ -123,6 +130,13 @@ export class CreateDocumentDialogComponent implements OnInit {
         [Validators.required, this.fileTypeValidator(this.allowedTypes), this.fileSizeValidator(this.maxMB)],
       ],
       categoryIds: ['', Validators.required],
+    });
+
+    // removes empty space from the beginning of the name
+    this.form.get('name')!.valueChanges.subscribe(value => {
+      if (typeof value === 'string' && value.startsWith(' ')) {
+        this.form.get('name')!.setValue(value.trim(), { emitEvent: false });
+      }
     });
   }
 

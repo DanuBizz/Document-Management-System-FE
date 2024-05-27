@@ -8,7 +8,7 @@ export class PaginationConfigService {
   private initialPageIndex: string = '0';
 
   // The pageSizeOptions contain the available options for page size.
-  private pageSizeOptions: number[] = [3, 5, 10, 25];
+  private pageSizeOptions: number[] = [5, 10, 25, 100];
 
   // The pageSize represents the current value of the pageSizeOptions.
   private pageSize: number = this.pageSizeOptions[1];

@@ -1,0 +1,27 @@
+<mat-tab-group (selectedIndexChange)="selectedTabIndex.set($event)">
+  <mat-tab>
+    <ng-template mat-tab-label>
+      <div class="centered-container">
+        <mat-icon matTooltip="Benutzerrollen" matTooltipPosition="above" [matTooltipShowDelay]="300"> person </mat-icon>
+        <h1 class="mobile-title my-0 mx-2">Benutzer Management</h1>
+      </div>
+    </ng-template>
+
+    @defer (when selectedTabIndex() === 0) {
+      <div class="mb-2"></div>
+      <app-user-role-management></app-user-role-management>
+    }
+  </mat-tab>
+  <mat-tab>
+    <ng-template mat-tab-label>
+      <div class="centered-container">
+        <mat-icon matTooltip="Benutzergruppen" matTooltipPosition="above" [matTooltipShowDelay]="300"> group </mat-icon>
+        <h1 class="mobile-title my-0 mx-2">Gruppen Management</h1>
+      </div>
+    </ng-template>
+    @defer (when selectedTabIndex() === 1) {
+      <div class="mb-2"></div>
+      <app-user-group-management></app-user-group-management>
+    }
+  </mat-tab>
+</mat-tab-group>

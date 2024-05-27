@@ -13,11 +13,13 @@ export const initialState: DocumentStateInterface = {
   data: [],
   totalElements: '0',
   pageSizeOptions: paginationConfigService.getPageSizeOptions(),
-  pagination: {
+  queryParams: {
     pageNumber: paginationConfigService.getInitialPageIndex(),
     pageSize: paginationConfigService.getInitialPageSize(),
     sort: paginationConfigService.getInitialSort(),
+    search: '',
   },
+  areLoaded: false,
 };
 
 export const documentFeature = createFeature({
@@ -30,7 +32,7 @@ export const documentFeature = createFeature({
       (state, action): DocumentStateInterface => ({
         ...state,
         isLoading: true,
-        pagination: action.pagination,
+        queryParams: action.queryParams,
       })
     ),
     on(
@@ -40,6 +42,7 @@ export const documentFeature = createFeature({
         isLoading: false,
         data: documents,
         totalElements: totalElements,
+        areLoaded: true,
       })
     ),
     on(
@@ -48,6 +51,7 @@ export const documentFeature = createFeature({
         ...state,
         isLoading: false,
         error: action.error,
+        areLoaded: false,
       })
     ),
 
@@ -112,5 +116,6 @@ export const {
   selectData: selectDocumentData,
   selectTotalElements: selectDocumentTotalElements,
   selectPageSizeOptions: selectDocumentPageSizeOptions,
-  selectPagination: selectDocumentPagination,
+  selectQueryParams: selectDocumentQueryParams,
+  selectAreLoaded: selectDocumentAreLoaded,
 } = documentFeature;

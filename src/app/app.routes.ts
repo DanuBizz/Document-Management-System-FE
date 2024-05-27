@@ -17,4 +17,8 @@ export const routes: Routes = [
     path: 'user',
     loadChildren: () => import('./user-view/user.routes').then(r => r.USER_ROUTES),
   },
+  {
+    path: '**',
+    loadChildren: () => import('./page-not-found/page-not-found.routes').then(r => r.PAGE_NOT_FOUND_ROUTES),
+  },
 ];
