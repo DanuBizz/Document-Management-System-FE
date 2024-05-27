@@ -8,6 +8,8 @@ import { UserResponseInterface } from '../../../type/user-response.interface';
 import { UserService } from '../../../../shared/service/user.service';
 import { Store } from '@ngrx/store';
 import { selectUserQueryParams } from './user.reducers';
+import { selectGroupQueryParams } from '../group/group.reducers';
+import { groupActions } from '../group/group.actions';
 
 export const getAllUsersEffect = createEffect(
   // Injecting dependencies
@@ -112,7 +114,7 @@ export const changeUserGroupsEffect = createEffect(
  * Effect for dispatching a new action to refresh the table data
  * Upon receiving such an action, it dispatches the 'get' action to fetch updated data.
  */
-export const refreshGetUserWithQuery = createEffect(
+export const refreshUserTableData = createEffect(
   (actions$ = inject(Actions), store = inject(Store)) => {
     return actions$.pipe(
       ofType(
@@ -125,6 +127,24 @@ export const refreshGetUserWithQuery = createEffect(
         return store
           .select(selectUserQueryParams)
           .pipe(map(queryParams => userActions.getUsersWithQuery({ queryParams: queryParams })));
+      })
+    );
+  },
+  { functional: true, dispatch: true }
+);
+
+/**
+ * Effect for dispatching a new action to refresh the table data
+ * Upon receiving such an action, it dispatches the 'get' action to fetch updated data.
+ */
+export const refreshGroupTableData = createEffect(
+  (actions$ = inject(Actions), store = inject(Store)) => {
+    return actions$.pipe(
+      ofType(userActions.changeUserGroupsSuccess, userActions.changeUserGroupsFailure),
+      mergeMap(() => {
+        return store
+          .select(selectGroupQueryParams)
+          .pipe(map(queryParams => groupActions.getGroupsWithQuery({ queryParams: queryParams })));
       })
     );
   },

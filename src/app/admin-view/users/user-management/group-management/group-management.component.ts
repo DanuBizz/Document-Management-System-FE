@@ -17,7 +17,7 @@ import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatProgressBar } from '@angular/material/progress-bar';
 import { MatSlideToggle } from '@angular/material/slide-toggle';
 import { MatSortModule, Sort } from '@angular/material/sort';
-import { FormBuilder, FormControl, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormControl, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { GroupResponseInterface } from '../../../type/group-response-interface';
 import { combineLatest, debounceTime } from 'rxjs';
 import {
@@ -107,15 +107,16 @@ export class GroupManagementComponent implements OnInit {
   maxUsersVisibleDesktop = 10;
   maxUsersVisibleMobile = 5;
 
+  // group control for the create group input field
   groupControl!: FormControl;
 
+  // This variable is needed to check if the group name is a duplicate
   allGroups: GroupResponseInterface[] = [];
 
   constructor(
     private store: Store,
     public paginationConfigService: PaginationConfigService,
     private dispatchActionService: DispatchActionService,
-    private fb: FormBuilder
   ) {}
 
   ngOnInit(): void {
@@ -163,6 +164,13 @@ export class GroupManagementComponent implements OnInit {
    */
   initializeForm() {
     this.groupControl = new FormControl('', [Validators.required, this.validateDocumentCategoryName.bind(this)]);
+
+    // removes empty space from the beginning of the name
+    this.groupControl.valueChanges.subscribe(value => {
+      if (value.startsWith(' ')) {
+        this.groupControl.setValue(value.trim(), { emitEvent: false });
+      }
+    });
   }
 
   /**
@@ -179,7 +187,7 @@ export class GroupManagementComponent implements OnInit {
    * Toggles the expansion of a row to display the details.
    * @param group to toggle the row expansion.
    */
-  onToggleExpandedUserRow(group: GroupResponseInterface) {
+  onToggleExpandedGroupRow(group: GroupResponseInterface) {
     if (group == this.expandedGroup) {
       this.expandedGroup = null;
     } else {
@@ -239,7 +247,11 @@ export class GroupManagementComponent implements OnInit {
     this.dispatchGetGroupsWithQueryAction();
   }
 
-  createNewGroup() {}
+  createNewGroup() {
+    if (this.groupControl.valid) {
+      this.store.dispatch(groupActions.createGroup({ group: this.groupControl.value }));
+    }
+  }
 
   /**
    * Sorts an array of names alphabetically and joins them into a single string.
@@ -256,17 +268,5 @@ export class GroupManagementComponent implements OnInit {
       return truncatedSortedNames + '...';
     }
     return sortedNames;
-  }
-
-  /**
-   * Toggles the expansion of a row to display the details.
-   * @param group to toggle the row expansion.
-   */
-  onToggleExpandedCategoryRow(group: GroupResponseInterface) {
-    if (group == this.expandedGroup) {
-      this.expandedGroup = null;
-    } else {
-      this.expandedGroup = group;
-    }
   }
 }

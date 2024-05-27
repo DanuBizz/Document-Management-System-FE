@@ -30,7 +30,6 @@ export const openNotificationErrorEffect = createEffect(
         groupActions.getAllGroupsFailure,
         groupActions.getGroupsWithQueryFailure,
         groupActions.createGroupFailure,
-        groupActions.changeGroupUsersFailure,
 
         docCategoryActions.getAllDocumentCategoriesFailure,
 
@@ -70,7 +69,6 @@ export const openNotificationSuccessEffect = createEffect(
         groupActions.getAllGroupsSuccess,
         groupActions.getGroupsWithQuerySuccess,
         groupActions.createGroupSuccess,
-        groupActions.changeGroupUsersSuccess,
 
         docCategoryActions.getAllDocumentCategoriesSuccess,
 

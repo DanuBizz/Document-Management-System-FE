@@ -52,12 +52,13 @@ export class GroupService {
 
   /**
    * Method to create a new group.
-   * @param newGroup The data of the new group to be created.
-   * @returns An observable containing a success message upon successful creation.
+   * @param name
    */
-  createGroup(newGroup: GroupRequestInterface): Observable<{ message: string }> {
-    return this.http
-      .post<{ message: string }>(this.baseUrl, newGroup)
-      .pipe(map(() => ({ message: 'Erfolgreich hochgeladen' })));
+  createGroup(name: string) {
+    const newGroup: GroupRequestInterface = {
+      name: name,
+      usernames: [],
+    };
+    return this.http.post<{ message: string }>(this.baseUrl, newGroup);
   }
 }

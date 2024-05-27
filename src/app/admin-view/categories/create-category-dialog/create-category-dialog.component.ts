@@ -107,6 +107,13 @@ export class CreateCategoryDialogComponent {
       ],
       groupIds: [this.formCategoryGroupIds, Validators.required],
     });
+
+    // removes empty space from the beginning of the name
+    this.form.get('name')!.valueChanges.subscribe(value => {
+      if (typeof value === 'string' && value.startsWith(' ')) {
+        this.form.get('name')!.setValue(value.trim(), { emitEvent: false });
+      }
+    });
   }
 
   /**

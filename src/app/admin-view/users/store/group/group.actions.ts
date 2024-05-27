@@ -1,7 +1,6 @@
 import { createActionGroup, emptyProps, props } from '@ngrx/store';
 import { BackendErrorsInterface } from '../../../../shared/type/backend-erros.interface';
 import { GroupResponseInterface } from '../../../type/group-response-interface';
-import { GroupRequestInterface } from '../../../type/group-request.interface';
 import { QueryParamsInterface } from '../../../../shared/type/query-params.interface';
 
 export const groupActions = createActionGroup({
@@ -15,12 +14,8 @@ export const groupActions = createActionGroup({
     'get groups with query success': props<{ groups: GroupResponseInterface[]; totalElements: string }>(),
     'get groups with query failure': props<{ error: BackendErrorsInterface }>(),
 
-    'create group': props<{ group: GroupRequestInterface }>(),
-    'create group success': props<{ message: string }>(),
+    'create group': props<{ group: string }>(),
+    'create group success': emptyProps(),
     'create group failure': props<{ error: BackendErrorsInterface }>(),
-
-    'change group users': props<{ id: number; isAdmin: boolean }>(),
-    'change group users success': props<{ message: string }>(),
-    'change group users failure': props<{ error: BackendErrorsInterface }>(),
   },
 });
