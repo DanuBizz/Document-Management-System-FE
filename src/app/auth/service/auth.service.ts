@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpStatusCode } from '@angular/common/http';
 import { CurrentUserInterface } from '../../shared/type/current-user.interface';
-import { map, Observable } from 'rxjs';
+import { map, Observable, of } from 'rxjs';
 import { LoginRequestInterface } from '../type/login-request.interface';
 import { environment } from '../../../environments/environment';
+import { PersistenceService } from './persistence.service';
 
 @Injectable({
   providedIn: 'root',
@@ -13,8 +14,12 @@ export class AuthService {
   authUrl = environment.apiUrl + '/usercontrol';
   /**
    * @param http HttpClient instance for making HTTP requests
+   * @param persistenceService
    */
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    private persistenceService: PersistenceService
+  ) {}
 
   /**
    * Performs user login.
@@ -40,12 +45,8 @@ export class AuthService {
     return this.http.get<CurrentUserInterface>(url);
   }
 
-  logout(): Observable<{ message: string }> {
-    const url = `${this.authUrl}/logout`;
-    return this.http.get<{ message: string }>(url, {}).pipe(
-      map(response => {
-        return response;
-      })
-    );
+  logout(): Observable<null> {
+    this.persistenceService.remove('accessToken');
+    return of(null);
   }
 }

@@ -64,6 +64,24 @@ export const authFeature = createFeature({
         currentUser: null,
       })
     ),
+    on(
+      authActions.logout,
+      (): AuthStateInterface => ({
+        ...initialState,
+      })
+    ),
+    on(
+      authActions.logoutSuccess,
+      (): AuthStateInterface => ({
+        ...initialState,
+      })
+    ),
+    on(
+      authActions.logoutSuccess,
+      (): AuthStateInterface => ({
+        ...initialState,
+      })
+    ),
 
     on(
       routerNavigationAction,

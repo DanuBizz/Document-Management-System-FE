@@ -2,26 +2,22 @@
   <mat-sidenav #sidenav>
     <mat-nav-list (click)="sidenav.close()">
       <!-- Link to the 'login' route -->
-      <a mat-list-item routerLink="login">
-        <div class="d-inline-flex">
-          <mat-icon>login</mat-icon>
-          <span class="mx-1">Login</span>
-        </div>
-      </a>
 
-      <!-- Link to the 'login' route -->
-      <ng-container *ngIf="currentUser; else loggedOut">
-        <button mat-list-item (click)="logout()">
-          <mat-icon>logout</mat-icon>
-          <span>Logout</span>
-        </button>
-      </ng-container>
-      <ng-template #loggedOut>
-        <a mat-list-item routerLink="login">
-          <mat-icon>login</mat-icon>
-          <span>Login</span>
+      @if (currentUser) {
+        <a mat-list-item (click)="logout()" routerLink="login">
+          <div class="d-inline-flex">
+            <mat-icon>logout</mat-icon>
+            <span class="mx-1">logout</span>
+          </div>
         </a>
-      </ng-template>
+      } @else {
+        <a mat-list-item routerLinkActive="menu-item-active" routerLink="login">
+          <div class="d-inline-flex">
+            <mat-icon>login</mat-icon>
+            <span class="mx-1">Login</span>
+          </div>
+        </a>
+      }
 
       <mat-divider></mat-divider>
 
@@ -52,13 +48,14 @@
 
       <mat-divider></mat-divider>
 
-      <!-- Link to the 'login' route -->
+      <!--
       <a mat-list-item routerLink="user">
         <div class="d-inline-flex">
           <mat-icon>library_books</mat-icon>
           <span class="mx-1">User</span>
         </div>
       </a>
+-->
 
       <mat-divider></mat-divider>
 
@@ -80,29 +77,41 @@
       <div class="nav-bar-logo mx-2"></div>
 
       <div class="toolbar-tools">
-        <!-- Link to the 'admin/document' route -->
-        <a class="menu-item toolbar-button" mat-button routerLink="admin/document" routerLinkActive="menu-item-active">
-          <span class="icon-with-text"><mat-icon>article</mat-icon></span>
-          <span class="button-description">Dokumente</span>
-        </a>
+        @if (!checkUrl()) {
+          @if (isAdmin) {
+            <!-- Link to the 'admin/document' route -->
+            <a
+              class="menu-item toolbar-button"
+              mat-button
+              routerLink="admin/document"
+              routerLinkActive="menu-item-active">
+              <span class="icon-with-text"><mat-icon>article</mat-icon></span>
+              <span class="button-description">Dokumente</span>
+            </a>
 
-        <!-- Link to the 'admin/category' route -->
-        <a class="menu-item toolbar-button" mat-button routerLink="admin/category" routerLinkActive="menu-item-active">
-          <span class="icon-with-text"><mat-icon>category</mat-icon></span>
-          <span class="button-description">Kategorie</span>
-        </a>
+            <!-- Link to the 'admin/category' route -->
+            <a
+              class="menu-item toolbar-button"
+              mat-button
+              routerLink="admin/category"
+              routerLinkActive="menu-item-active">
+              <span class="icon-with-text"><mat-icon>category</mat-icon></span>
+              <span class="button-description">Kategorie</span>
+            </a>
 
-        <!-- Link to the 'admin/user' route -->
-        <a class="menu-item toolbar-button" mat-button routerLink="admin/user" routerLinkActive="menu-item-active">
-          <span class="icon-with-text"><mat-icon>group</mat-icon></span>
-          <span class="button-description">Benutzer</span>
-        </a>
-
-        <!-- Link to the 'login' route -->
-        <a class="menu-item toolbar-button" mat-button routerLink="login" routerLinkActive="menu-item-active">
-          <span class="icon-with-text"><mat-icon>login</mat-icon></span>
-          <span class="button-description">Login</span>
-        </a>
+            <!-- Link to the 'admin/user' route -->
+            <a class="menu-item toolbar-button" mat-button routerLink="admin/user" routerLinkActive="menu-item-active">
+              <span class="icon-with-text"><mat-icon>group</mat-icon></span>
+              <span class="button-description">Benutzer</span>
+            </a>
+          } @else {
+            <!-- Link to the 'user/document' route -->
+            <a class="menu-item toolbar-button" mat-button routerLink="user" routerLinkActive="menu-item-active">
+              <span class="icon-with-text"><mat-icon>article</mat-icon></span>
+              <span class="button-description">Dokumente</span>
+            </a>
+          }
+        }
       </div>
     </mat-toolbar>
 
@@ -125,20 +134,29 @@
           <mat-icon>menu</mat-icon>
         </button>
 
-        <!-- Link to the '/admin/document' route -->
-        <a class="menu-item" mat-button routerLink="/admin/document" routerLinkActive="menu-item-active">
-          <mat-icon>article</mat-icon>
-        </a>
+        @if (!checkUrl()) {
+          @if (isAdmin) {
+            <!-- Link to the '/admin/document' route -->
+            <a class="menu-item" mat-button routerLink="/admin/document" routerLinkActive="menu-item-active">
+              <mat-icon>article</mat-icon>
+            </a>
 
-        <!-- Link to the '/admin/category' route -->
-        <a class="menu-item" mat-button routerLink="/admin/category" routerLinkActive="menu-item-active">
-          <mat-icon>category</mat-icon>
-        </a>
+            <!-- Link to the '/admin/category' route -->
+            <a class="menu-item" mat-button routerLink="/admin/category" routerLinkActive="menu-item-active">
+              <mat-icon>category</mat-icon>
+            </a>
 
-        <!-- Link to the 'admin/user' route -->
-        <a class="menu-item" mat-button routerLink="admin/user" routerLinkActive="menu-item-active">
-          <span class="icon-with-text"><mat-icon>group</mat-icon></span>
-        </a>
+            <!-- Link to the 'admin/user' route -->
+            <a class="menu-item" mat-button routerLink="admin/user" routerLinkActive="menu-item-active">
+              <span class="icon-with-text"><mat-icon>group</mat-icon></span>
+            </a>
+          } @else {
+            <!-- Link to the '/admin/document' route -->
+            <a class="menu-item" mat-button routerLink="/user" routerLinkActive="menu-item-active">
+              <mat-icon>article</mat-icon>
+            </a>
+          }
+        }
       </div>
     </mat-toolbar>
   </div>

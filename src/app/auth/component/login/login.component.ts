@@ -42,6 +42,12 @@ export class LoginComponent {
   // FormGroup for handling login form
   loginForm: FormGroup;
 
+  // test users for login
+  testUserName = 'Bob';
+  testUserPassword = 'bobspassword';
+  testAdminName = 'Alice';
+  testAdminPassword = 'alicespassword';
+
   // Observable to combine the isSubmitting and backendErrors from the store
   data$ = combineLatest({
     isSubmitting: this.store.select(selectIsSubmitting),
@@ -58,8 +64,8 @@ export class LoginComponent {
   ) {
     // Initialize loginForm with default values and validators
     this.loginForm = this.fb.group({
-      username: ['Admin', [Validators.required]],
-      password: ['password', [Validators.required]],
+      username: [this.testAdminName, [Validators.required]],
+      password: [this.testAdminPassword, [Validators.required]],
     });
   }
 

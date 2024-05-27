@@ -8,6 +8,7 @@ import { catchError, tap } from 'rxjs/operators';
 import { HttpErrorResponse } from '@angular/common/http';
 import { PersistenceService } from '../service/persistence.service';
 import { Router } from '@angular/router';
+import { NotificationService } from '../../shared/service/notification.service';
 
 /**
  * Effect that handles the login action. It sends a login request to the AuthService,
@@ -81,4 +82,73 @@ export const getCurrentUserEffect = createEffect(
     );
   },
   { functional: true }
+);
+
+/**
+ * Effect that handles the logout action. It removes the login-credentials from lacal storage
+ */
+export const logoutEffect = createEffect(
+  () => {
+    const actions$ = inject(Actions);
+    const authService = inject(AuthService);
+    return actions$.pipe(
+      ofType(authActions.logout),
+      switchMap(() => {
+        return authService.logout().pipe(
+          switchMap(() => {
+            return of(authActions.logoutSuccess());
+          }),
+          catchError(() => {
+            return of(authActions.logoutFailure());
+          })
+        );
+      })
+    );
+  },
+  { functional: true }
+);
+
+/**
+ * Effect that redirects the user after logout.
+ */
+export const redirectAfterLogoutEffect = createEffect(
+  (actions$ = inject(Actions), router = inject(Router)) => {
+    return actions$.pipe(
+      ofType(authActions.logoutSuccess, authActions.logoutFailure),
+      tap(() => {
+        router.navigateByUrl('/login');
+      })
+    );
+  },
+  { functional: true, dispatch: false }
+);
+
+/**
+ * Effect for opening a notification if a logout has succeeded
+ */
+export const openNotificationSuccessLogout = createEffect(
+  (actions$ = inject(Actions), notificationService = inject(NotificationService)) => {
+    return actions$.pipe(
+      ofType(authActions.loginSuccess, authActions.logoutSuccess),
+      tap(action$ => {
+        notificationService.pushNotification(`${action$.type}`, false);
+      })
+    );
+  },
+  { functional: true, dispatch: false }
+);
+
+/**
+ * Effect for opening a notification if a logout has failed
+ */
+export const openNotificationFailureLogout = createEffect(
+  (actions$ = inject(Actions), notificationService = inject(NotificationService)) => {
+    return actions$.pipe(
+      ofType(authActions.loginFailure, authActions.logoutFailure),
+      tap(action$ => {
+        notificationService.pushNotification(`${action$.type}`, true);
+      })
+    );
+  },
+  { functional: true, dispatch: false }
 );
