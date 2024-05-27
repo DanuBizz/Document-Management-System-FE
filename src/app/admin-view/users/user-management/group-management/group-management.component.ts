@@ -17,10 +17,11 @@ import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatProgressBar } from '@angular/material/progress-bar';
 import { MatSlideToggle } from '@angular/material/slide-toggle';
 import { MatSortModule, Sort } from '@angular/material/sort';
-import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormControl, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { GroupResponseInterface } from '../../../type/group-response-interface';
 import { combineLatest, debounceTime } from 'rxjs';
 import {
+  selectGroupAllData,
   selectGroupAreLoaded,
   selectGroupError,
   selectGroupIsLoading,
@@ -33,7 +34,7 @@ import { Store } from '@ngrx/store';
 import { PaginationConfigService } from '../../../../shared/service/pagination-config.service';
 import { DispatchActionService } from '../../../../shared/service/dispatch-action.service';
 import { groupActions } from '../../store/group/group.actions';
-import { MatFormField, MatLabel, MatSuffix } from '@angular/material/form-field';
+import { MatError, MatFormField, MatLabel, MatSuffix } from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
 import { QueryParamsInterface } from '../../../../shared/type/query-params.interface';
 import { FabButtonComponent } from '../../../../shared/component/fab-button/fab-button.component';
@@ -69,13 +70,12 @@ import { MatBadge } from '@angular/material/badge';
     ReactiveFormsModule,
     FabButtonComponent,
     MatBadge,
+    MatError,
   ],
   templateUrl: './group-management.component.html',
   styleUrl: './group-management.component.scss',
 })
 export class GroupManagementComponent implements OnInit {
-  title = 'Gruppen Management';
-
   // Columns to display in the table
   displayedDesktopColumns: string[] = ['id', 'name', 'usernames'];
   displayedMobileColumns: string[] = ['id', 'name'];
@@ -107,10 +107,15 @@ export class GroupManagementComponent implements OnInit {
   maxUsersVisibleDesktop = 10;
   maxUsersVisibleMobile = 5;
 
+  groupControl!: FormControl;
+
+  allGroups: GroupResponseInterface[] = [];
+
   constructor(
     private store: Store,
     public paginationConfigService: PaginationConfigService,
-    private dispatchActionService: DispatchActionService
+    private dispatchActionService: DispatchActionService,
+    private fb: FormBuilder
   ) {}
 
   ngOnInit(): void {
@@ -141,6 +146,33 @@ export class GroupManagementComponent implements OnInit {
       .subscribe(value => {
         this.searchGroups(value);
       });
+
+    this.store
+      .select(selectGroupAllData)
+      .pipe()
+      .subscribe(groups => {
+        this.allGroups = groups;
+      });
+
+    // Initialize the form
+    this.initializeForm();
+  }
+
+  /**
+   * Initializes the form with form controls and validators.
+   */
+  initializeForm() {
+    this.groupControl = new FormControl('', [Validators.required, this.validateDocumentCategoryName.bind(this)]);
+  }
+
+  /**
+   * Validates the name of a document category to ensure it is not a duplicate.
+   * @param control The form control containing the name of the document category.
+   * @returns An object with a 'duplicateName' key set to true if the name is a duplicate, or null if the name is unique.
+   */
+  validateDocumentCategoryName(control: FormControl): { [key: string]: boolean } | null {
+    const existingDocCategory = this.allGroups.find(group => group.name.toLowerCase() === control.value.toLowerCase());
+    return existingDocCategory ? { duplicateName: true } : null;
   }
 
   /**

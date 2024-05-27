@@ -1,8 +1,6 @@
 <ng-container *ngIf="data$ | async as data">
   <div class="container-fluid">
-    <!-- Title -->
-    <h1 class="text-center mobile-title">{{ title }}</h1>
-
+    <br />
     <mat-form-field appearance="outline" hideRequiredMarker="true">
       <mat-label>Benutzer suchen</mat-label>
       <input matInput [formControl]="searchControl" />

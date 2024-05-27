@@ -1,17 +1,22 @@
 <ng-container *ngIf="data$ | async as data">
   <div class="container-fluid">
-    <!-- Title -->
-    <h1 class="text-center mobile-title">{{ title }}</h1>
-
-    <!-- Button area for category-->
-    <div class="d-flex justify-content-center mobile-without-title mt-2 mb-3">
-      <!-- Button for creating a new category -->
+    <mat-form-field appearance="outline" hideRequiredMarker="true" class="create-group">
+      <mat-label>Gruppe erstellen</mat-label>
+      <input matInput [formControl]="groupControl" />
       <app-fab-button
         icon="add"
-        tooltip="Neue Kategorie erstellen"
-        [disabled]="checkIsLoadingIsSubmitting()"
-        (OnClick)="createNewGroup()"></app-fab-button>
-    </div>
+        tooltip="Neue Gruppe erstellen"
+        [disabled]="checkIsLoadingIsSubmitting() || !this.groupControl.valid"
+        (OnClick)="createNewGroup()"
+        matSuffix>
+      </app-fab-button>
+      @if (groupControl.hasError('required')) {
+        <mat-error>Name ist <strong>erforderlich</strong></mat-error>
+      }
+      @if (groupControl.hasError('duplicateName')) {
+        <mat-error>Name existiert <strong>bereits</strong></mat-error>
+      }
+    </mat-form-field>
 
     <mat-form-field appearance="outline" hideRequiredMarker="true">
       <mat-label>Gruppen suchen</mat-label>

@@ -80,8 +80,6 @@ import { groupActions } from '../../store/group/group.actions';
   styleUrl: './user-management.component.scss',
 })
 export class UserManagementComponent implements OnInit {
-  title = 'Benutzer Management';
-
   // Columns to display in the table
   displayedMobileColumns: string[] = ['arrow', 'username', 'isAdmin'];
   displayedDesktopColumns: string[] = ['id', 'username', 'email', 'isAdmin', 'groups'];
