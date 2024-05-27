@@ -2,6 +2,7 @@ import { GroupStateInterface } from '../../../type/group-state.inerface';
 import { createFeature, createReducer, on } from '@ngrx/store';
 import { groupActions } from './group.actions';
 import { PaginationConfigService } from '../../../../shared/service/pagination-config.service';
+import { routerNavigatedAction } from '@ngrx/router-store';
 
 const paginationConfigService = new PaginationConfigService();
 
@@ -100,7 +101,15 @@ export const groupFeature = createFeature({
         isSubmitting: false,
         error: action.error,
       })
-    )
+    ),
+
+    // Handling router navigated action
+    on(routerNavigatedAction, (state, action): GroupStateInterface => {
+      if (action.payload.routerState.url === '/login') {
+        return initialState;
+      }
+      return state;
+    })
   ),
 });
 

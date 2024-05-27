@@ -1,6 +1,7 @@
 import { DocCategoryStateInterface } from '../../type/doc-category-state.interface';
 import { createFeature, createReducer, on } from '@ngrx/store';
 import { docCategoryActions } from './doc-category.actions';
+import { routerNavigatedAction } from '@ngrx/router-store';
 
 // Initial state for the docCategories feature
 export const initialState: DocCategoryStateInterface = {
@@ -36,12 +37,16 @@ export const docCategoryFeature = createFeature({
         isLoading: false,
         error: action.error,
       })
-    )
+    ),
 
     // Handling router navigated action
-    /*
-        on(routerNavigatedAction, () => (initialState))
-        */
+
+    on(routerNavigatedAction, (state, action): DocCategoryStateInterface => {
+      if (action.payload.routerState.url === '/login') {
+        return initialState;
+      }
+      return state;
+    })
   ),
 });
 

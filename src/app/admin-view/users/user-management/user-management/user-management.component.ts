@@ -114,6 +114,8 @@ export class UserManagementComponent implements OnInit {
   // Values which will be displayed in the select-input and modified
   userGroupSelections: { [key: number]: number[] } = {};
 
+  currentUserName: string = '';
+
   constructor(
     private store: Store,
     public paginationConfigService: PaginationConfigService,
@@ -133,6 +135,7 @@ export class UserManagementComponent implements OnInit {
       this.isLoading = data.isLoading;
       this.isSubmitting = data.isSubmitting;
       this.changeDetectorRef.detectChanges();
+      this.currentUserName = data.currentUser?.username ?? '';
 
       data.users.forEach(user => {
         this.userGroupSelections[user.id] = [...user.groupIds];

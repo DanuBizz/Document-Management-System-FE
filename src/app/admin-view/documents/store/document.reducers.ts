@@ -2,6 +2,7 @@ import { DocumentStateInterface } from '../../type/document-state.interface';
 import { createFeature, createReducer, on } from '@ngrx/store';
 import { documentActions } from './document.actions';
 import { PaginationConfigService } from '../../../shared/service/pagination-config.service';
+import { routerNavigatedAction } from '@ngrx/router-store';
 
 const paginationConfigService = new PaginationConfigService();
 
@@ -99,10 +100,15 @@ export const documentFeature = createFeature({
         isSubmitting: false,
         error: action.error,
       })
-    )
-    /*
-    on(routerNavigatedAction, () => (initialState))
-    */
+    ),
+
+    // Handling router navigated action
+    on(routerNavigatedAction, (state, action): DocumentStateInterface => {
+      if (action.payload.routerState.url === '/login') {
+        return initialState;
+      }
+      return state;
+    })
   ),
 });
 

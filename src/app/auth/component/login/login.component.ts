@@ -13,6 +13,7 @@ import { Store } from '@ngrx/store';
 import { combineLatest } from 'rxjs';
 import { selectIsSubmitting, selectValidationErrors } from '../../store/auth.reducers';
 import { BackendErrorMessagesComponent } from '../../../shared/component/backend-error-messages/backend-error-messages.component';
+import { PersistenceService } from '../../service/persistence.service';
 
 @Component({
   selector: 'app-login',
@@ -42,6 +43,12 @@ export class LoginComponent {
   // FormGroup for handling login form
   loginForm: FormGroup;
 
+  // test users for login
+  testUserName = 'Bob';
+  testUserPassword = 'bobspassword';
+  testAdminName = 'Alice';
+  testAdminPassword = 'alicespassword';
+
   // Observable to combine the isSubmitting and backendErrors from the store
   data$ = combineLatest({
     isSubmitting: this.store.select(selectIsSubmitting),
@@ -51,16 +58,20 @@ export class LoginComponent {
   /**
    * @param fb FormBuilder instance for creating form controls
    * @param store Store instance for dispatching actions and accessing store data
+   * @param persistenceService
    */
   constructor(
     private fb: FormBuilder,
-    private store: Store
+    private store: Store,
+    private persistenceService: PersistenceService
   ) {
     // Initialize loginForm with default values and validators
     this.loginForm = this.fb.group({
-      username: ['Admin', [Validators.required]],
-      password: ['password', [Validators.required]],
+      username: [this.testAdminName, [Validators.required]],
+      password: [this.testAdminPassword, [Validators.required]],
     });
+
+    this.persistenceService.remove('accessToken');
   }
 
   /**

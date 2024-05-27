@@ -45,7 +45,7 @@
                 color="primary"
                 [disabled]="data.currentUser?.username === user.username || checkIsLoadingIsSubmitting()"
                 [ngModel]="user.isAdmin"
-                (click)="toggleUserIsAdmin(user.id, user.isAdmin)"></mat-slide-toggle>
+                (change)="toggleUserIsAdmin(user.id, user.isAdmin)"></mat-slide-toggle>
             </td>
           </ng-container>
 
@@ -122,9 +122,9 @@
             <td mat-cell *matCellDef="let user">
               <mat-slide-toggle
                 color="primary"
-                [disabled]="data.currentUser?.username === user.username || checkIsLoadingIsSubmitting()"
+                [disabled]="checkIsLoadingIsSubmitting() || currentUserName === user.username"
                 [ngModel]="user.isAdmin"
-                (click)="toggleUserIsAdmin(user.id, user.isAdmin)"></mat-slide-toggle>
+                (change)="toggleUserIsAdmin(user.id, user.isAdmin)"></mat-slide-toggle>
             </td>
           </ng-container>
 

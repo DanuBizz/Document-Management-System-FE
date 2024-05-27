@@ -2,12 +2,13 @@ import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { inject } from '@angular/core';
 import { AuthService } from '../service/auth.service';
 import { authActions } from './auth.actions';
-import { map, of, switchMap } from 'rxjs';
+import { delay, map, of, switchMap } from 'rxjs';
 import { CurrentUserInterface } from '../../shared/type/current-user.interface';
 import { catchError, tap } from 'rxjs/operators';
 import { HttpErrorResponse } from '@angular/common/http';
 import { PersistenceService } from '../service/persistence.service';
 import { Router } from '@angular/router';
+import { NotificationService } from '../../shared/service/notification.service';
 
 /**
  * Effect that handles the login action. It sends a login request to the AuthService,
@@ -65,20 +66,92 @@ export const redirectAfterLoginEffect = createEffect(
  * occurs during the request, it also dispatches getCurrentUserFailure action.
  */
 export const getCurrentUserEffect = createEffect(
-  (actions$ = inject(Actions), authService = inject(AuthService), persistanceService = inject(PersistenceService)) => {
+  (actions$ = inject(Actions), authService = inject(AuthService), persistenceService = inject(PersistenceService)) => {
     return actions$.pipe(
       ofType(authActions.getCurrentUser),
-      switchMap(({ encodedUsername }) => {
-        const token = persistanceService.get('accessToken');
-        if (!token) {
+      switchMap(() => {
+        const encodedToken = persistenceService.get('accessToken') as string;
+        if (!encodedToken) {
           return of(authActions.getCurrentUserFailure());
         }
+        const decodedToken = atob(encodedToken);
+        const [username] = decodedToken.split(':');
+        const encodedUsername = btoa(username);
+
         return authService.getCurrentUser(encodedUsername).pipe(
-          map((currentUser: CurrentUserInterface) => authActions.getCurrentUserSuccess({ currentUser })),
+          map((currentUser: CurrentUserInterface) => {
+            return authActions.getCurrentUserSuccess({ currentUser });
+          }),
           catchError(() => of(authActions.getCurrentUserFailure()))
         );
       })
     );
   },
   { functional: true }
+);
+
+/**
+ * Effect that handles the logout action. It removes the login-credentials from lacal storage
+ */
+export const logoutEffect = createEffect(
+  () => {
+    const actions$ = inject(Actions);
+    const authService = inject(AuthService);
+    return actions$.pipe(
+      ofType(authActions.logout),
+      switchMap(() => {
+        return authService.logout().pipe(
+          switchMap(() => of(authActions.logoutSuccess())),
+          catchError(() => of(authActions.logoutFailure()))
+        );
+      })
+    );
+  },
+  { functional: true }
+);
+
+/**
+ * Effect that redirects the user after logout.
+ */
+export const redirectAfterLogoutEffect = createEffect(
+  (actions$ = inject(Actions), router = inject(Router)) => {
+    return actions$.pipe(
+      ofType(authActions.logoutSuccess, authActions.logoutFailure),
+      delay(100),
+      tap(() => {
+        router.navigateByUrl('/login');
+      })
+    );
+  },
+  { functional: true, dispatch: false }
+);
+
+/**
+ * Effect for opening a notification if a logout has succeeded
+ */
+export const openNotificationSuccessLogout = createEffect(
+  (actions$ = inject(Actions), notificationService = inject(NotificationService)) => {
+    return actions$.pipe(
+      ofType(authActions.loginSuccess, authActions.logoutSuccess),
+      tap(action$ => {
+        notificationService.pushNotification(`${action$.type}`, false);
+      })
+    );
+  },
+  { functional: true, dispatch: false }
+);
+
+/**
+ * Effect for opening a notification if a logout has failed
+ */
+export const openNotificationFailureLogout = createEffect(
+  (actions$ = inject(Actions), notificationService = inject(NotificationService)) => {
+    return actions$.pipe(
+      ofType(authActions.loginFailure, authActions.logoutFailure),
+      tap(action$ => {
+        notificationService.pushNotification(`${action$.type}`, true);
+      })
+    );
+  },
+  { functional: true, dispatch: false }
 );

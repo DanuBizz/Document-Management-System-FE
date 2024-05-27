@@ -2,6 +2,7 @@ import { UserStateInterface } from '../../../type/user-state.interface';
 import { createFeature, createReducer, on } from '@ngrx/store';
 import { userActions } from './user.actions';
 import { PaginationConfigService } from '../../../../shared/service/pagination-config.service';
+import { routerNavigatedAction } from '@ngrx/router-store';
 
 const paginationConfigService = new PaginationConfigService();
 
@@ -127,12 +128,15 @@ export const userFeature = createFeature({
         isSubmitting: false,
         error: action.error,
       })
-    )
+    ),
 
     // Handling router navigated action
-    /*
-    on(routerNavigatedAction, () => (initialState))
-    */
+    on(routerNavigatedAction, (state, action): UserStateInterface => {
+      if (action.payload.routerState.url === '/login') {
+        return initialState;
+      }
+      return state;
+    })
   ),
 });
 
