@@ -15,8 +15,10 @@ export const openNotificationErrorEffect = createEffect(
       ofType(
         documentActions.getDocumentsWithQueryFailure,
         documentActions.getUserDocumentsWithQueryFailure,
+        documentActions.getUnreadUserDocumentsFailure,
         documentActions.createDocumentVersionFailure,
         documentActions.changeDocumentVisibilityFailure,
+        documentActions.confirmDocumentFailure,
 
         categoryActions.getAllCategoriesFailure,
         categoryActions.getCategoriesWithQueryFailure,
@@ -55,8 +57,10 @@ export const openNotificationSuccessEffect = createEffect(
       ofType(
         documentActions.getDocumentsWithQuerySuccess,
         documentActions.getUserDocumentsWithQuerySuccess,
+        documentActions.getUnreadUserDocumentsSuccess,
         documentActions.createDocumentVersionSuccess,
         documentActions.changeDocumentVisibilitySuccess,
+        documentActions.confirmDocumentSuccess,
 
         categoryActions.getAllCategoriesSuccess,
         categoryActions.getCategoriesWithQuerySuccess,

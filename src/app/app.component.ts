@@ -80,7 +80,8 @@ export class AppComponent implements OnInit {
     const isHomePage = this.currentUrl === '/';
     const isPageNotFound = this.currentUrl.endsWith('page-not-found');
     const isPageNotPermitted = this.currentUrl.endsWith('page-not-permitted');
+    const isConfirmNewDocuments = this.currentUrl.endsWith('confirm-new-documents');
 
-    return isLoginPage || isHomePage || isPageNotFound || isPageNotPermitted;
+    return isLoginPage || isHomePage || isPageNotFound || isPageNotPermitted || isConfirmNewDocuments;
   }
 }
