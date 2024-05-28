@@ -51,7 +51,6 @@ export const getUserDocumentsWithQuery = createEffect(
         const encodedToken = persistenceService.get('accessToken') as string;
         const decodedToken = atob(encodedToken);
         const username = decodedToken.split(':');
-        console.log(username[0]);
 
         return documentService.fetchUserDocumentsWithAssociatedVersionsWithQuery(queryParams, username[0]).pipe(
           map(documents =>
@@ -86,7 +85,6 @@ export const getUnreadUserDocuments = createEffect(
         const encodedToken = persistenceService.get('accessToken') as string;
         const decodedToken = atob(encodedToken);
         const username = decodedToken.split(':');
-        console.log(username[0]);
 
         return documentService.fetchUnreadUserDocuments(username[0]).pipe(
           map(documents =>

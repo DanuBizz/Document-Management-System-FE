@@ -2,13 +2,19 @@ import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { inject } from '@angular/core';
 import { AuthService } from '../service/auth.service';
 import { authActions } from './auth.actions';
-import { delay, map, of, switchMap } from 'rxjs';
+import { combineLatest, delay, map, of, switchMap, takeWhile } from 'rxjs';
 import { CurrentUserInterface } from '../../shared/type/current-user.interface';
 import { catchError, tap } from 'rxjs/operators';
 import { HttpErrorResponse } from '@angular/common/http';
 import { PersistenceService } from '../service/persistence.service';
 import { Router } from '@angular/router';
 import { NotificationService } from '../../shared/service/notification.service';
+import { documentActions } from '../../admin-view/documents/store/document.actions';
+import { Store } from '@ngrx/store';
+import {
+  selectDocumentAreLoaded,
+  selectDocumentTotalElements,
+} from '../../admin-view/documents/store/document.reducers';
 
 /**
  * Effect that handles the login action. It sends a login request to the AuthService,
@@ -44,14 +50,28 @@ export const loginEffect = createEffect(
  * Effect that redirects the user after successful login.
  */
 export const redirectAfterLoginEffect = createEffect(
-  (actions$ = inject(Actions), router = inject(Router)) => {
+  (actions$ = inject(Actions), router = inject(Router), store = inject(Store)) => {
     return actions$.pipe(
       ofType(authActions.loginSuccess),
       tap(({ currentUser }) => {
         if (currentUser.isAdmin) {
           router.navigateByUrl('/admin/document');
         } else {
-          router.navigateByUrl('/user');
+          store.dispatch(documentActions.getUnreadUserDocuments());
+          const data$ = combineLatest({
+            totalElements: store.select(selectDocumentTotalElements),
+            areLoaded: store.select(selectDocumentAreLoaded),
+          });
+
+          data$.pipe(takeWhile(data => !data.areLoaded, true)).subscribe(data => {
+            if (data.areLoaded) {
+              if (data.totalElements === '0') {
+                router.navigateByUrl('user/documents-overview');
+              } else {
+                router.navigateByUrl('user/confirm-new-documents');
+              }
+            }
+          });
         }
       })
     );
@@ -91,7 +111,7 @@ export const getCurrentUserEffect = createEffect(
 );
 
 /**
- * Effect that handles the logout action. It removes the login-credentials from lacal storage
+ * Effect that handles the logout action. It removes the login-credentials from local storage
  */
 export const logoutEffect = createEffect(
   () => {
@@ -117,7 +137,7 @@ export const redirectAfterLogoutEffect = createEffect(
   (actions$ = inject(Actions), router = inject(Router)) => {
     return actions$.pipe(
       ofType(authActions.logoutSuccess, authActions.logoutFailure),
-      delay(100),
+      delay(10),
       tap(() => {
         router.navigateByUrl('/login');
       })

@@ -29,7 +29,6 @@ export class AuthService {
   login(data: LoginRequestInterface): Observable<HttpStatusCode> {
     return this.http.post<HttpStatusCode>(this.authUrl, data).pipe(
       map(response => {
-        console.log(response);
         return response;
       })
     );
