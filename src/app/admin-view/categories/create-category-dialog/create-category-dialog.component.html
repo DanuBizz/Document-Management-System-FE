@@ -21,12 +21,12 @@
     <!-- Select field for adding groups -->
     <mat-form-field appearance="outline" hideRequiredMarker="true" class="select-field">
       <mat-label>Gruppen hinzufügen</mat-label>
-      <mat-select formControlName="groupIds" multiple>
+      <mat-select formControlName="groupNames" multiple>
         @for (group of groups$ | async; track group) {
-          <mat-option [value]="group.id">{{ group.name }}</mat-option>
+          <mat-option [value]="group.name">{{ group.name }}</mat-option>
         }
       </mat-select>
-      @if (form.controls['groupIds'].hasError('required')) {
+      @if (form.controls['groupNames'].hasError('required')) {
         <mat-error>Gruppe ist <strong>erforderlich</strong></mat-error>
       }
     </mat-form-field>

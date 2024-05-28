@@ -56,6 +56,38 @@ export const documentFeature = createFeature({
       })
     ),
 
+    // GET USER DOCUMENTS
+
+    on(
+      documentActions.getUserDocumentsWithQuery,
+      (state, action): DocumentStateInterface => ({
+        ...state,
+        isLoading: true,
+        queryParams: action.queryParams,
+      })
+    ),
+    on(
+      documentActions.getUserDocumentsWithQuerySuccess,
+      (state, { documents, totalElements }): DocumentStateInterface => ({
+        ...state,
+        isLoading: false,
+        data: documents,
+        totalElements: totalElements,
+        areLoaded: true,
+      })
+    ),
+    on(
+      documentActions.getUserDocumentsWithQueryFailure,
+      (state, action): DocumentStateInterface => ({
+        ...state,
+        isLoading: false,
+        error: action.error,
+        areLoaded: false,
+      })
+    ),
+
+    // CREATE DOCUMENT VERSION
+
     on(
       documentActions.createDocumentVersion,
       (state): DocumentStateInterface => ({

@@ -19,7 +19,7 @@ export const categoryActions = createActionGroup({
     'create category success': props<{ message: string }>(),
     'create category failure': props<{ error: BackendErrorsInterface }>(),
 
-    'update category': props<{ id: number; userIds: number[] }>(),
+    'update category': props<{ id: number; category: CategoryRequestInterface }>(),
     'update category success': props<{ message: string }>(),
     'update category failure': props<{ error: BackendErrorsInterface }>(),
   },

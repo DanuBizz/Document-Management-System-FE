@@ -14,6 +14,13 @@ export const documentActions = createActionGroup({
     }>(),
     'get documents with query failure': props<{ error: BackendErrorsInterface }>(),
 
+    'get user documents with query': props<{ queryParams: QueryParamsInterface }>(),
+    'get user documents with query success': props<{
+      documents: DocumentVersionsResponseInterface[];
+      totalElements: string;
+    }>(),
+    'get user documents with query failure': props<{ error: BackendErrorsInterface }>(),
+
     'create document version': props<{ doc: DocumentRequestInterface }>(),
     'create document version success': props<{ emailSent: boolean }>(),
     'create document version failure': props<{ error: BackendErrorsInterface }>(),

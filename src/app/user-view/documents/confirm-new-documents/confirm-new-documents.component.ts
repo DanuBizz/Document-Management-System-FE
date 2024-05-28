@@ -60,7 +60,7 @@ import { MatListOption, MatSelectionList } from '@angular/material/list';
   styleUrl: './confirm-new-documents.component.scss',
 })
 export class ConfirmNewDocumentsComponent implements OnInit {
-  title = 'Dokumenten zum Bestätigen';
+  title = 'Dokumente zum Bestätigen';
 
   // Observable combining necessary data from the store for the component
   data$ = combineLatest({
