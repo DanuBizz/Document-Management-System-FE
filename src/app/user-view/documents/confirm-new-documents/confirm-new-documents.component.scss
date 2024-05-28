@@ -1,0 +1,72 @@
+// adds a border for the last columns
+.mdc-data-table__row {
+  border-bottom: 1px solid #e0e0e0 !important;
+}
+
+.mdc-data-table__cell,
+.mdc-data-table__header-cell {
+  padding: 0 6px 0 6px !important;
+}
+
+.remove-padding {
+  padding: 0 !important;
+}
+
+.link-button {
+  background-color: transparent;
+  border: none;
+  color: inherit;
+  padding: 7px;
+  font: inherit;
+  cursor: pointer;
+  text-decoration: none;
+  transition: font-size 0.4s;
+}
+
+.link-button:hover {
+  font-size: 1rem;
+}
+
+.mat-header-column-arrow,
+.mat-column-arrow {
+  width: 50px;
+  max-width: 50px;
+  min-width: 50px;
+}
+
+.mat-header-column-documentName,
+.mat-column-documentName {
+  width: 70%;
+}
+
+.mat-header-column-timestamp,
+.mat-column-timestamp {
+  width: 30%;
+  min-width: 140px;
+}
+
+// ----------------------------------------------------------------
+
+.container {
+  height: 85vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.mat-selection-list-container {
+  min-height: auto;
+  max-height: 100%;
+
+  width: 100%;
+  max-width: 600px;
+
+  margin: 0.5rem auto;
+  padding: 10px;
+  border-radius: 8px;
+
+  overflow-y: auto;
+}
+
+.mat-list-option {
+  padding: 2.5rem !important;
+}
