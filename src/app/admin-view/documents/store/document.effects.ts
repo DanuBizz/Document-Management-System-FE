@@ -8,6 +8,7 @@ import { Store } from '@ngrx/store';
 import { selectDocumentQueryParams } from './document.reducers';
 import { DocumentService } from '../../../shared/service/document.service';
 import { NotificationService } from '../../../shared/service/notification.service';
+import { PersistenceService } from '../../../auth/service/persistence.service';
 
 export const getDocumentsWithQuery = createEffect(
   // Injecting dependencies
@@ -28,6 +29,74 @@ export const getDocumentsWithQuery = createEffect(
           catchError((errorResponse: HttpErrorResponse) => {
             // Handling errors and dispatching action when fetching fails
             return of(documentActions.getDocumentsWithQueryFailure(errorResponse.error));
+          })
+        );
+      })
+    );
+  },
+  { functional: true }
+);
+
+export const getUserDocumentsWithQuery = createEffect(
+  // Injecting dependencies
+  (
+    actions$ = inject(Actions),
+    documentService = inject(DocumentService),
+    persistenceService = inject(PersistenceService)
+  ) => {
+    return actions$.pipe(
+      // Listening for actions of type
+      ofType(documentActions.getUserDocumentsWithQuery),
+      switchMap(({ queryParams }) => {
+        const encodedToken = persistenceService.get('accessToken') as string;
+        const decodedToken = atob(encodedToken);
+        const username = decodedToken.split(':');
+
+        return documentService.fetchUserDocumentsWithAssociatedVersionsWithQuery(queryParams, username[0]).pipe(
+          map(documents =>
+            // Handling the response and dispatching action when successful
+            documentActions.getUserDocumentsWithQuerySuccess({
+              documents: documents.documents,
+              totalElements: documents.totalElements,
+            })
+          ),
+          catchError((errorResponse: HttpErrorResponse) => {
+            // Handling errors and dispatching action when fetching fails
+            return of(documentActions.getUserDocumentsWithQueryFailure(errorResponse.error));
+          })
+        );
+      })
+    );
+  },
+  { functional: true }
+);
+
+export const getUnreadUserDocuments = createEffect(
+  // Injecting dependencies
+  (
+    actions$ = inject(Actions),
+    documentService = inject(DocumentService),
+    persistenceService = inject(PersistenceService)
+  ) => {
+    return actions$.pipe(
+      // Listening for actions of type
+      ofType(documentActions.getUnreadUserDocuments),
+      switchMap(() => {
+        const encodedToken = persistenceService.get('accessToken') as string;
+        const decodedToken = atob(encodedToken);
+        const username = decodedToken.split(':');
+
+        return documentService.fetchUnreadUserDocuments(username[0]).pipe(
+          map(documents =>
+            // Handling the response and dispatching action when successful
+            documentActions.getUnreadUserDocumentsSuccess({
+              documents: documents.documents,
+              totalElements: documents.totalElements,
+            })
+          ),
+          catchError((errorResponse: HttpErrorResponse) => {
+            // Handling errors and dispatching action when fetching fails
+            return of(documentActions.getUnreadUserDocumentsFailure(errorResponse.error));
           })
         );
       })
@@ -76,6 +145,30 @@ export const changeDocumentVisibilityEffect = createEffect(
           catchError((errorResponse: HttpErrorResponse) => {
             // Handling errors and dispatching action when fetching fails
             return of(documentActions.changeDocumentVisibilityFailure(errorResponse.error));
+          })
+        );
+      })
+    );
+  },
+  { functional: true }
+);
+
+export const confirmDocumentEffect = createEffect(
+  // Injecting dependencies
+  (actions$ = inject(Actions), documentService = inject(DocumentService)) => {
+    return actions$.pipe(
+      // Listening for actions of type
+      ofType(documentActions.confirmDocument),
+      switchMap(({ id, docId }) => {
+        // Calling the service method to create document
+        return documentService.confirmDocument(id, docId).pipe(
+          map(() =>
+            // Handling the response and dispatching action when successful
+            documentActions.confirmDocumentSuccess()
+          ),
+          catchError((errorResponse: HttpErrorResponse) => {
+            // Handling errors and dispatching action when fetching fails
+            return of(documentActions.confirmDocumentFailure(errorResponse.error));
           })
         );
       })

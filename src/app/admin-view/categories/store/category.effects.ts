@@ -97,8 +97,8 @@ export const updateCategoryEffect = createEffect(
   (actions$ = inject(Actions), categoriesService = inject(CategoryService)) => {
     return actions$.pipe(
       ofType(categoryActions.updateCategory),
-      switchMap(({ id, userIds }) => {
-        return categoriesService.updateCategoryUsers(id, userIds).pipe(
+      switchMap(({ id, category }) => {
+        return categoriesService.updateCategoryUsers(id, category).pipe(
           map(({ message }) => {
             return categoryActions.updateCategorySuccess({ message });
           }),

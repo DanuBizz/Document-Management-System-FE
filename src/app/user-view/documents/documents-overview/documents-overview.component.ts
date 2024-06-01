@@ -175,7 +175,7 @@ export class DocumentsOverviewComponent implements OnInit {
    * Dispatches an action to fetch documents data based on the current pagination and sorting options.
    */
   private dispatchGetDocumentsWithQueryAction() {
-    this.store.dispatch(documentActions.getDocumentsWithQuery({ queryParams: this.queryParams }));
+    this.store.dispatch(documentActions.getUserDocumentsWithQuery({ queryParams: this.queryParams }));
   }
 
   /**

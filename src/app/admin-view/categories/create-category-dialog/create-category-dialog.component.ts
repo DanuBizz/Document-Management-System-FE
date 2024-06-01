@@ -47,7 +47,7 @@ export class CreateCategoryDialogComponent {
 
   // Form field name and categoryIds for the dialog, if category already exists
   formName: string = '';
-  formCategoryGroupIds: number[] = [];
+  formCategoryGroupNames: string[] = [];
 
   // Flag to disable form field name as true if document is passed and not null
   isDisabled: boolean = false;
@@ -76,7 +76,7 @@ export class CreateCategoryDialogComponent {
     // If category data exists, set formName and disable form fields
     if (this.category !== null) {
       this.formName = this.category.name;
-      this.formCategoryGroupIds = this.category.groupIds;
+      this.formCategoryGroupNames = this.category.groupNames;
       this.isDisabled = true;
       this.dialogTitle = 'Kategorie bearbeiten';
     }
@@ -105,7 +105,7 @@ export class CreateCategoryDialogComponent {
         { value: this.formName, disabled: this.isDisabled },
         this.isDisabled ? [] : [Validators.required, this.validateCategoryName.bind(this)],
       ],
-      groupIds: [this.formCategoryGroupIds, Validators.required],
+      groupNames: [this.formCategoryGroupNames, Validators.required],
     });
 
     // removes empty space from the beginning of the name
@@ -141,14 +141,19 @@ export class CreateCategoryDialogComponent {
    * Otherwise, saves the form data and closes the dialog.
    */
   save() {
+    let newCategory: CategoryRequestInterface = {
+      ...this.form.value,
+    };
+
     if (this.category !== null) {
-      const newUserIds: number[] = this.form.value.userIds;
-      this.dialogRef.close(newUserIds);
-    } else {
-      const newCategory: CategoryRequestInterface = {
-        ...this.form.value,
+      newCategory = {
+        name: this.formName,
+        groupNames: this.form.value.groupNames,
       };
+
       this.dialogRef.close(newCategory);
     }
+
+    this.dialogRef.close(newCategory);
   }
 }

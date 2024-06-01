@@ -71,4 +71,55 @@ export class DocumentService {
   updateDocumentVisibility(id: number) {
     return this.http.put(this.baseUrl + `/${id}/toggle-visibility`, null);
   }
+
+  fetchUserDocumentsWithAssociatedVersionsWithQuery(
+    queryParams: QueryParamsInterface,
+    username: string
+  ): Observable<{
+    documents: DocumentVersionsResponseInterface[];
+    totalElements: string;
+  }> {
+    const params = new HttpParams()
+      .set('search', queryParams.search)
+      .set('page', queryParams.pageNumber)
+      .set('size', queryParams.pageSize)
+      .set('sort', queryParams.sort)
+      .set('userName', username);
+
+    return this.http
+      .get<{
+        content: DocumentVersionsResponseInterface[];
+        totalElements: string;
+      }>(this.baseUrl + '/user-latest-with-associated-versions', { params })
+      .pipe(
+        delay(1000), // Simulate delay for demonstration purposes
+        map(response => ({
+          documents: response.content,
+          totalElements: response.totalElements.toString(),
+        }))
+      );
+  }
+
+  fetchUnreadUserDocuments(username: string): Observable<{
+    documents: DocumentVersionsResponseInterface[];
+    totalElements: string;
+  }> {
+    const params = new HttpParams().set('page', 0).set('size', 100).set('sort', '').set('userName', username);
+    return this.http
+      .get<{
+        content: DocumentVersionsResponseInterface[];
+        totalElements: string;
+      }>(this.baseUrl + '/user-unread-documents', { params })
+      .pipe(
+        map(response => ({
+          documents: response.content,
+          totalElements: response.totalElements.toString(),
+        }))
+      );
+  }
+
+  confirmDocument(id: number, docId: number) {
+    const url = environment.apiUrl + `/user-documents/mark-as-read`;
+    return this.http.post(url, { userId: id, documentVersionId: docId });
+  }
 }

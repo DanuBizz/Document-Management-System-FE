@@ -160,8 +160,12 @@ export class CategoryManagementComponent implements OnInit {
       .pipe(filter(val => !!val))
       .subscribe(val => {
         const id: number = category.id;
-        const userIds: number[] = val;
-        this.store.dispatch(categoryActions.updateCategory({ id, userIds }));
+        const newCategory: CategoryRequestInterface = {
+          ...val,
+        };
+        console.log(newCategory);
+
+        this.store.dispatch(categoryActions.updateCategory({ id, category: newCategory }));
       });
   }
 

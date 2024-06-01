@@ -56,6 +56,67 @@ export const documentFeature = createFeature({
       })
     ),
 
+    // GET USER DOCUMENTS
+
+    on(
+      documentActions.getUserDocumentsWithQuery,
+      (state, action): DocumentStateInterface => ({
+        ...state,
+        isLoading: true,
+        queryParams: action.queryParams,
+      })
+    ),
+    on(
+      documentActions.getUserDocumentsWithQuerySuccess,
+      (state, { documents, totalElements }): DocumentStateInterface => ({
+        ...state,
+        isLoading: false,
+        data: documents,
+        totalElements: totalElements,
+        areLoaded: true,
+      })
+    ),
+    on(
+      documentActions.getUserDocumentsWithQueryFailure,
+      (state, action): DocumentStateInterface => ({
+        ...state,
+        isLoading: false,
+        error: action.error,
+        areLoaded: false,
+      })
+    ),
+
+    // GET UNREAD USER DOCUMENTS
+
+    on(
+      documentActions.getUnreadUserDocuments,
+      (state): DocumentStateInterface => ({
+        ...state,
+        isLoading: true,
+      })
+    ),
+    on(
+      documentActions.getUnreadUserDocumentsSuccess,
+      (state, { documents, totalElements }): DocumentStateInterface => ({
+        ...state,
+        isLoading: false,
+        data: documents,
+        totalElements: totalElements,
+        areLoaded: true,
+      })
+    ),
+    on(
+      documentActions.getUnreadUserDocumentsFailure,
+      (state, action): DocumentStateInterface => ({
+        ...state,
+        isLoading: false,
+        error: action.error,
+        areLoaded: false,
+      })
+    ),
+
+    // CREATE DOCUMENT VERSION
+
     on(
       documentActions.createDocumentVersion,
       (state): DocumentStateInterface => ({
@@ -95,6 +156,31 @@ export const documentFeature = createFeature({
     ),
     on(
       documentActions.changeDocumentVisibilityFailure,
+      (state, action): DocumentStateInterface => ({
+        ...state,
+        isSubmitting: false,
+        error: action.error,
+      })
+    ),
+
+    // CONFIRM DOCUMENT ACTION
+
+    on(
+      documentActions.confirmDocument,
+      (state): DocumentStateInterface => ({
+        ...state,
+        isSubmitting: true,
+      })
+    ),
+    on(
+      documentActions.confirmDocumentSuccess,
+      (state): DocumentStateInterface => ({
+        ...state,
+        isSubmitting: false,
+      })
+    ),
+    on(
+      documentActions.confirmDocumentFailure,
       (state, action): DocumentStateInterface => ({
         ...state,
         isSubmitting: false,
