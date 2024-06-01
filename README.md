@@ -11,13 +11,21 @@
 
 <!-- TABLE OF CONTENTS -->
 <details>
-  <summary>Table of Contents</summary>
+  <summary style="font-size: 24px;">Table of Contents</summary>
   <ol>
     <li>
       <a href="#about-the-project">About The Project</a>
-      <ul>
-        <li><a href="#built-with">Built With</a></li>
+    </li>
+    <li>
+      <a href="#project-components">Project Components</a>
+        <ul>
+        <li><a href="#main-components">Main Components</a></li>
+        <li><a href="#additional-components">Additional Components</a></li>
+        <li><a href="#shared-components">Shared Components</a></li>
       </ul>
+    </li>
+    <li>
+      <a href="#built-with">Built With</a>
     </li>
     <li>
       <a href="#getting-started">Getting Started</a>
@@ -26,11 +34,23 @@
         <li><a href="#installation">Installation</a></li>
       </ul>
     </li>
-    <li><a href="#usage">Usage</a></li>
+    <li><a href="#screenshots">Screenshots</a></li>
+        <ul>
+            <li><a href="#login-page">Login Page</a></li>
+            <li><a href="#document-management-page">Document-Management Page</a></li>
+            <li><a href="#create-document-page">Create-Document Page</a></li>
+            <li><a href="#category-management-page">Category-Management Page</a></li>
+            <li><a href="#create-category-page">Create-Category Page</a></li>
+            <li><a href="#user-management-page">User-Management Page</a></li>
+            <li><a href="#group-management-page">Group-Management Page</a></li>
+            <li><a href="#confirm-new-document-page">Confirm-New-Document Page</a></li>
+            <li><a href="#document-overview-page">Document-Overview Page</a></li>
+            <li><a href="#open-file-page">Open-File Page</a></li>
+            <li><a href="#page-not-found-and-page-not-permitted">Page-Not-Found & Page-Not-Permitted</a></li>
+      </ul>
     <li><a href="#contributing">Contributing</a></li>
     <li><a href="#license">License</a></li>
     <li><a href="#contact">Contact</a></li>
-    <li><a href="#acknowledgments">Acknowledgments</a></li>
   </ol>
 </details>
 
@@ -217,7 +237,7 @@ If you work with Visual Studio you need the following plugins. JetBrain IDE inst
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-### CREATE CATEGORY PAGE
+### CREATE-CATEGORY PAGE
 
 #### Create a new category
 
@@ -236,7 +256,7 @@ If you work with Visual Studio you need the following plugins. JetBrain IDE inst
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-### USER MANAGEMENT PAGE
+### USER-MANAGEMENT PAGE
 
 <div style="display: flex; justify-content: space-between;">
     <img src="screenshots/user-management_desktop.png" style="width: 75%;">
@@ -246,7 +266,7 @@ If you work with Visual Studio you need the following plugins. JetBrain IDE inst
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-### GROUP MANAGEMENT PAGE
+### GROUP-MANAGEMENT PAGE
 
 <div style="display: flex; justify-content: space-between;">
     <img src="screenshots/group-management_desktop.png" style="width: 75%;">
@@ -258,7 +278,7 @@ If you work with Visual Studio you need the following plugins. JetBrain IDE inst
 
 ## USER VIEW
 
-### CONFIRM NEW DOCUMENT PAGE
+### CONFIRM-NEW-DOCUMENT PAGE
 
 <div style="display: flex; justify-content: space-between;">
     <img src="screenshots/confirm-doc_desktop.png" style="width: 75%;">
@@ -268,7 +288,7 @@ If you work with Visual Studio you need the following plugins. JetBrain IDE inst
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-### DOCUMENT OVERVIEW PAGE
+### DOCUMENT-OVERVIEW PAGE
 
 <div style="display: flex; justify-content: space-between;">
     <img src="screenshots/doc-overview_desktop.png" style="width: 75%;">
@@ -278,7 +298,7 @@ If you work with Visual Studio you need the following plugins. JetBrain IDE inst
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-### OPEN FILE PAGE
+### OPEN-FILE PAGE
 
 <div style="display: flex; justify-content: center;">
     <img src="screenshots/open_file_desktop.png" style="width: 75%;">
@@ -287,7 +307,7 @@ If you work with Visual Studio you need the following plugins. JetBrain IDE inst
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-### PAGE NOT FOUND & PAGE NOT PERMITTED
+### PAGE-NOT-FOUND AND PAGE-NOT-PERMITTED
 
 <div style="display: flex; justify-content: space-around;">
     <img src="screenshots/page-not-found_mobile.png" style="width: 25%;">
