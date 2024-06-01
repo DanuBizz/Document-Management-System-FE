@@ -29,20 +29,20 @@ export const loginEffect = createEffect(
         const encodedUsername = btoa(request.user.username);
         persistenceService.set('accessToken', btoa(request.user.username + ':' + request.user.password));
         return authService.getCsrfToken().pipe(
-                switchMap(() => {
-                  return authService.getCurrentUser(encodedUsername).pipe(
-                    map((currentUser: CurrentUserInterface) => {
-                      return authActions.loginSuccess({ currentUser });
-                    }),
-                    catchError((errorResponse: HttpErrorResponse) => {
-                      return of(authActions.loginFailure({ errors: errorResponse.error.errors }));
-                    })
-                  );
-                })
-              );
-            })
-          );
-        },
+          switchMap(() => {
+            return authService.getCurrentUser(encodedUsername).pipe(
+              map((currentUser: CurrentUserInterface) => {
+                return authActions.loginSuccess({ currentUser });
+              }),
+              catchError((errorResponse: HttpErrorResponse) => {
+                return of(authActions.loginFailure({ errors: errorResponse.error.errors }));
+              })
+            );
+          })
+        );
+      })
+    );
+  },
   { functional: true }
 );
 

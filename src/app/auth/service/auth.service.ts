@@ -38,8 +38,8 @@ export class AuthService {
    * @param data LoginRequestInterface containing user credentials
    * @returns Observable of CurrentUserInterface
    */
-  login(data: LoginRequestInterface): Observable<HttpResponse<any>> {
-    return this.http.post<HttpResponse<any>>(this.authUrl, data);
+  login(data: LoginRequestInterface): Observable<HttpResponse<string>> {
+    return this.http.post<HttpResponse<string>>(this.authUrl, data);
   }
 
   /**
