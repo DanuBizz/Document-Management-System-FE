@@ -7,13 +7,17 @@
     <mat-selection-list
       #documents
       [(ngModel)]="selectedDocuments"
-      class="mat-selection-list-container mat-elevation-z10">
+      class="mat-selection-list-container mat-elevation-z10"
+      [hideSingleSelectionIndicator]="true">
+
       <!-- Progress bar: displayed while data is being fetched -->
       <mat-progress-bar mode="indeterminate" *ngIf="data.isLoading" color="primary"></mat-progress-bar>
 
       @for (document of data.documents; track document) {
-        <mat-list-option [value]="document">
-          <button (click)="openDocumentInBrowser(document.id)" class="link-button">
+        <mat-list-option [value]="document" [disabled]="!clickedDocuments[document.id]" color="primary">
+          <button
+            (click)="handleClick(document.id, $event)"
+            class="link-button">
             <span class="border-bottom">{{ document.documentName }}</span>
           </button>
         </mat-list-option>
