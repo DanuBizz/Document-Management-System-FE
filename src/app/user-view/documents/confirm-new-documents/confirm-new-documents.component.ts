@@ -76,7 +76,11 @@ export class ConfirmNewDocumentsComponent implements OnInit {
   // Pagination and sorting properties for the component ts file
   queryParams!: QueryParamsInterface;
 
+  // Array to store the currently selected documents
   selectedDocuments: DocumentVersionsResponseInterface[] = [];
+
+  // Array to track if a document has been clicked before it can be checked
+  clickedDocuments: { [key: number]: boolean } = {};
 
   /**
    * @param store - The Redux store instance injected via dependency injection.
@@ -89,6 +93,12 @@ export class ConfirmNewDocumentsComponent implements OnInit {
     private router: Router
   ) {}
 
+  /**
+   * Dispatches an action to fetch unread user documents from the store.
+   * Subscribes to the data observable to handle the fetched data.
+   * Redirects to 'user/documents-overview' route if there are no unread documents.
+   * Initializes clickedDocuments object with document IDs set to false by default.
+   */
   ngOnInit(): void {
     this.store.dispatch(documentActions.getUnreadUserDocuments());
 
@@ -96,7 +106,14 @@ export class ConfirmNewDocumentsComponent implements OnInit {
       if (data.areLoaded && data.totalElements === '0') {
         this.router.navigateByUrl('user/documents-overview');
       }
+
+      data.documents.forEach(document => {
+        console.log(document.id);
+        this.clickedDocuments[document.id] = false;
+      })
+
     });
+
   }
 
   /**
@@ -107,6 +124,20 @@ export class ConfirmNewDocumentsComponent implements OnInit {
     this.store.dispatch(fileActions.getFile({ id }));
 
     this.openDialogSubscription();
+  }
+
+  /**
+   * Opens the document in the browser based on the provided document ID.
+   * event.stopPropagation avoids that the checkbox will be touched if clicks on the button.
+   * Sets the clicked state of the document item to true in the clickedDocuments object.
+   *
+   * @param documentId - The ID of the document to be opened.
+   * @param event - The click event object.
+   */
+  handleClick(documentId: number, event: Event): void {
+    this.openDocumentInBrowser(documentId);
+    event.stopPropagation();
+    this.clickedDocuments[documentId] = true;
   }
 
   /**
@@ -122,6 +153,15 @@ export class ConfirmNewDocumentsComponent implements OnInit {
       });
   }
 
+  /**
+   * Redirects to the document overview page after confirming selected documents.
+   * Retrieves the current user from the store.
+   * If a user is found:
+   *    - Iterates over selected documents.
+   *    - Dispatches an action to confirm each document with the user's ID.
+   * Dispatches an action to fetch unread user documents from the store.
+   * In ngOnInit is a subscription to the data observable to handle the fetched data.
+   */
   redirectToDocumentOverview() {
     this.store
       .select(selectCurrentUser)

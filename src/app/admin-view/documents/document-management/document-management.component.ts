@@ -107,7 +107,7 @@ export class DocumentManagementComponent implements OnInit {
   tooltipVisibilityButton = '';
 
   // Maximum number of users to display in the list
-  maxVisibleCategories = 4;
+  maxVisibleCategories = 3;
 
   // Search control for the search input field
   searchControl: FormControl = new FormControl('');
