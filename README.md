@@ -67,39 +67,39 @@ Additionally, the system includes user management, allowing administrators to gr
 ### Main Components
 
 1. **Login**: Features a modern login window where users can log in using their username and password.
-
+<br></br>
 2. **Document-Management (Admin-View)**: This component comprises a feature-rich table listing all documents and their versions. It allows the creation of new documents or new versions of existing ones. Documents can be viewed in the web interface, and there is an option to mark documents as "hidden".
-
+<br></br>
 3. **Create-Document-Dialog (Admin-View)**: This component consists of three input fields with validations. The first field is for entering the document name. The second field allows users to upload a document via the file explorer, with validation for file type (PDF) and size. The third field is for adding categories to the document. The document can only be saved or created when all fields are filled out correctly and without errors. If a new version of an existing document is created, the document name is pre-filled and cannot be changed.
-
+<br></br>
 4. **Category-Mangagement (Admin-View)**: This component includes a feature-rich table listing all categories. It allows the creation of new categories or editing existing ones.
-
+<br></br>
 5. **Create-Category-Dialog (Admin-View)**: This component consists of two input fields with validations. The first field is for entering the category name. The second field is for adding user groups. The category can only be saved or created when all fields are filled out correctly and without errors. If an existing category is being edited, the category name is pre-filled and immutable. Additionally, user groups are pre-populated in the select dropdown and can be modified.
-
+<br></br>
 6. **User-Groups-Management (Admin-View)**: This component contains two tabs that switch between user management and group management views using lazy loading.
-
+<br></br>
 7. **User-Management (Admin-View)**: This component includes a feature-rich table listing all users. Administrator rights can be granted or revoked, and users can be added to or removed from different user groups.
-
+<br></br>
 8. **Group-Management (Admin-View)**: This component comprises a feature-rich table listing all user groups. New groups can be created.
-
+<br></br>
 9. **Confirm-New-Documents (User-View)**: This component contains a list of all new documents for the logged-in user. These documents can be viewed and manually confirmed. Additionally, there is a "Continue" button that leads to the main view and can only be pressed once all documents have been confirmed.
-
+<br></br>
 10. **Documents-Overview (User-View)**: This component comprises a feature-rich table listing all documents and their versions for the logged-in user. These documents can be opened in a web view for viewing.
 
 ### Additional Components
 
 11. **Page-Not-Found**: This component includes a message informing the user that the specified link does not exist, along with a link to return to the login page.
-
+<br></br>
 12. **Page-Not-Permitted**: This component includes a message informing the user that they do not have the required permissions to access the page. Additionally, there is a link to return to the login page.
 
 ### Shared Components
 
 13. **Fab-Button**: This component includes a reusable button with predefined attributes and specific styling.
-
+<br></br>
 14. **Backend-Error-Messages**: This component contains a reusable message with predefined attributes, which is displayed to the user, for example, during login.
-
+<br></br>
 15. **Display-Document-Dialog**: This component contains a window in which a PDF file can be displayed.
-
+<br></br>
 16. **Notification**: This component is used to display the status of a transmitted action to the user in the form of an alert box. The display duration of the notification varies depending on the success or failure of the action. Additionally, notifications can be manually closed.
 
 ### Integration with Backend-API
