@@ -28,7 +28,7 @@ export const loginEffect = createEffect(
       switchMap(({ request }) => {
         const encodedUsername = btoa(request.user.username);
         persistenceService.set('accessToken', btoa(request.user.username + ':' + request.user.password));
-        return authService.login(request).pipe(
+        return authService.getCsrfToken().pipe(
           switchMap(() => {
             return authService.getCurrentUser(encodedUsername).pipe(
               map((currentUser: CurrentUserInterface) => {

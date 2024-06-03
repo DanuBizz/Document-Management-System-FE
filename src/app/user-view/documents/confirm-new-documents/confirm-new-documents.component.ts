@@ -110,10 +110,8 @@ export class ConfirmNewDocumentsComponent implements OnInit {
       data.documents.forEach(document => {
         console.log(document.id);
         this.clickedDocuments[document.id] = false;
-      })
-
+      });
     });
-
   }
 
   /**
