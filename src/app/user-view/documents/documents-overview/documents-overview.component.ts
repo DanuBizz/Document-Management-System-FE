@@ -6,7 +6,7 @@ import { MatProgressBar } from '@angular/material/progress-bar';
 import { MatSortModule, Sort } from '@angular/material/sort';
 import { QueryParamsInterface } from '../../../shared/type/query-params.interface';
 import { Store } from '@ngrx/store';
-import { documentActions } from '../../../admin-view/documents/store/document.actions';
+import { documentActions } from '../../../shared/store/document/document.actions';
 import { combineLatest, debounceTime, first } from 'rxjs';
 import {
   selectDocumentData,
@@ -15,7 +15,7 @@ import {
   selectDocumentPageSizeOptions,
   selectDocumentQueryParams,
   selectDocumentTotalElements,
-} from '../../../admin-view/documents/store/document.reducers';
+} from '../../../shared/store/document/document.reducers';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTooltipModule } from '@angular/material/tooltip';
@@ -26,7 +26,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatIcon } from '@angular/material/icon';
 import { DocumentVersionsResponseInterface } from '../../../admin-view/type/document-versions-response.interface';
 import { DocumentResponseInterface } from '../../../admin-view/type/document-response.interface';
-import { selectUserAreLoaded } from '../../../admin-view/users/store/user/user.reducers';
+import { selectUserAreLoaded } from '../../../admin-view/store/user/user.reducers';
 import { DispatchActionService } from '../../../shared/service/dispatch-action.service';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 

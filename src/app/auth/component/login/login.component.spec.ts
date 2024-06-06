@@ -106,7 +106,7 @@ describe('LoginComponent', () => {
 
   it('should dispatch login action with correct data on form submit', () => {
     const formData = {
-      email: 'test@example.com',
+      username: 'user',
       password: 'password',
     };
     component.loginForm.setValue(formData);

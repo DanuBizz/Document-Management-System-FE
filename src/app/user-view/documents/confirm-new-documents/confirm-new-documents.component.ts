@@ -15,12 +15,12 @@ import {
   selectDocumentError,
   selectDocumentIsLoading,
   selectDocumentTotalElements,
-} from '../../../admin-view/documents/store/document.reducers';
+} from '../../../shared/store/document/document.reducers';
 import { QueryParamsInterface } from '../../../shared/type/query-params.interface';
 import { DocumentVersionsResponseInterface } from '../../../admin-view/type/document-versions-response.interface';
 import { Store } from '@ngrx/store';
 import { MatDialog } from '@angular/material/dialog';
-import { documentActions } from '../../../admin-view/documents/store/document.actions';
+import { documentActions } from '../../../shared/store/document/document.actions';
 import { fileActions } from '../../../shared/store/file/file.actions';
 import { selectFileData } from '../../../shared/store/file/file.reducers';
 import { openDisplayDocumentDialog } from '../../../shared/component/display-document-dialog/display-document-dialog.config';
