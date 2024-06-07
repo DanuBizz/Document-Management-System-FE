@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatTableModule } from '@angular/material/table';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -8,7 +8,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatProgressBar } from '@angular/material/progress-bar';
 import { MatSortModule } from '@angular/material/sort';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { combineLatest, first } from 'rxjs';
+import { combineLatest, first, Subject, takeUntil } from 'rxjs';
 import {
   selectDocumentAreLoaded,
   selectDocumentData,
@@ -61,7 +61,7 @@ import { CurrentUserInterface } from '../../../shared/type/current-user.interfac
   templateUrl: './confirm-new-documents.component.html',
   styleUrl: './confirm-new-documents.component.scss',
 })
-export class ConfirmNewDocumentsComponent implements OnInit {
+export class ConfirmNewDocumentsComponent implements OnInit, OnDestroy {
   title = 'Dokumente zum Bestätigen';
 
   // Observable combining necessary data from the store for the component
@@ -81,6 +81,9 @@ export class ConfirmNewDocumentsComponent implements OnInit {
 
   // Array to track if a document has been clicked before it can be checked
   clickedDocuments: { [key: number]: boolean } = {};
+
+  // A subject used to signal the destruction of the component and unsubscribe from active subscriptions.
+  private unsubscribe$ = new Subject<void>();
 
   /**
    * @param store - The Redux store instance injected via dependency injection.
@@ -102,16 +105,25 @@ export class ConfirmNewDocumentsComponent implements OnInit {
   ngOnInit(): void {
     this.store.dispatch(documentActions.getUnreadUserDocuments());
 
-    this.data$.subscribe(data => {
+    this.data$.pipe(takeUntil(this.unsubscribe$)).subscribe(data => {
       if (data.areLoaded && data.totalElements === '0') {
         this.router.navigateByUrl('user/documents-overview');
+        this.unsubscribe$.next();
       }
 
       data.documents.forEach(document => {
-        console.log(document.id);
         this.clickedDocuments[document.id] = false;
       });
     });
+  }
+
+  /**
+   * Performs clean-up operations when the component is destroyed.
+   * Unsubscribes from all active subscriptions to prevent memory leaks.
+   */
+  ngOnDestroy() {
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
   }
 
   /**
@@ -163,7 +175,7 @@ export class ConfirmNewDocumentsComponent implements OnInit {
   redirectToDocumentOverview() {
     this.store
       .select(selectCurrentUser)
-      .pipe()
+      .pipe(takeUntil(this.unsubscribe$))
       .subscribe((user: CurrentUserInterface | null | undefined) => {
         if (user) {
           this.selectedDocuments.forEach(document => {
