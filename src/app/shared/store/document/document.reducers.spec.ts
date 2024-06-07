@@ -5,7 +5,6 @@ import { DocumentVersionsResponseInterface } from '../../../admin-view/type/docu
 import { PaginationConfigService } from '../../service/pagination-config.service';
 
 describe('DocumentReducers', () => {
-
   const paginationConfigService = new PaginationConfigService();
 
   const queryParams = {

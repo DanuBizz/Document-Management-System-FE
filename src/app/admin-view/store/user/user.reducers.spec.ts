@@ -10,7 +10,7 @@ describe('UserReducers', () => {
       username: 'User 1',
       email: 'test@example.com',
       isAdmin: true,
-      groupIds: [1, 2]
+      groupIds: [1, 2],
     },
   ];
 

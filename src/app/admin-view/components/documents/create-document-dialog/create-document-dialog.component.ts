@@ -73,10 +73,10 @@ export class CreateDocumentDialogComponent implements OnInit {
   documentCategories: DocCategoryResponseInterface[] = [];
 
   // maximum file size in MB
-  maxMB = environment.maxFileSize
+  maxMB = environment.maxFileSize;
 
   // allowed file types
-  allowedTypes = environment.allowedFileTypes
+  allowedTypes = environment.allowedFileTypes;
 
   /**
    * @param fb - The FormBuilder service for creating form controls and groups.

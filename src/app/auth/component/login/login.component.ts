@@ -72,7 +72,7 @@ export class LoginComponent {
     });
 
     this.persistenceService.remove('accessToken');
-    this.persistenceService.remove('csrfToken')
+    this.persistenceService.remove('csrfToken');
   }
 
   /**

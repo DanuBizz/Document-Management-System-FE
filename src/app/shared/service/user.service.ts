@@ -58,8 +58,7 @@ export class UserService {
    * @returns An Observable with a message indicating the success of the operation.
    */
   updateUserRole(id: number, isAdmin: boolean) {
-    return this.http
-      .put(this.baseUrl + `/${id}/toggle-admin`, { isAdmin: isAdmin });
+    return this.http.put(this.baseUrl + `/${id}/toggle-admin`, { isAdmin: isAdmin });
   }
 
   /**

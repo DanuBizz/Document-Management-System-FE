@@ -20,8 +20,8 @@ describe('UserService', () => {
   };
 
   const dummyUsers: UserResponseInterface[] = [
-    { id: 1, username: 'User 1', email: 'test@example.com', isAdmin: true, groupIds: [1,2] },
-    { id: 2, username: 'User 2', email: 'test@example.com', isAdmin: true,   groupIds: [1,2] },
+    { id: 1, username: 'User 1', email: 'test@example.com', isAdmin: true, groupIds: [1, 2] },
+    { id: 2, username: 'User 2', email: 'test@example.com', isAdmin: true, groupIds: [1, 2] },
   ];
 
   beforeEach(() => {
@@ -56,7 +56,6 @@ describe('UserService', () => {
 
   it('should return users with pagination query from the api', () => {
     const dummyTotalElements = '2';
-
 
     service.fetchUsersWitQuery(queryParams).subscribe(response => {
       expect(response.users.length).toBe(2);

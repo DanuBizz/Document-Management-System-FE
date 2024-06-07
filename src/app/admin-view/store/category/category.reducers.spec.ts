@@ -5,16 +5,14 @@ import { CategoryRequestInterface } from '../../type/category-request.interface'
 import { PaginationConfigService } from '../../../shared/service/pagination-config.service';
 
 describe('CategoryReducers', () => {
-
   const paginationConfigService = new PaginationConfigService();
 
   const queryParams = {
     pageNumber: paginationConfigService.getInitialPageIndex(),
-      pageSize: paginationConfigService.getInitialPageSize(),
-      sort: paginationConfigService.getInitialSort(),
-      search: '',
+    pageSize: paginationConfigService.getInitialPageSize(),
+    sort: paginationConfigService.getInitialSort(),
+    search: '',
   };
-
 
   it('returns a default state', () => {
     const action = { type: 'UNKNOWN' };

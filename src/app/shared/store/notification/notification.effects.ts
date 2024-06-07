@@ -39,7 +39,7 @@ export const openNotificationErrorEffect = createEffect(
 
         fileActions.getFileFailure,
 
-        authActions.loginFailure,
+        authActions.loginFailure
       ),
       tap(action => {
         const errorCode = action.error?.['status'] ?? `Unknown`;
@@ -84,7 +84,7 @@ export const openNotificationSuccessEffect = createEffect(
         fileActions.getFileSuccess,
 
         authActions.loginSuccess,
-        authActions.logoutSuccess,
+        authActions.logoutSuccess
       ),
       tap(action => {
         notificationService.pushNotification(`${action.type}`, false);

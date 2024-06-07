@@ -56,8 +56,7 @@ export class CategoryService {
    * @returns An observable containing a success message upon successful creation.
    */
   createCategory(newCategory: CategoryRequestInterface) {
-    return this.http
-      .post(this.baseUrl, newCategory);
+    return this.http.post(this.baseUrl, newCategory);
   }
 
   /**
@@ -65,7 +64,6 @@ export class CategoryService {
    * @returns An observable containing a success message upon successful creation.
    */
   updateCategoryUsers(id: number, category: CategoryRequestInterface) {
-    return this.http
-      .put(this.baseUrl + `/${id}`, category);
+    return this.http.put(this.baseUrl + `/${id}`, category);
   }
 }

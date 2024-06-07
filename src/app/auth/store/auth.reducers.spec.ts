@@ -6,7 +6,6 @@ import { BackendErrorsInterface } from '../../shared/type/backend-erros.interfac
 import { routerNavigationAction } from '@ngrx/router-store';
 
 describe('AuthReducers', () => {
-
   const currentUser: CurrentUserInterface = {
     id: 1,
     email: 'email@gmx.at',
@@ -48,8 +47,6 @@ describe('AuthReducers', () => {
   });
 
   it('should login success', () => {
-
-
     const action = authActions.loginSuccess({ currentUser });
     const state = authReducer(initialState, action);
     const newState = {
@@ -91,7 +88,6 @@ describe('AuthReducers', () => {
   });
 
   it('should get current user success', () => {
-
     const action = authActions.getCurrentUserSuccess({ currentUser });
     const state = authReducer(initialState, action);
     const newState = {

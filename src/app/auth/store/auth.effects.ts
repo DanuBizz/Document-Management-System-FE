@@ -10,10 +10,7 @@ import { PersistenceService } from '../service/persistence.service';
 import { Router } from '@angular/router';
 import { documentActions } from '../../shared/store/document/document.actions';
 import { Store } from '@ngrx/store';
-import {
-  selectDocumentAreLoaded,
-  selectDocumentTotalElements,
-} from '../../shared/store/document/document.reducers';
+import { selectDocumentAreLoaded, selectDocumentTotalElements } from '../../shared/store/document/document.reducers';
 
 /**
  * Effect that handles the login action. It sends a login request to the AuthService,
@@ -34,12 +31,12 @@ export const loginEffect = createEffect(
                 return authActions.loginSuccess({ currentUser });
               }),
               catchError((errorResponse: HttpErrorResponse) => {
-                return of(authActions.loginFailure({ error: errorResponse.error}));
+                return of(authActions.loginFailure({ error: errorResponse.error }));
               })
             );
           }),
           catchError((errorResponse: HttpErrorResponse) => {
-            return of(authActions.loginFailure({ error: errorResponse.error}));
+            return of(authActions.loginFailure({ error: errorResponse.error }));
           })
         );
       })
@@ -147,4 +144,3 @@ export const redirectAfterLogoutEffect = createEffect(
   },
   { functional: true, dispatch: false }
 );
-
