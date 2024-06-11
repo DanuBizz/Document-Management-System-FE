@@ -122,10 +122,6 @@ body {
 @include responsive-dialogs();
 @include mobile-responsive-title;
 
-.scrolling-container {
-  @include scrolling-container;
-}
-
 .toolbar-button {
   height: auto !important;
   width: 100px !important;
@@ -273,4 +269,34 @@ mat-form-field {
 .without-bottom-space .mat-mdc-form-field-subscript-wrapper,
 .without-bottom-space .mat-mdc-form-field-bottom-align::before {
   height: 0 !important;
+}
+
+.table-container {
+  min-height: auto;
+  max-height: 100%;
+  overflow: auto;
+}
+
+.container-fluid {
+  max-height: 85vh;
+  display: flex;
+  flex-direction: column;
+}
+
+@media (max-width: 768px) {
+  .container-fluid {
+    max-height: 90vh;
+  }
+}
+
+@media (max-height: 900px) {
+  .container-fluid {
+    max-height: 80vh;
+  }
+}
+
+@media (max-height: 600px) {
+  .container-fluid {
+    max-height: 75vh;
+  }
 }

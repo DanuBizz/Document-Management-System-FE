@@ -50,166 +50,164 @@
     <mat-progress-bar mode="indeterminate" *ngIf="checkIsLoadingIsSubmitting()" color="accent"></mat-progress-bar>
 
     <!-- scrolling container for the table -->
-    <div class="mat-elevation-z10 mb-2">
-      <div class="scrolling-container">
-        <table
-          mat-table
-          class="default-table-design"
-          [dataSource]="data.documents"
-          matSort
-          (matSortChange)="changeSort($event)"
-          multiTemplateDataRows>
-          <!-- Select column -->
-          <ng-container matColumnDef="select">
-            <th mat-header-cell *matHeaderCellDef>
-              <mat-icon>add_task</mat-icon>
-            </th>
-            <td mat-cell *matCellDef="let document" (click)="$event.stopPropagation()">
-              <mat-checkbox
-                color="primary"
-                [disabled]="checkIsLoadingIsSubmitting()"
-                (change)="onToggleSelectDocument(document)"
-                [checked]="selection.isSelected(document)"></mat-checkbox>
-            </td>
-          </ng-container>
+    <div class="table-container">
+      <table
+        mat-table
+        class="default-table-design"
+        [dataSource]="data.documents"
+        matSort
+        (matSortChange)="changeSort($event)"
+        multiTemplateDataRows>
+        <!-- Select column -->
+        <ng-container matColumnDef="select">
+          <th mat-header-cell *matHeaderCellDef>
+            <mat-icon>add_task</mat-icon>
+          </th>
+          <td mat-cell *matCellDef="let document" (click)="$event.stopPropagation()">
+            <mat-checkbox
+              color="primary"
+              [disabled]="checkIsLoadingIsSubmitting()"
+              (change)="onToggleSelectDocument(document)"
+              [checked]="selection.isSelected(document)"></mat-checkbox>
+          </td>
+        </ng-container>
 
-          <!-- ID column -->
-          <ng-container matColumnDef="id">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header>ID</th>
-            <td mat-cell *matCellDef="let document">
-              @if (document.oldVersions.length > 0) {
-                <mat-icon class="table-icon-hint" *ngIf="expandedDocument === null"> keyboard_arrow_down </mat-icon>
-                <mat-icon class="table-icon-hint" *ngIf="expandedDocument !== null"> keyboard_arrow_up </mat-icon>
-              }
-              {{ document.id }}
-            </td>
-          </ng-container>
+        <!-- ID column -->
+        <ng-container matColumnDef="id">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>ID</th>
+          <td mat-cell *matCellDef="let document">
+            @if (document.oldVersions.length > 0) {
+              <mat-icon class="table-icon-hint" *ngIf="expandedDocument === null"> keyboard_arrow_down </mat-icon>
+              <mat-icon class="table-icon-hint" *ngIf="expandedDocument !== null"> keyboard_arrow_up </mat-icon>
+            }
+            {{ document.id }}
+          </td>
+        </ng-container>
 
-          <!-- Name column -->
-          <ng-container matColumnDef="documentName">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
-            <td mat-cell *matCellDef="let document">
-              {{ document.documentName }}
-              <mat-icon class="table-icon-hint" *ngIf="!document.isVisible">
-                {{ visibilityIconList[1] }}
-              </mat-icon>
-            </td>
-          </ng-container>
+        <!-- Name column -->
+        <ng-container matColumnDef="documentName">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
+          <td mat-cell *matCellDef="let document">
+            {{ document.documentName }}
+            <mat-icon class="table-icon-hint" *ngIf="!document.isVisible">
+              {{ visibilityIconList[1] }}
+            </mat-icon>
+          </td>
+        </ng-container>
 
-          <!-- version column -->
-          <ng-container matColumnDef="timestamp">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header>Versionsdatum</th>
-            <td mat-cell *matCellDef="let document">
-              {{ document.timestamp | date: 'dd.MM.yyyy HH:mm:ss' }}
-            </td>
-          </ng-container>
+        <!-- version column -->
+        <ng-container matColumnDef="timestamp">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Versionsdatum</th>
+          <td mat-cell *matCellDef="let document">
+            {{ document.timestamp | date: 'dd.MM.yyyy HH:mm:ss' }}
+          </td>
+        </ng-container>
 
-          <!-- Categories column -->
-          <ng-container matColumnDef="categories">
-            <th mat-header-cell *matHeaderCellDef>Kategorien</th>
-            <td mat-cell *matCellDef="let document">
-              @if (document.categoryNames.length <= maxVisibleCategories) {
-                {{ sortAndJoinCategoryNames(document.categoryNames, false, 0) }}
-              } @else {
-                {{ sortAndJoinCategoryNames(document.categoryNames, true, maxVisibleCategories) }}
-                <div matBadge="{{ document.categoryNames.length }}" matBadgeOverlap="false"></div>
-              }
-            </td>
-          </ng-container>
+        <!-- Categories column -->
+        <ng-container matColumnDef="categories">
+          <th mat-header-cell *matHeaderCellDef>Kategorien</th>
+          <td mat-cell *matCellDef="let document">
+            @if (document.categoryNames.length <= maxVisibleCategories) {
+              {{ sortAndJoinCategoryNames(document.categoryNames, false, 0) }}
+            } @else {
+              {{ sortAndJoinCategoryNames(document.categoryNames, true, maxVisibleCategories) }}
+              <div matBadge="{{ document.categoryNames.length }}" matBadgeOverlap="false"></div>
+            }
+          </td>
+        </ng-container>
 
-          <!-- Expanded row column for older document versions -->
-          <ng-container matColumnDef="expandedDetail">
-            <td mat-cell *matCellDef="let document" colspan="5" class="expandable-row remove-padding">
-              <table mat-table class="expandable-row" [dataSource]="getMatTableData(document.oldVersions)">
-                <!-- Select column inside expanded detail -->
-                <ng-container matColumnDef="select">
-                  <th mat-header-cell *matHeaderCellDef>
-                    <mat-icon>add_task</mat-icon>
-                  </th>
-                  <td mat-cell *matCellDef="let document" (click)="$event.stopPropagation()">
-                    <mat-checkbox
-                      [disabled]="checkIsLoadingIsSubmitting()"
-                      (change)="onToggleSelectDocument(document)"
-                      [checked]="selection.isSelected(document)">
-                    </mat-checkbox>
-                  </td>
-                </ng-container>
+        <!-- Expanded row column for older document versions -->
+        <ng-container matColumnDef="expandedDetail">
+          <td mat-cell *matCellDef="let document" colspan="5" class="expandable-row remove-padding">
+            <table mat-table class="expandable-row" [dataSource]="getMatTableData(document.oldVersions)">
+              <!-- Select column inside expanded detail -->
+              <ng-container matColumnDef="select">
+                <th mat-header-cell *matHeaderCellDef>
+                  <mat-icon>add_task</mat-icon>
+                </th>
+                <td mat-cell *matCellDef="let document" (click)="$event.stopPropagation()">
+                  <mat-checkbox
+                    [disabled]="checkIsLoadingIsSubmitting()"
+                    (change)="onToggleSelectDocument(document)"
+                    [checked]="selection.isSelected(document)">
+                  </mat-checkbox>
+                </td>
+              </ng-container>
 
-                <!-- ID column inside expanded detail -->
-                <ng-container matColumnDef="id">
-                  <th mat-header-cell *matHeaderCellDef>ID</th>
-                  <td mat-cell *matCellDef="let document">
-                    {{ document.id }}
-                  </td>
-                </ng-container>
+              <!-- ID column inside expanded detail -->
+              <ng-container matColumnDef="id">
+                <th mat-header-cell *matHeaderCellDef>ID</th>
+                <td mat-cell *matCellDef="let document">
+                  {{ document.id }}
+                </td>
+              </ng-container>
 
-                <!-- Name column inside expanded detail -->
-                <ng-container matColumnDef="documentName">
-                  <th mat-header-cell *matHeaderCellDef>Name</th>
-                  <td mat-cell *matCellDef="let document">
-                    {{ document.documentName }}
-                    <mat-icon class="table-icon-hint" *ngIf="!document.isVisible">
-                      {{ visibilityIconList[1] }}
-                    </mat-icon>
-                  </td>
-                </ng-container>
+              <!-- Name column inside expanded detail -->
+              <ng-container matColumnDef="documentName">
+                <th mat-header-cell *matHeaderCellDef>Name</th>
+                <td mat-cell *matCellDef="let document">
+                  {{ document.documentName }}
+                  <mat-icon class="table-icon-hint" *ngIf="!document.isVisible">
+                    {{ visibilityIconList[1] }}
+                  </mat-icon>
+                </td>
+              </ng-container>
 
-                <!-- version column -->
-                <ng-container matColumnDef="timestamp">
-                  <th mat-header-cell *matHeaderCellDef>Versionsdatum</th>
-                  <td mat-cell *matCellDef="let document">
-                    {{ document.timestamp | date: 'dd.MM.yyyy HH:mm:ss' }}
-                  </td>
-                </ng-container>
+              <!-- version column -->
+              <ng-container matColumnDef="timestamp">
+                <th mat-header-cell *matHeaderCellDef>Versionsdatum</th>
+                <td mat-cell *matCellDef="let document">
+                  {{ document.timestamp | date: 'dd.MM.yyyy HH:mm:ss' }}
+                </td>
+              </ng-container>
 
-                <!-- Categories column inside expanded detail -->
-                <ng-container matColumnDef="categories">
-                  <th mat-header-cell *matHeaderCellDef>Kategorien</th>
-                  <td mat-cell *matCellDef="let document">
-                    @if (document.categoryNames.length <= maxVisibleCategories) {
-                      {{ sortAndJoinCategoryNames(document.categoryNames, false, 0) }}
-                    } @else {
-                      {{ sortAndJoinCategoryNames(document.categoryNames, true, maxVisibleCategories) }}
-                      <div matBadge="{{ document.categoryNames.length }}" matBadgeOverlap="false"></div>
-                    }
-                  </td>
-                </ng-container>
+              <!-- Categories column inside expanded detail -->
+              <ng-container matColumnDef="categories">
+                <th mat-header-cell *matHeaderCellDef>Kategorien</th>
+                <td mat-cell *matCellDef="let document">
+                  @if (document.categoryNames.length <= maxVisibleCategories) {
+                    {{ sortAndJoinCategoryNames(document.categoryNames, false, 0) }}
+                  } @else {
+                    {{ sortAndJoinCategoryNames(document.categoryNames, true, maxVisibleCategories) }}
+                    <div matBadge="{{ document.categoryNames.length }}" matBadgeOverlap="false"></div>
+                  }
+                </td>
+              </ng-container>
 
-                <!-- Row definition for expanded detail -->
-                <tr
-                  mat-row
-                  *matRowDef="let document; columns: displayedColumns"
-                  (click)="onToggleExpandedDocumentRow(document)"></tr>
-              </table>
-            </td>
-          </ng-container>
+              <!-- Row definition for expanded detail -->
+              <tr
+                mat-row
+                *matRowDef="let document; columns: displayedColumns"
+                (click)="onToggleExpandedDocumentRow(document)"></tr>
+            </table>
+          </td>
+        </ng-container>
 
-          <!-- Header row definition -->
-          <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+        <!-- Header row definition -->
+        <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
 
-          <!-- Row definition -->
-          <tr mat-row *matRowDef="let row; columns: displayedColumns" (click)="onToggleExpandedDocumentRow(row)"></tr>
+        <!-- Row definition -->
+        <tr mat-row *matRowDef="let row; columns: displayedColumns" (click)="onToggleExpandedDocumentRow(row)"></tr>
 
-          <!-- Expanded detail row definition -->
-          <tr
-            mat-row
-            *matRowDef="let row; columns: ['expandedDetail']"
-            [class.collapsed-detail]="row !== expandedDocument"></tr>
-        </table>
-      </div>
-
-      <!-- Paginator -->
-      <mat-paginator
-        class="default-paginator-design"
-        [length]="data.totalElements"
-        [pageSize]="queryParams.pageSize"
-        [pageSizeOptions]="data.pageSizeOptions"
-        [pageIndex]="queryParams.pageNumber"
-        (page)="handlePageEvent($event)"
-        [showFirstLastButtons]="true"
-        [disabled]="checkIsLoadingIsSubmitting()"
-        aria-label="Select page of documents">
-      </mat-paginator>
+        <!-- Expanded detail row definition -->
+        <tr
+          mat-row
+          *matRowDef="let row; columns: ['expandedDetail']"
+          [class.collapsed-detail]="row !== expandedDocument"></tr>
+      </table>
     </div>
+
+    <!-- Paginator -->
+    <mat-paginator
+      class="default-paginator-design"
+      [length]="data.totalElements"
+      [pageSize]="queryParams.pageSize"
+      [pageSizeOptions]="data.pageSizeOptions"
+      [pageIndex]="queryParams.pageNumber"
+      (page)="handlePageEvent($event)"
+      [showFirstLastButtons]="true"
+      [disabled]="checkIsLoadingIsSubmitting()"
+      aria-label="Select page of documents">
+    </mat-paginator>
   </div>
 </ng-container>

@@ -24,121 +24,112 @@
     <!-- Progress bar: displayed while data is being fetched -->
     <mat-progress-bar mode="indeterminate" *ngIf="checkIsLoadingIsSubmitting()" color="accent"></mat-progress-bar>
 
-    <!-- Table for user data (mobile view)-->
-    <div class="mat-elevation-z10 mb-2">
-      <!-- Table for user data (desktop-view)-->
-      <div class="desktop-table scrolling-container">
-        <table
-          mat-table
-          class="default-table-design"
-          [dataSource]="data.groups"
-          matSort
-          (matSortChange)="changeSort($event)"
-          multiTemplateDataRows>
-          <!-- Column header for ID -->
-          <ng-container matColumnDef="id">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header>ID</th>
-            <td mat-cell *matCellDef="let user">
-              {{ user.id }}
-            </td>
-          </ng-container>
+    <!-- Table for user data (desktop-view)-->
+    <div class="desktop-table table-container">
+      <table
+        mat-table
+        class="default-table-design"
+        [dataSource]="data.groups"
+        matSort
+        (matSortChange)="changeSort($event)"
+        multiTemplateDataRows>
+        <!-- Column header for ID -->
+        <ng-container matColumnDef="id">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>ID</th>
+          <td mat-cell *matCellDef="let user">
+            {{ user.id }}
+          </td>
+        </ng-container>
 
-          <!-- Column header for Name -->
-          <ng-container matColumnDef="name">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header>Gruppe</th>
-            <td mat-cell *matCellDef="let group">
-              {{ group.name }}
-            </td>
-          </ng-container>
+        <!-- Column header for Name -->
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Gruppe</th>
+          <td mat-cell *matCellDef="let group">
+            {{ group.name }}
+          </td>
+        </ng-container>
 
-          <!-- Column header for Name -->
-          <ng-container matColumnDef="usernames">
-            <th mat-header-cell *matHeaderCellDef>Benutzer</th>
-            <td mat-cell *matCellDef="let group">
-              @if (group.usernames.length <= maxUsersVisibleDesktop) {
-                {{ sortAndJoinNames(group.usernames, false, 0) }}
-              } @else {
-                {{ sortAndJoinNames(group.usernames, true, maxUsersVisibleDesktop) }}
-                <div matBadge="{{ group.usernames.length }}" matBadgeOverlap="false"></div>
-              }
-            </td>
-          </ng-container>
+        <!-- Column header for Name -->
+        <ng-container matColumnDef="usernames">
+          <th mat-header-cell *matHeaderCellDef>Benutzer</th>
+          <td mat-cell *matCellDef="let group">
+            @if (group.usernames.length <= maxUsersVisibleDesktop) {
+              {{ sortAndJoinNames(group.usernames, false, 0) }}
+            } @else {
+              {{ sortAndJoinNames(group.usernames, true, maxUsersVisibleDesktop) }}
+              <div matBadge="{{ group.usernames.length }}" matBadgeOverlap="false"></div>
+            }
+          </td>
+        </ng-container>
 
-          <!-- Header row definition -->
-          <tr mat-header-row *matHeaderRowDef="displayedDesktopColumns; sticky: true"></tr>
+        <!-- Header row definition -->
+        <tr mat-header-row *matHeaderRowDef="displayedDesktopColumns; sticky: true"></tr>
 
-          <!-- Row definition -->
-          <tr mat-row *matRowDef="let row; columns: displayedDesktopColumns"></tr>
-        </table>
-      </div>
-
-      <!-- Table for user data (mobile-view)-->
-      <div class="mobile-table scrolling-container">
-        <table
-          mat-table
-          class="default-table-design"
-          [dataSource]="data.groups"
-          matSort
-          (matSortChange)="changeSort($event)"
-          multiTemplateDataRows>
-          <!-- Column header for ID -->
-          <ng-container matColumnDef="id">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header>ID</th>
-            <td mat-cell *matCellDef="let group">
-              <mat-icon class="table-icon-hint" *ngIf="expandedGroup === null"> keyboard_arrow_down </mat-icon>
-              <mat-icon class="table-icon-hint" *ngIf="expandedGroup !== null"> keyboard_arrow_up </mat-icon>
-              {{ group.id }}
-            </td>
-          </ng-container>
-
-          <!-- Column header for Name -->
-          <ng-container matColumnDef="name">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header>Gruppe</th>
-            <td mat-cell *matCellDef="let group">
-              {{ group.name }}
-            </td>
-          </ng-container>
-
-          <!-- Expanded row column for user details -->
-          <ng-container matColumnDef="expandedDetail">
-            <td mat-cell *matCellDef="let group" colspan="2" class="expandable-row">
-              @if (group.usernames.length <= maxUsersVisibleMobile) {
-                {{ sortAndJoinNames(group.usernames, false, 0) }}
-              } @else {
-                {{ sortAndJoinNames(group.usernames, true, maxUsersVisibleMobile) }}
-                <div matBadge="{{ group.usernames.length }}" matBadgeOverlap="false"></div>
-              }
-            </td>
-          </ng-container>
-
-          <!-- Row and column definitions -->
-          <tr mat-header-row *matHeaderRowDef="displayedMobileColumns; sticky: true"></tr>
-          <tr
-            mat-row
-            *matRowDef="let row; columns: displayedMobileColumns"
-            (click)="onToggleExpandedGroupRow(row)"></tr>
-          <!-- Row definition for expandedDetail -->
-          <tr
-            mat-row
-            *matRowDef="let row; columns: ['expandedDetail']"
-            [class.collapsed-detail]="row !== expandedGroup">
-            >
-          </tr>
-        </table>
-      </div>
-
-      <!-- Paginator -->
-      <mat-paginator
-        class="default-paginator-design"
-        [length]="data.totalElements"
-        [pageSize]="queryParams.pageSize"
-        [pageSizeOptions]="paginationConfigService.getPageSizeOptions()"
-        [pageIndex]="queryParams.pageNumber"
-        (page)="handlePageEvent($event)"
-        [showFirstLastButtons]="true"
-        [disabled]="checkIsLoadingIsSubmitting()"
-        aria-label="Select page of groups">
-      </mat-paginator>
+        <!-- Row definition -->
+        <tr mat-row *matRowDef="let row; columns: displayedDesktopColumns"></tr>
+      </table>
     </div>
+
+    <!-- Table for user data (mobile-view)-->
+    <div class="mobile-table table-container">
+      <table
+        mat-table
+        class="default-table-design"
+        [dataSource]="data.groups"
+        matSort
+        (matSortChange)="changeSort($event)"
+        multiTemplateDataRows>
+        <!-- Column header for ID -->
+        <ng-container matColumnDef="id">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>ID</th>
+          <td mat-cell *matCellDef="let group">
+            <mat-icon class="table-icon-hint" *ngIf="expandedGroup === null"> keyboard_arrow_down </mat-icon>
+            <mat-icon class="table-icon-hint" *ngIf="expandedGroup !== null"> keyboard_arrow_up </mat-icon>
+            {{ group.id }}
+          </td>
+        </ng-container>
+
+        <!-- Column header for Name -->
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Gruppe</th>
+          <td mat-cell *matCellDef="let group">
+            {{ group.name }}
+          </td>
+        </ng-container>
+
+        <!-- Expanded row column for user details -->
+        <ng-container matColumnDef="expandedDetail">
+          <td mat-cell *matCellDef="let group" colspan="2" class="expandable-row">
+            @if (group.usernames.length <= maxUsersVisibleMobile) {
+              {{ sortAndJoinNames(group.usernames, false, 0) }}
+            } @else {
+              {{ sortAndJoinNames(group.usernames, true, maxUsersVisibleMobile) }}
+              <div matBadge="{{ group.usernames.length }}" matBadgeOverlap="false"></div>
+            }
+          </td>
+        </ng-container>
+
+        <!-- Row and column definitions -->
+        <tr mat-header-row *matHeaderRowDef="displayedMobileColumns; sticky: true"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedMobileColumns" (click)="onToggleExpandedGroupRow(row)"></tr>
+        <!-- Row definition for expandedDetail -->
+        <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" [class.collapsed-detail]="row !== expandedGroup">
+          >
+        </tr>
+      </table>
+    </div>
+
+    <!-- Paginator -->
+    <mat-paginator
+      class="default-paginator-design"
+      [length]="data.totalElements"
+      [pageSize]="queryParams.pageSize"
+      [pageSizeOptions]="paginationConfigService.getPageSizeOptions()"
+      [pageIndex]="queryParams.pageNumber"
+      (page)="handlePageEvent($event)"
+      [showFirstLastButtons]="true"
+      [disabled]="checkIsLoadingIsSubmitting()"
+      aria-label="Select page of groups">
+    </mat-paginator>
   </div>
 </ng-container>

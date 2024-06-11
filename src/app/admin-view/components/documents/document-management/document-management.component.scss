@@ -1,12 +1,3 @@
-// adds a border for the last columns
-// new
-.container-fluid {
-  min-height: auto;
-  max-height: 100%;
-  display: flex;
-  flex-direction: column;
-}
-
 .mdc-data-table__row {
   border-bottom: 1px solid #e0e0e0 !important;
 }
