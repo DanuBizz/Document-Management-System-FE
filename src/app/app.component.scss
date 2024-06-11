@@ -1,8 +1,3 @@
-.menu-item {
-  padding: 0 1rem;
-  text-transform: uppercase;
-  cursor: pointer;
-}
 
 .desktop-nav {
   display: flex;
@@ -21,14 +16,17 @@
   margin-right: 2rem;
 }
 
+.menu-item {
+  padding: 0 1rem;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+
 .mobile-toolbar-tools {
   display: flex;
   justify-content: space-around;
   flex-grow: 0.3;
-}
-
-.desktop-footer {
-  text-align: center;
 }
 
 .nav-bar-logo {
@@ -70,6 +68,11 @@
 
 .button-description {
   font-size: 0.7rem;
+}
+
+
+.desktop-footer {
+  text-align: center;
 }
 
 .footer {

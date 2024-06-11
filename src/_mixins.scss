@@ -33,6 +33,45 @@
     }
   }
 }
+@mixin responsive-page-container {
+
+  .table-container {
+    min-height: auto;
+    max-height: 100%;
+    overflow: auto;
+  }
+
+  .container-fluid {
+    max-height: 85vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  @media (min-width: 1444px) {
+    .container-fluid {
+      width: 90% !important;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .container-fluid {
+      max-height: 90vh;
+    }
+  }
+
+  @media (max-height: 900px) {
+    .container-fluid {
+      max-height: 80vh;
+    }
+  }
+
+  @media (max-height: 600px) {
+    .container-fluid {
+      max-height: 75vh;
+    }
+  }
+
+}
 
 @mixin mobile-responsive-title {
   .mobile-title {
