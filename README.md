@@ -169,6 +169,21 @@ If you work with Visual Studio you need the following plugins. JetBrain IDE inst
 
 - install the modules with the command "npm install" in the cli
 
+#### Adjust the environment variables and configuration
+
+- open the environment.ts file in the src/environments folder
+- adjust the apiUrl to the url of the backend application
+
+- open the config.ts file in the src/config folder
+- change the config variables if necessary
+
+#### Adjust the logo and auth image url
+
+- open the login.component.css file in the src/app/login folder
+- adapt the url of the auth background-image within the container css-class
+- open the app.component.css file in the src/app folder
+- adapt the url of the logo within the nav-bar-logo & side-nav-logo css-classes
+
 #### Run Server
 
 - run the application with the command "ng serve"
