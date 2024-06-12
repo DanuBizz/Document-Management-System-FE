@@ -1,3 +1,5 @@
+// ******** customized expandable row *********
+
 // adds a border for the last columns
 .mdc-data-table__row {
   border-bottom: 1px solid #e0e0e0 !important;
@@ -11,6 +13,7 @@
 .remove-padding {
   padding: 0 !important;
 }
+// ******** customized link button to open file *********
 
 .link-button {
   background-color: transparent;
@@ -26,6 +29,8 @@
 .link-button:hover {
   font-size: 1rem;
 }
+
+// ******** customized column width section *********
 
 .mat-header-column-arrow,
 .mat-column-arrow {
@@ -44,3 +49,5 @@
   width: 30%;
   min-width: 140px;
 }
+
+// *******************************************

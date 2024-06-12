@@ -34,13 +34,6 @@
   }
 }
 @mixin responsive-page-container {
-
-  .table-container {
-    min-height: auto;
-    max-height: 100%;
-    overflow: auto;
-  }
-
   .container-fluid {
     max-height: 85vh;
     display: flex;
@@ -70,7 +63,6 @@
       max-height: 75vh;
     }
   }
-
 }
 
 @mixin mobile-responsive-title {
