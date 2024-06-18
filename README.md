@@ -1,12 +1,11 @@
 <div id="readme-top"></div>
 <div align="center">
-  <img src="src/assets/img/logo.png" alt="KBB-Logo" style="width: 250px; height: auto; margin-top: 10px">
+  <h1>Document-Management-System</h1>
 </div>
 
 <br />
 <div align="center">
-  <h1 align="center">Kultur Betriebe Burgenland</h1>
-  <h3 align="center">Frontend für die Entwicklung der Web-Applikation Kultur Betriebe Burgenland</h3>
+  <h3 align="center">Frontend für die Entwicklung einer Document-Management-System Web-Applikation</h3>
 </div>
 
 <!-- TABLE OF CONTENTS -->
@@ -106,7 +105,7 @@ Additionally, the system includes user management, allowing administrators to gr
 
 In a parallel project, a Spring Boot application was developed. This application manages database calls and handles authentication via Active Directory, as well as a mail distribution system.
 
-- [Link to GitHub-Repo](https://github.com/DanuBizz/KulturBetriebeBurgenland-BE)
+- [Link to GitHub-Repo](https://github.com/DanuBizz/Document-Management-System-BE)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -155,11 +154,11 @@ If you work with Visual Studio you need the following plugins. JetBrain IDE inst
 
 #### Navigate to the project root directory
 
-- Make sure you have already completed the instructions for the other repository. [Link KulturBetriebeBurgenland-BE Repository](https://github.com/DanuBizz/KulturBetriebeBurgenland-BE?tab=readme-ov-file#kulturbetriebeburgenland)
+- Make sure you have already completed the instructions for the other repository. [Link Document-Managment-System-BE Repository](https://github.com/DanuBizz/Document-Management-System-BE?tab=readme-ov-file#kulturbetriebeburgenland)
 
 #### Clone the repositories
 
-- git clone https://github.com/DanuBizz/KulturBetriebeBurgenland-FE.git
+- git clone https://github.com/DanuBizz/Document-Management-System-FE.git
 
 #### Open the Web Application
 
