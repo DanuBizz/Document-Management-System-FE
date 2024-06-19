@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
@@ -8,10 +9,10 @@ export class PaginationConfigService {
   private initialPageIndex: string = '0';
 
   // The pageSizeOptions contain the available options for page size.
-  private pageSizeOptions: number[] = [5, 10, 25, 100];
+  private pageSizeOptions: number[] = environment.pageSizeOptions;
 
   // The pageSize represents the current value of the pageSizeOptions.
-  private pageSize: number = this.pageSizeOptions[1];
+  private pageSize: number = this.pageSizeOptions[0];
 
   private sort: string = '';
 

@@ -1,13 +1,14 @@
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { inject } from '@angular/core';
 import { NotificationService } from '../../service/notification.service';
-import { documentActions } from '../../../admin-view/documents/store/document.actions';
+import { documentActions } from '../document/document.actions';
 import { tap } from 'rxjs/operators';
-import { categoryActions } from '../../../admin-view/categories/store/category.actions';
-import { groupActions } from '../../../admin-view/users/store/group/group.actions';
-import { userActions } from '../../../admin-view/users/store/user/user.actions';
+import { categoryActions } from '../../../admin-view/store/category/category.actions';
+import { groupActions } from '../../../admin-view/store/group/group.actions';
+import { userActions } from '../../../admin-view/store/user/user.actions';
 import { docCategoryActions } from '../doc-category/doc-category.actions';
 import { fileActions } from '../file/file.actions';
+import { authActions } from '../../../auth/store/auth.actions';
 
 export const openNotificationErrorEffect = createEffect(
   (actions$ = inject(Actions), notificationService = inject(NotificationService)) => {
@@ -36,7 +37,9 @@ export const openNotificationErrorEffect = createEffect(
 
         docCategoryActions.getAllDocumentCategoriesFailure,
 
-        fileActions.getFileFailure
+        fileActions.getFileFailure,
+
+        authActions.loginFailure
       ),
       tap(action => {
         const errorCode = action.error?.['status'] ?? `Unknown`;
@@ -78,7 +81,10 @@ export const openNotificationSuccessEffect = createEffect(
 
         docCategoryActions.getAllDocumentCategoriesSuccess,
 
-        fileActions.getFileSuccess
+        fileActions.getFileSuccess,
+
+        authActions.loginSuccess,
+        authActions.logoutSuccess
       ),
       tap(action => {
         notificationService.pushNotification(`${action.type}`, false);

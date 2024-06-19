@@ -1,6 +1,6 @@
 <!-- Container to utilize data once data$ has been fetched -->
 <ng-container *ngIf="data$ | async as data">
-  <div class="container-fluid">
+  <div class="container">
     <mat-card>
       <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="form-sign-in">
         <!-- Title -->

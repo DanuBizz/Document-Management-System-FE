@@ -58,9 +58,7 @@ export class UserService {
    * @returns An Observable with a message indicating the success of the operation.
    */
   updateUserRole(id: number, isAdmin: boolean) {
-    return this.http
-      .put<{ message: string }>(this.baseUrl + `/${id}/toggle-admin`, { isAdmin: isAdmin })
-      .pipe(map(() => ({ message: 'Erfolgreich geändert' })));
+    return this.http.put(this.baseUrl + `/${id}/toggle-admin`, { isAdmin: isAdmin });
   }
 
   /**

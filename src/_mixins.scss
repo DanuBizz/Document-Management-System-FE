@@ -33,26 +33,35 @@
     }
   }
 }
-
-@mixin scrolling-container {
-  overflow-y: auto;
-  overflow-x: auto;
-  max-height: 60vh;
-
-  @media (max-height: 1000px) {
-    max-height: 55vh;
+@mixin responsive-page-container {
+  .container-fluid {
+    max-height: 85vh;
+    display: flex;
+    flex-direction: column;
   }
 
-  @media (max-height: 750px) {
-    max-height: 50vh;
+  @media (min-width: 1444px) {
+    .container-fluid {
+      width: 90% !important;
+    }
   }
 
-  @media (max-height: 750px) and (max-width: 992px) {
-    max-height: 50vh;
+  @media (max-width: 768px) {
+    .container-fluid {
+      max-height: 90vh;
+    }
   }
 
-  @media (max-height: 650px) and (min-width: 992px) {
-    max-height: 40vh;
+  @media (max-height: 900px) {
+    .container-fluid {
+      max-height: 80vh;
+    }
+  }
+
+  @media (max-height: 600px) {
+    .container-fluid {
+      max-height: 75vh;
+    }
   }
 }
 

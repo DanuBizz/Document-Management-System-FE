@@ -4,7 +4,7 @@ import { CategoryService } from './category.service';
 import { CategoryResponseInterface } from '../../admin-view/type/category-response.interface';
 import { environment } from '../../../environments/environment';
 import { CategoryRequestInterface } from '../../admin-view/type/category-request.interface';
-import { QueryParamsInterface } from '../type/query-params.interface';
+import { PaginationConfigService } from './pagination-config.service';
 
 describe('CategoryService', () => {
   let service: CategoryService;
@@ -12,14 +12,17 @@ describe('CategoryService', () => {
   const baseUrl = environment.apiUrl + '/categories';
 
   const dummyCategories: CategoryResponseInterface[] = [
-    { id: 1, name: 'Category 1', userNames: ['user1'], userIds: [1] },
-    { id: 2, name: 'Category 2', userNames: ['user1', 'user2'], userIds: [1, 2] },
+    { id: 1, name: 'Category 1', groupNames: ['group1'], groupIds: [1] },
+    { id: 2, name: 'Category 2', groupNames: ['group1', 'group2'], groupIds: [1, 2] },
   ];
 
-  const pagination: QueryParamsInterface = {
-    pageNumber: '0',
-    pageSize: '5',
-    sort: '',
+  const paginationConfigService = new PaginationConfigService();
+
+  const queryParams = {
+    pageNumber: paginationConfigService.getInitialPageIndex(),
+    pageSize: paginationConfigService.getInitialPageSize(),
+    sort: paginationConfigService.getInitialSort(),
+    search: '',
   };
 
   beforeEach(() => {
@@ -55,24 +58,24 @@ describe('CategoryService', () => {
   it('should return categories with pagination query from the api', () => {
     const dummyTotalElements = '2';
 
-    service.fetchCategoriesWithQuery(pagination).subscribe(response => {
+    service.fetchCategoriesWithQuery(queryParams).subscribe(response => {
       expect(response.categories.length).toBe(2);
       expect(response.categories).toEqual(dummyCategories);
       expect(response.totalElements).toBe(dummyTotalElements);
     });
 
     const req = httpMock.expectOne(
-      baseUrl + `?page=${pagination.pageNumber}&size=${pagination.pageSize}&sort=${pagination.sort}`
+      baseUrl + `?page=${queryParams.pageNumber}&size=${queryParams.pageSize}&sort=${queryParams.sort}`
     );
     expect(req.request.method).toBe('GET');
     req.flush({ content: dummyCategories, totalElements: dummyTotalElements });
   });
 
   it('should create a new category', () => {
-    const dummyNewCategory: CategoryRequestInterface = { name: 'New Category', userIds: [2, 3] };
+    const dummyNewCategory: CategoryRequestInterface = { name: 'New Category', groupNames: ['group1', 'group2'] };
 
     service.createCategory(dummyNewCategory).subscribe(response => {
-      expect(response.message).toBe('Erfolgreich hochgeladen');
+      expect(response).toBe(200);
     });
 
     const req = httpMock.expectOne(baseUrl);

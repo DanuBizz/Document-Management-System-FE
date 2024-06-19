@@ -1,4 +1,7 @@
+import { commonConfig } from '../config/config';
+
 export const environment = {
-  apiUrl: 'http://localhost:8080',
   production: true,
+  apiUrl: 'http://localhost:8080',
+  ...commonConfig,
 };

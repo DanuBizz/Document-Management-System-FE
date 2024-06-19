@@ -6,6 +6,13 @@ import { BackendErrorsInterface } from '../../shared/type/backend-erros.interfac
 import { routerNavigationAction } from '@ngrx/router-store';
 
 describe('AuthReducers', () => {
+  const currentUser: CurrentUserInterface = {
+    id: 1,
+    email: 'email@gmx.at',
+    username: 'karl',
+    isAdmin: true,
+  };
+
   it('returns a default state', () => {
     const action = { type: 'UNKNOWN' };
     const state = authReducer(initialState, action);
@@ -22,8 +29,8 @@ describe('AuthReducers', () => {
   it('should login', () => {
     const request: LoginRequestInterface = {
       user: {
-        email: 'karl.franz.bertl.sayajin@kamehameha.at',
-        password: 'karl.franz.bertl.sayajin123456789',
+        username: 'karl',
+        password: 'karl.franz',
       },
     };
 
@@ -40,14 +47,6 @@ describe('AuthReducers', () => {
   });
 
   it('should login success', () => {
-    const currentUser: CurrentUserInterface = {
-      email: 'karl.franz.bertl.sayajin@kamehameha.at',
-      token: 'karl.franz.bertl.sayajin123456789',
-      username: 'karli',
-      bio: null,
-      image: null,
-    };
-
     const action = authActions.loginSuccess({ currentUser });
     const state = authReducer(initialState, action);
     const newState = {
@@ -65,7 +64,7 @@ describe('AuthReducers', () => {
       error: ['server error', 'test error'],
     };
 
-    const action = authActions.loginFailure({ errors });
+    const action = authActions.loginFailure({ error: errors });
     const state = authReducer(initialState, action);
     const newState = {
       isSubmitting: false,
@@ -89,14 +88,6 @@ describe('AuthReducers', () => {
   });
 
   it('should get current user success', () => {
-    const currentUser: CurrentUserInterface = {
-      email: 'karl.franz.bertl.sayajin@kamehameha.at',
-      token: 'karl.franz.bertl.sayajin123456789',
-      username: 'karli',
-      bio: null,
-      image: null,
-    };
-
     const action = authActions.getCurrentUserSuccess({ currentUser });
     const state = authReducer(initialState, action);
     const newState = {
@@ -121,8 +112,7 @@ describe('AuthReducers', () => {
   });
 
   it('should delete errors when routing', () => {
-    const action = routerNavigationAction;
-    const state = authReducer(initialState, action);
+    const state = authReducer(initialState, routerNavigationAction);
     const newState = {
       ...initialState,
       validationErrors: null,

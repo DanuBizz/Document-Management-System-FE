@@ -55,19 +55,15 @@ export class CategoryService {
    * @param newCategory The data of the new category to be created.
    * @returns An observable containing a success message upon successful creation.
    */
-  createCategory(newCategory: CategoryRequestInterface): Observable<{ message: string }> {
-    return this.http
-      .post<{ message: string }>(this.baseUrl, newCategory)
-      .pipe(map(() => ({ message: 'Erfolgreich hochgeladen' })));
+  createCategory(newCategory: CategoryRequestInterface) {
+    return this.http.post(this.baseUrl, newCategory);
   }
 
   /**
    * Method to update the users of an existing category.
    * @returns An observable containing a success message upon successful creation.
    */
-  updateCategoryUsers(id: number, category: CategoryRequestInterface): Observable<{ message: string }> {
-    return this.http
-      .put<{ message: string }>(this.baseUrl + `/${id}`, category)
-      .pipe(map(() => ({ message: 'Erfolgreich geändert' })));
+  updateCategoryUsers(id: number, category: CategoryRequestInterface) {
+    return this.http.put(this.baseUrl + `/${id}`, category);
   }
 }

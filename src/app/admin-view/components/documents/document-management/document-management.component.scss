@@ -1,0 +1,49 @@
+// ******** customized expandable row *********
+
+// adds a border for the last columns
+.mdc-data-table__row {
+  border-bottom: 1px solid #e0e0e0 !important;
+}
+
+.mdc-data-table__cell,
+.mdc-data-table__header-cell {
+  padding: 0 6px 0 6px !important;
+}
+
+.remove-padding {
+  padding: 0 !important;
+}
+
+// ******** customized column width section *********
+
+.mat-header-column-select,
+.mat-column-select {
+  max-width: 60px !important;
+  min-width: 60px !important;
+}
+
+.mat-header-column-id,
+.mat-column-id {
+  max-width: 60px !important;
+  min-width: 60px !important;
+}
+
+.mat-header-column-documentName,
+.mat-column-documentName {
+  width: 30%;
+  min-width: 240px !important;
+}
+
+.mat-header-column-timestamp,
+.mat-column-timestamp {
+  width: 20%;
+  min-width: 140px !important;
+}
+
+.mat-header-column-categories,
+.mat-column-categories {
+  width: 40%;
+  padding-right: 20px !important;
+}
+
+// *************************************************

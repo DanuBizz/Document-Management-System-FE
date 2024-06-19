@@ -121,21 +121,20 @@ body {
 @include pagination-design();
 @include responsive-dialogs();
 @include mobile-responsive-title;
+@include responsive-page-container();
 
-.scrolling-container {
-  @include scrolling-container;
+.table-container {
+  min-height: auto;
+  max-height: 100%;
+  overflow: auto;
 }
+// *************** customized toolbar styles ********
 
 .toolbar-button {
   height: auto !important;
   width: 100px !important;
   padding: 0.5rem 1rem !important;
   margin: 0 0.5rem !important;
-}
-
-// changes the size of the mat-button touch-field
-.mat-mdc-button .mat-mdc-button-touch-target {
-  max-height: 100% !important;
 }
 
 .mat-toolbar-single-row {
@@ -152,16 +151,9 @@ body {
   background-color: map-get($mat-accent, 600) !important;
 }
 
-.expandable-row {
-  background-color: map-get($mat-accent, 900) !important;
-}
-
-.mdc-text-field {
-  --mdc-outlined-text-field-container-shape: 1.8rem !important;
-}
-
-mat-form-field {
-  width: 100%;
+// changes the size of the mat-button touch-field
+.mat-mdc-button .mat-mdc-button-touch-target {
+  max-height: 100% !important;
 }
 
 .mdc-button {
@@ -169,6 +161,27 @@ mat-form-field {
   &.mat-mdc-raised-button {
     border-radius: 2rem !important;
   }
+}
+
+// ******* expandable table design ********
+
+// changes the color of the expandable row within all tables
+.expandable-row {
+  background-color: map-get($mat-accent, 900) !important;
+}
+
+.collapsed-detail {
+  display: none;
+}
+
+// ******* form field styles ********
+
+.mdc-text-field {
+  --mdc-outlined-text-field-container-shape: 1.8rem !important;
+}
+
+mat-form-field {
+  width: 100%;
 }
 
 .select-field {
@@ -179,6 +192,20 @@ mat-form-field {
 .mat-mdc-select-value-text {
   white-space: normal !important;
 }
+
+// form field bottom space/element
+.mat-mdc-form-field-subscript-wrapper,
+.mat-mdc-form-field-bottom-align::before {
+  height: 0.5rem !important;
+}
+
+// form field bottom space/element within the user-table
+.without-bottom-space .mat-mdc-form-field-subscript-wrapper,
+.without-bottom-space .mat-mdc-form-field-bottom-align::before {
+  height: 0 !important;
+}
+
+// ******* custom select styles for select-field in the user-table********
 
 .custom-select-groups .mat-mdc-select-value-text {
   white-space: nowrap !important;
@@ -196,6 +223,8 @@ mat-form-field {
   padding-bottom: 0 !important;
 }
 
+// ******* custom table designs ********
+
 .table-icon-hint {
   height: 15px !important;
   width: 15px !important;
@@ -203,13 +232,14 @@ mat-form-field {
   line-height: inherit !important;
 }
 
-.collapsed-detail {
-  display: none;
-}
-
 .mat-column-id {
   border-right: 1px solid black;
   width: 70px;
+}
+
+.mat-badge.mat-badge {
+  display: inline-block;
+  margin-bottom: 6px;
 }
 
 .mobile-table {
@@ -226,18 +256,9 @@ mat-form-field {
   }
 }
 
-@media (min-width: 1444px) {
-  .container-fluid {
-    width: 90% !important;
-  }
-}
+// ******** custom snackbar styles for the notifications ********
 
-.mat-badge.mat-badge {
-  display: inline-block;
-  margin-bottom: 6px;
-}
-
-// changing the background color of the snackbar notifications
+//  changing the background color of the snackbar notifications
 .mat-mdc-snack-bar-container .mdc-snackbar__surface {
   background-color: transparent !important;
   box-shadow: none !important;
@@ -261,16 +282,4 @@ mat-form-field {
   right: 0 !important;
   left: auto !important;
   padding-bottom: 0 !important;
-}
-
-// form field bottom space/element
-.mat-mdc-form-field-subscript-wrapper,
-.mat-mdc-form-field-bottom-align::before {
-  height: 0.5rem !important;
-}
-
-// form field bottom space/element within the user-table
-.without-bottom-space .mat-mdc-form-field-subscript-wrapper,
-.without-bottom-space .mat-mdc-form-field-bottom-align::before {
-  height: 0 !important;
 }

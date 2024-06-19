@@ -3,16 +3,25 @@ import { HttpClientTestingModule, HttpTestingController } from '@angular/common/
 import { environment } from '../../../environments/environment';
 import { UserService } from './user.service';
 import { UserResponseInterface } from '../../admin-view/type/user-response.interface';
-import { QueryParamsInterface } from '../type/query-params.interface';
+import { PaginationConfigService } from './pagination-config.service';
 
 describe('UserService', () => {
   let service: UserService;
   let httpMock: HttpTestingController;
   const baseUrl = environment.apiUrl + '/users';
 
+  const paginationConfigService = new PaginationConfigService();
+
+  const queryParams = {
+    pageNumber: paginationConfigService.getInitialPageIndex(),
+    pageSize: paginationConfigService.getInitialPageSize(),
+    sort: paginationConfigService.getInitialSort(),
+    search: '',
+  };
+
   const dummyUsers: UserResponseInterface[] = [
-    { id: 1, username: 'User 1', email: 'test@example.com', isAdmin: true },
-    { id: 2, username: 'User 2', email: 'test@example.com', isAdmin: true },
+    { id: 1, username: 'User 1', email: 'test@example.com', isAdmin: true, groupIds: [1, 2] },
+    { id: 2, username: 'User 2', email: 'test@example.com', isAdmin: true, groupIds: [1, 2] },
   ];
 
   beforeEach(() => {
@@ -47,20 +56,15 @@ describe('UserService', () => {
 
   it('should return users with pagination query from the api', () => {
     const dummyTotalElements = '2';
-    const pagination: QueryParamsInterface = {
-      pageNumber: '0',
-      pageSize: '5',
-      sort: '',
-    };
 
-    service.fetchUsersWitQuery(pagination).subscribe(response => {
+    service.fetchUsersWitQuery(queryParams).subscribe(response => {
       expect(response.users.length).toBe(2);
       expect(response.users).toEqual(dummyUsers);
       expect(response.totalElements).toBe(dummyTotalElements);
     });
 
     const req = httpMock.expectOne(
-      baseUrl + `?page=${pagination.pageNumber}&size=${pagination.pageSize}&sort=${pagination.sort}`
+      baseUrl + `?page=${queryParams.pageNumber}&size=${queryParams.pageSize}&sort=${queryParams.sort}`
     );
     expect(req.request.method).toBe('GET');
     req.flush({ content: dummyUsers, totalElements: dummyTotalElements });

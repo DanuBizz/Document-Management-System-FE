@@ -36,7 +36,7 @@ export const authFeature = createFeature({
       (state, action): AuthStateInterface => ({
         ...state,
         isSubmitting: false,
-        validationErrors: action.errors,
+        validationErrors: action.error,
       })
     ),
 

@@ -60,12 +60,12 @@
     <mat-toolbar color="accent" class="desktop-nav">
       <button class="menu-item toolbar-button" mat-button (click)="sidenav.open()">
         <span class="icon-with-text"><mat-icon>menu</mat-icon></span>
-        <span class="button-description">Menu</span>
+        <span class="desktop-nav-button-description">Menu</span>
       </button>
 
       <div class="nav-bar-logo mx-2"></div>
 
-      <div class="toolbar-tools">
+      <div class="desktop-toolbar-tools">
         @if (!checkUrl()) {
           @if (isAdmin) {
             <!-- Link to the 'admin/document' route -->
@@ -75,7 +75,7 @@
               routerLink="admin/document"
               routerLinkActive="menu-item-active">
               <span class="icon-with-text"><mat-icon>article</mat-icon></span>
-              <span class="button-description">Dokumente</span>
+              <span class="desktop-nav-button-description">Dokumente</span>
             </a>
 
             <!-- Link to the 'admin/category' route -->
@@ -85,19 +85,19 @@
               routerLink="admin/category"
               routerLinkActive="menu-item-active">
               <span class="icon-with-text"><mat-icon>category</mat-icon></span>
-              <span class="button-description">Kategorie</span>
+              <span class="desktop-nav-button-description">Kategorie</span>
             </a>
 
             <!-- Link to the 'admin/user' route -->
             <a class="menu-item toolbar-button" mat-button routerLink="admin/user" routerLinkActive="menu-item-active">
               <span class="icon-with-text"><mat-icon>group</mat-icon></span>
-              <span class="button-description">Benutzer</span>
+              <span class="desktop-nav-button-description">Benutzer</span>
             </a>
           } @else {
             <!-- Link to the 'user/document' route -->
             <a class="menu-item toolbar-button" mat-button routerLink="user" routerLinkActive="menu-item-active">
               <span class="icon-with-text"><mat-icon>article</mat-icon></span>
-              <span class="button-description">Dokumente</span>
+              <span class="desktop-nav-button-description">Dokumente</span>
             </a>
           }
         }
@@ -111,9 +111,7 @@
 
     <!-- Footer card for desktop -->
     <mat-card class="footer desktop-footer">
-      <mat-card-footer>
-        © 2024 Kulturbetriebe Burgenland | Nutzungsbedingungen | Impressum | Datenschutz
-      </mat-card-footer>
+      <mat-card-footer> © Max Mustermann Unternehmen | Nutzungsbedingungen | Impressum | Datenschutz </mat-card-footer>
     </mat-card>
 
     <!-- Toolbar for mobile navigation -->
