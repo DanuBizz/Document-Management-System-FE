@@ -3,7 +3,6 @@ import { HttpClientTestingModule, HttpTestingController } from '@angular/common/
 import { DocumentService } from './document.service';
 import { environment } from '../../../environments/environment';
 import { DocumentVersionsResponseInterface } from '../../admin-view/type/document-versions-response.interface';
-import { DocumentRequestInterface } from '../../admin-view/type/document-request.interface';
 import { PaginationConfigService } from './pagination-config.service';
 
 describe('DocumentService', () => {
